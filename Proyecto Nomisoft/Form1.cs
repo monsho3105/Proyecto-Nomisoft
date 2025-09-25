@@ -16,7 +16,7 @@ namespace Proyecto_Nomisoft
         {
             InitializeComponent();
         }
-
+        //HOLA
         private void Form1_Load(object sender, EventArgs e)
         {
 
