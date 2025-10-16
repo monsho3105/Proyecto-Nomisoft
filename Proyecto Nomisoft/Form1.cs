@@ -16,7 +16,6 @@ namespace Proyecto_Nomisoft
         {
             InitializeComponent();
         }
-        //HOLA
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -24,7 +23,9 @@ namespace Proyecto_Nomisoft
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Admin_Menu Next = new Admin_Menu();
+            Next.Show();
+            this.Hide();
         }
 
         private void txtUser_Enter(object sender, EventArgs e)
@@ -147,6 +148,11 @@ namespace Proyecto_Nomisoft
             {
                 txtPass.UseSystemPasswordChar = true;
             }
+        }
+
+        private void txtPass_TextChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
