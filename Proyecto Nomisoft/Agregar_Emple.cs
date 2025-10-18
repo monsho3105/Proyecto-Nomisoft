@@ -71,5 +71,40 @@ namespace Proyecto_Nomisoft
         {
 
         }
+
+        private void label2_Click_4(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click_5(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click_6(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged_3(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click_7(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
