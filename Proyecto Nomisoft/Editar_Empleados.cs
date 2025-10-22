@@ -10,22 +10,17 @@ using System.Windows.Forms;
 
 namespace Proyecto_Nomisoft
 {
-    public partial class Seleccion : Form
+    public partial class Editar_Empleados : Form
     {
-        public Seleccion()
+        public Editar_Empleados()
         {
             InitializeComponent();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Admin_Menu Next = new Admin_Menu();
-            Next.Show();
-            this.Hide();
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
+            string ID = txt_Numero_Doc.Text;
+
 
         }
     }

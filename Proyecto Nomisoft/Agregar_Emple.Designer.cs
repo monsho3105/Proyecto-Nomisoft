@@ -51,19 +51,20 @@
             this.Label_Estado_Civil = new System.Windows.Forms.Label();
             this.txt_Estado_Civil = new System.Windows.Forms.TextBox();
             this.label_Hijos = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txt_Hijos = new System.Windows.Forms.TextBox();
             this.label_Cargo = new System.Windows.Forms.Label();
             this.txt_Cargo = new System.Windows.Forms.TextBox();
             this.label_Departamento = new System.Windows.Forms.Label();
             this.txt_Departamento = new System.Windows.Forms.TextBox();
             this.label_Fecha_Ingreso = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txt_Fecha_Ingreso = new System.Windows.Forms.TextBox();
             this.label_Tipo_Contrato = new System.Windows.Forms.Label();
             this.text_Tipo_Contrato = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txt_Estado = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txt_Salario = new System.Windows.Forms.TextBox();
+            this.button_Agregar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label_Nombre1
@@ -272,13 +273,13 @@
             this.label_Hijos.Text = "Hijos *";
             this.label_Hijos.Click += new System.EventHandler(this.label2_Click_6);
             // 
-            // textBox1
+            // txt_Hijos
             // 
-            this.textBox1.Location = new System.Drawing.Point(578, 473);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(40, 26);
-            this.textBox1.TabIndex = 25;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged_3);
+            this.txt_Hijos.Location = new System.Drawing.Point(578, 473);
+            this.txt_Hijos.Name = "txt_Hijos";
+            this.txt_Hijos.Size = new System.Drawing.Size(40, 26);
+            this.txt_Hijos.TabIndex = 25;
+            this.txt_Hijos.TextChanged += new System.EventHandler(this.textBox1_TextChanged_3);
             // 
             // label_Cargo
             // 
@@ -323,12 +324,12 @@
             this.label_Fecha_Ingreso.TabIndex = 32;
             this.label_Fecha_Ingreso.Text = "Fecha_Ingreso";
             // 
-            // textBox2
+            // txt_Fecha_Ingreso
             // 
-            this.textBox2.Location = new System.Drawing.Point(228, 638);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(203, 26);
-            this.textBox2.TabIndex = 31;
+            this.txt_Fecha_Ingreso.Location = new System.Drawing.Point(228, 638);
+            this.txt_Fecha_Ingreso.Name = "txt_Fecha_Ingreso";
+            this.txt_Fecha_Ingreso.Size = new System.Drawing.Size(203, 26);
+            this.txt_Fecha_Ingreso.TabIndex = 31;
             // 
             // label_Tipo_Contrato
             // 
@@ -355,12 +356,12 @@
             this.label2.TabIndex = 36;
             this.label2.Text = "Estado ";
             // 
-            // textBox3
+            // txt_Estado
             // 
-            this.textBox3.Location = new System.Drawing.Point(703, 734);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(203, 26);
-            this.textBox3.TabIndex = 35;
+            this.txt_Estado.Location = new System.Drawing.Point(703, 734);
+            this.txt_Estado.Name = "txt_Estado";
+            this.txt_Estado.Size = new System.Drawing.Size(203, 26);
+            this.txt_Estado.TabIndex = 35;
             // 
             // label3
             // 
@@ -371,32 +372,43 @@
             this.label3.TabIndex = 38;
             this.label3.Text = "Salario Base";
             // 
-            // textBox4
+            // txt_Salario
             // 
-            this.textBox4.Location = new System.Drawing.Point(228, 740);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(203, 26);
-            this.textBox4.TabIndex = 37;
+            this.txt_Salario.Location = new System.Drawing.Point(228, 740);
+            this.txt_Salario.Name = "txt_Salario";
+            this.txt_Salario.Size = new System.Drawing.Size(203, 26);
+            this.txt_Salario.TabIndex = 37;
+            // 
+            // button_Agregar
+            // 
+            this.button_Agregar.Location = new System.Drawing.Point(1080, 936);
+            this.button_Agregar.Name = "button_Agregar";
+            this.button_Agregar.Size = new System.Drawing.Size(329, 96);
+            this.button_Agregar.TabIndex = 39;
+            this.button_Agregar.Text = "Agregar";
+            this.button_Agregar.UseVisualStyleBackColor = true;
+            this.button_Agregar.Click += new System.EventHandler(this.button_Agregar_Click);
             // 
             // Agregar_Emple
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1531, 1077);
+            this.Controls.Add(this.button_Agregar);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.txt_Salario);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txt_Estado);
             this.Controls.Add(this.label_Tipo_Contrato);
             this.Controls.Add(this.text_Tipo_Contrato);
             this.Controls.Add(this.label_Fecha_Ingreso);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txt_Fecha_Ingreso);
             this.Controls.Add(this.label_Departamento);
             this.Controls.Add(this.txt_Departamento);
             this.Controls.Add(this.label_Cargo);
             this.Controls.Add(this.txt_Cargo);
             this.Controls.Add(this.label_Hijos);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txt_Hijos);
             this.Controls.Add(this.Label_Estado_Civil);
             this.Controls.Add(this.txt_Estado_Civil);
             this.Controls.Add(this.label_Direccion);
@@ -452,18 +464,19 @@
         private System.Windows.Forms.Label Label_Estado_Civil;
         private System.Windows.Forms.TextBox txt_Estado_Civil;
         private System.Windows.Forms.Label label_Hijos;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txt_Hijos;
         private System.Windows.Forms.Label label_Cargo;
         private System.Windows.Forms.TextBox txt_Cargo;
         private System.Windows.Forms.Label label_Departamento;
         private System.Windows.Forms.TextBox txt_Departamento;
         private System.Windows.Forms.Label label_Fecha_Ingreso;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txt_Fecha_Ingreso;
         private System.Windows.Forms.Label label_Tipo_Contrato;
         private System.Windows.Forms.TextBox text_Tipo_Contrato;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txt_Estado;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txt_Salario;
+        private System.Windows.Forms.Button button_Agregar;
     }
 }

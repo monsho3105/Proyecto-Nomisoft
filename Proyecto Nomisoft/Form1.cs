@@ -23,7 +23,7 @@ namespace Proyecto_Nomisoft
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Admin_Menu Next = new Admin_Menu();
+            Seleccion Next = new Seleccion();
             Next.Show();
             this.Hide();
         }
