@@ -20,6 +20,8 @@ namespace Proyecto_Nomisoft
         private void button1_Click(object sender, EventArgs e)
         {
             string ID = txt_Numero_Doc.Text;
+            Conexion conexion = new Conexion();
+            conexion.Buscar_Empleado();
 
 
         }
