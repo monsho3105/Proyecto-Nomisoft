@@ -33,6 +33,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.buttonRegresar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -77,7 +78,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(245, 394);
+            this.button5.Location = new System.Drawing.Point(245, 354);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(230, 43);
             this.button5.TabIndex = 4;
@@ -85,11 +86,22 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // buttonRegresar
+            // 
+            this.buttonRegresar.Location = new System.Drawing.Point(30, 475);
+            this.buttonRegresar.Name = "buttonRegresar";
+            this.buttonRegresar.Size = new System.Drawing.Size(230, 43);
+            this.buttonRegresar.TabIndex = 5;
+            this.buttonRegresar.Text = "Regresar";
+            this.buttonRegresar.UseVisualStyleBackColor = true;
+            this.buttonRegresar.Click += new System.EventHandler(this.buttonRegresar_Click);
+            // 
             // Admin_Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(740, 555);
+            this.Controls.Add(this.buttonRegresar);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -97,6 +109,7 @@
             this.Controls.Add(this.button1);
             this.Name = "Admin_Menu";
             this.Text = "Admin_Menu";
+            this.Load += new System.EventHandler(this.Admin_Menu_Load);
             this.ResumeLayout(false);
 
         }
@@ -108,5 +121,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button buttonRegresar;
     }
 }

@@ -15,6 +15,12 @@ namespace Proyecto_Nomisoft
         public Ver_Emple()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
+        }
+
+        private void Ver_Emple_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

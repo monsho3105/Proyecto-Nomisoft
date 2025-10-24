@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button_Agregar = new System.Windows.Forms.Button();
+            this.button_Guardar = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txt_Salario = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -65,17 +65,19 @@
             this.label_Nombre1 = new System.Windows.Forms.Label();
             this.Com_Box_Tipo_Doc = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.button_Buscar = new System.Windows.Forms.Button();
+            this.button_Regresar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button_Agregar
+            // button_Guardar
             // 
-            this.button_Agregar.Location = new System.Drawing.Point(1087, 1043);
-            this.button_Agregar.Name = "button_Agregar";
-            this.button_Agregar.Size = new System.Drawing.Size(329, 96);
-            this.button_Agregar.TabIndex = 76;
-            this.button_Agregar.Text = "Agregar";
-            this.button_Agregar.UseVisualStyleBackColor = true;
+            this.button_Guardar.Location = new System.Drawing.Point(1277, 872);
+            this.button_Guardar.Name = "button_Guardar";
+            this.button_Guardar.Size = new System.Drawing.Size(329, 96);
+            this.button_Guardar.TabIndex = 76;
+            this.button_Guardar.Text = "Guardar";
+            this.button_Guardar.UseVisualStyleBackColor = true;
+            this.button_Guardar.Click += new System.EventHandler(this.button_Guardar_Click);
             // 
             // label3
             // 
@@ -92,6 +94,7 @@
             this.txt_Salario.Name = "txt_Salario";
             this.txt_Salario.Size = new System.Drawing.Size(203, 26);
             this.txt_Salario.TabIndex = 74;
+            this.txt_Salario.TextChanged += new System.EventHandler(this.txt_Salario_TextChanged);
             // 
             // label2
             // 
@@ -108,6 +111,7 @@
             this.txt_Estado.Name = "txt_Estado";
             this.txt_Estado.Size = new System.Drawing.Size(203, 26);
             this.txt_Estado.TabIndex = 72;
+            this.txt_Estado.TextChanged += new System.EventHandler(this.txt_Estado_TextChanged);
             // 
             // label_Tipo_Contrato
             // 
@@ -124,6 +128,7 @@
             this.text_Tipo_Contrato.Name = "text_Tipo_Contrato";
             this.text_Tipo_Contrato.Size = new System.Drawing.Size(203, 26);
             this.text_Tipo_Contrato.TabIndex = 70;
+            this.text_Tipo_Contrato.TextChanged += new System.EventHandler(this.text_Tipo_Contrato_TextChanged);
             // 
             // label_Fecha_Ingreso
             // 
@@ -140,6 +145,7 @@
             this.txt_Fecha_Ingreso.Name = "txt_Fecha_Ingreso";
             this.txt_Fecha_Ingreso.Size = new System.Drawing.Size(203, 26);
             this.txt_Fecha_Ingreso.TabIndex = 68;
+            this.txt_Fecha_Ingreso.TextChanged += new System.EventHandler(this.txt_Fecha_Ingreso_TextChanged);
             // 
             // label_Departamento
             // 
@@ -156,6 +162,7 @@
             this.txt_Departamento.Name = "txt_Departamento";
             this.txt_Departamento.Size = new System.Drawing.Size(203, 26);
             this.txt_Departamento.TabIndex = 66;
+            this.txt_Departamento.TextChanged += new System.EventHandler(this.txt_Departamento_TextChanged);
             // 
             // label_Cargo
             // 
@@ -172,6 +179,7 @@
             this.txt_Cargo.Name = "txt_Cargo";
             this.txt_Cargo.Size = new System.Drawing.Size(203, 26);
             this.txt_Cargo.TabIndex = 64;
+            this.txt_Cargo.TextChanged += new System.EventHandler(this.txt_Cargo_TextChanged);
             // 
             // label_Hijos
             // 
@@ -188,6 +196,7 @@
             this.txt_Hijos.Name = "txt_Hijos";
             this.txt_Hijos.Size = new System.Drawing.Size(40, 26);
             this.txt_Hijos.TabIndex = 62;
+            this.txt_Hijos.TextChanged += new System.EventHandler(this.txt_Hijos_TextChanged);
             // 
             // Label_Estado_Civil
             // 
@@ -204,6 +213,7 @@
             this.txt_Estado_Civil.Name = "txt_Estado_Civil";
             this.txt_Estado_Civil.Size = new System.Drawing.Size(203, 26);
             this.txt_Estado_Civil.TabIndex = 60;
+            this.txt_Estado_Civil.TextChanged += new System.EventHandler(this.txt_Estado_Civil_TextChanged);
             // 
             // label_Direccion
             // 
@@ -220,6 +230,7 @@
             this.txt_Direccion.Name = "txt_Direccion";
             this.txt_Direccion.Size = new System.Drawing.Size(684, 26);
             this.txt_Direccion.TabIndex = 58;
+            this.txt_Direccion.TextChanged += new System.EventHandler(this.txt_Direccion_TextChanged);
             // 
             // label_Correo
             // 
@@ -236,6 +247,7 @@
             this.txt_Correo.Name = "txt_Correo";
             this.txt_Correo.Size = new System.Drawing.Size(203, 26);
             this.txt_Correo.TabIndex = 56;
+            this.txt_Correo.TextChanged += new System.EventHandler(this.txt_Correo_TextChanged);
             // 
             // labelTelefono
             // 
@@ -252,6 +264,7 @@
             this.txt_Telefono.Name = "txt_Telefono";
             this.txt_Telefono.Size = new System.Drawing.Size(203, 26);
             this.txt_Telefono.TabIndex = 54;
+            this.txt_Telefono.TextChanged += new System.EventHandler(this.txt_Telefono_TextChanged);
             // 
             // label_Fecha_Nacimiento
             // 
@@ -268,6 +281,7 @@
             this.txt_Fecha_Nacimiento.Name = "txt_Fecha_Nacimiento";
             this.txt_Fecha_Nacimiento.Size = new System.Drawing.Size(203, 26);
             this.txt_Fecha_Nacimiento.TabIndex = 52;
+            this.txt_Fecha_Nacimiento.TextChanged += new System.EventHandler(this.txt_Fecha_Nacimiento_TextChanged);
             // 
             // label_Numero_Documento
             // 
@@ -284,6 +298,7 @@
             this.txt_Numero_Doc.Name = "txt_Numero_Doc";
             this.txt_Numero_Doc.Size = new System.Drawing.Size(203, 26);
             this.txt_Numero_Doc.TabIndex = 50;
+            this.txt_Numero_Doc.TextChanged += new System.EventHandler(this.txt_Numero_Doc_TextChanged);
             // 
             // txt_Apellido1
             // 
@@ -291,6 +306,7 @@
             this.txt_Apellido1.Name = "txt_Apellido1";
             this.txt_Apellido1.Size = new System.Drawing.Size(167, 26);
             this.txt_Apellido1.TabIndex = 47;
+            this.txt_Apellido1.TextChanged += new System.EventHandler(this.txt_Apellido1_TextChanged);
             // 
             // label_Apellido1
             // 
@@ -307,6 +323,7 @@
             this.txt_Apellido2.Name = "txt_Apellido2";
             this.txt_Apellido2.Size = new System.Drawing.Size(167, 26);
             this.txt_Apellido2.TabIndex = 45;
+            this.txt_Apellido2.TextChanged += new System.EventHandler(this.txt_Apellido2_TextChanged);
             // 
             // label_Apellido2
             // 
@@ -323,6 +340,7 @@
             this.txt_Nombre2.Name = "txt_Nombre2";
             this.txt_Nombre2.Size = new System.Drawing.Size(167, 26);
             this.txt_Nombre2.TabIndex = 43;
+            this.txt_Nombre2.TextChanged += new System.EventHandler(this.txt_Nombre2_TextChanged);
             // 
             // label_Nombre2
             // 
@@ -339,6 +357,7 @@
             this.txt_Nombre1.Name = "txt_Nombre1";
             this.txt_Nombre1.Size = new System.Drawing.Size(203, 26);
             this.txt_Nombre1.TabIndex = 41;
+            this.txt_Nombre1.TextChanged += new System.EventHandler(this.txt_Nombre1_TextChanged);
             // 
             // label_Nombre1
             // 
@@ -364,6 +383,7 @@
             this.Com_Box_Tipo_Doc.Name = "Com_Box_Tipo_Doc";
             this.Com_Box_Tipo_Doc.Size = new System.Drawing.Size(205, 28);
             this.Com_Box_Tipo_Doc.TabIndex = 49;
+            this.Com_Box_Tipo_Doc.SelectedIndexChanged += new System.EventHandler(this.Com_Box_Tipo_Doc_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -374,23 +394,34 @@
             this.label1.TabIndex = 48;
             this.label1.Text = "Tipo de documento *";
             // 
-            // button1
+            // button_Buscar
             // 
-            this.button1.Location = new System.Drawing.Point(552, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(329, 96);
-            this.button1.TabIndex = 77;
-            this.button1.Text = "Buscar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button_Buscar.Location = new System.Drawing.Point(552, 12);
+            this.button_Buscar.Name = "button_Buscar";
+            this.button_Buscar.Size = new System.Drawing.Size(329, 96);
+            this.button_Buscar.TabIndex = 77;
+            this.button_Buscar.Text = "Buscar";
+            this.button_Buscar.UseVisualStyleBackColor = true;
+            this.button_Buscar.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button_Regresar
+            // 
+            this.button_Regresar.Location = new System.Drawing.Point(158, 931);
+            this.button_Regresar.Name = "button_Regresar";
+            this.button_Regresar.Size = new System.Drawing.Size(329, 96);
+            this.button_Regresar.TabIndex = 78;
+            this.button_Regresar.Text = "Regresar";
+            this.button_Regresar.UseVisualStyleBackColor = true;
+            this.button_Regresar.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // Editar_Empleados
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1666, 1232);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.button_Agregar);
+            this.Controls.Add(this.button_Regresar);
+            this.Controls.Add(this.button_Buscar);
+            this.Controls.Add(this.button_Guardar);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txt_Salario);
             this.Controls.Add(this.label2);
@@ -429,6 +460,7 @@
             this.Controls.Add(this.label_Nombre1);
             this.Name = "Editar_Empleados";
             this.Text = "Editar_Empleados";
+            this.Load += new System.EventHandler(this.Editar_Empleados_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,7 +468,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button_Agregar;
+        private System.Windows.Forms.Button button_Guardar;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txt_Salario;
         private System.Windows.Forms.Label label2;
@@ -473,6 +505,7 @@
         private System.Windows.Forms.Label label_Nombre1;
         private System.Windows.Forms.ComboBox Com_Box_Tipo_Doc;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button_Buscar;
+        private System.Windows.Forms.Button button_Regresar;
     }
 }
