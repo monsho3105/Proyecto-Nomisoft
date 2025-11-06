@@ -1,7 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Globalization; // <-- added
+using System.Data;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 
 namespace Proyecto_Nomisoft
 {
@@ -193,6 +196,216 @@ namespace Proyecto_Nomisoft
             }
         }
 
+        // Returns a DataTable with Nombre, Documento, Cargo, Salario and Estado.
+        // All parameters are optional; empty/null values are ignored.
+        // fechaIngresoFilter and fechaNacimientoFilter accept partial strings (will match against date text) or full parseable dates.
+        public DataTable ObtenerResumenEmpleados(
+            string nombre = null,
+            string documento = null,
+            string departamento = null,
+            string cargo = null,
+            string estadoCivil = null,
+            string salarioRange = null,
+            string fechaIngresoFilter = null,
+            string fechaNacimientoFilter = null,
+            int? numeroHijos = null)
+        {
+            var dt = new DataTable();
+            var sb = new StringBuilder();
+            sb.Append(@"
+        SELECT
+            -- convenient combined display name
+            CONCAT(
+                COALESCE(`Primer_Nombre`, ''), ' ',
+                COALESCE(`Segundo_Nombre`, ''), ' ',
+                COALESCE(`Primer_Apellido`, ''), ' ',
+                COALESCE(`Segundo_Apellido`, '')
+            ) AS Nombre,
+            `Numero_Documento` AS Documento,
+            `Cargo`,
+            `Salario_Base` AS Salario,
+            `Estado`,
+            -- include all underlying columns so the grid can show them on demand
+            `Primer_Nombre`,
+            `Segundo_Nombre`,
+            `Primer_Apellido`,
+            `Segundo_Apellido`,
+            `Tipo_Documento`,
+            `Fecha_Nacimiento`,
+            `Telefono`,
+            `Correo`,
+            `Direccion`,
+            `Estado_Civil`,
+            `Numero_Hijos`,
+            `Departamento`,
+            `Fecha_Ingreso`,
+            `Tipo_Contrato`
+        FROM `empleados`
+        WHERE 1 = 1
+    ");
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand())
+            {
+                cmd.Connection = conn;
+
+                if (!string.IsNullOrWhiteSpace(nombre))
+                {
+                    sb.Append(" AND CONCAT(COALESCE(`Primer_Nombre`,''),' ',COALESCE(`Segundo_Nombre`,''),' ',COALESCE(`Primer_Apellido`,''),' ',COALESCE(`Segundo_Apellido`,'')) LIKE @Nombre");
+                    cmd.Parameters.AddWithValue("@Nombre", "%" + nombre.Trim() + "%");
+                }
+
+                if (!string.IsNullOrWhiteSpace(documento))
+                {
+                    sb.Append(" AND `Numero_Documento` LIKE @Documento");
+                    cmd.Parameters.AddWithValue("@Documento", "%" + documento.Trim() + "%");
+                }
+
+                if (!string.IsNullOrWhiteSpace(departamento))
+                {
+                    sb.Append(" AND `Departamento` = @Departamento");
+                    cmd.Parameters.AddWithValue("@Departamento", departamento.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(cargo))
+                {
+                    sb.Append(" AND `Cargo` = @Cargo");
+                    cmd.Parameters.AddWithValue("@Cargo", cargo.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(estadoCivil))
+                {
+                    sb.Append(" AND `Estado_Civil` = @EstadoCivil");
+                    cmd.Parameters.AddWithValue("@EstadoCivil", estadoCivil.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(salarioRange))
+                {
+                    decimal? min = null, max = null;
+                    var key = salarioRange.Trim();
+
+                    switch (key)
+                    {
+                        case "1.400.000 - 1.999.999":
+                            min = 1400000m; max = 1999999.99m; break;
+                        case "2.000.000 - 2.999.999":
+                            min = 2000000m; max = 2999999.99m; break;
+                        case "3.000.000 - 4.999.999":
+                            min = 3000000m; max = 4999999.99m; break;
+                        case "+ 5.000.000":
+                        case "+5.000.000":
+                            min = 5000000m; break;
+                    }
+
+                    if (min.HasValue)
+                    {
+                        sb.Append(" AND `Salario_Base` >= @MinSalario");
+                        cmd.Parameters.AddWithValue("@MinSalario", min.Value);
+                    }
+
+                    if (max.HasValue)
+                    {
+                        sb.Append(" AND `Salario_Base` <= @MaxSalario");
+                        cmd.Parameters.AddWithValue("@MaxSalario", max.Value);
+                    }
+                }
+
+                // Fecha_Ingreso filter: if parseable, exact date; otherwise partial-match against MySQL textual representation (YYYY-MM-DD)
+                if (!string.IsNullOrWhiteSpace(fechaIngresoFilter))
+                {
+                    var txt = fechaIngresoFilter.Trim();
+                    if (DateTime.TryParse(txt, out var dtIngres))
+                    {
+                        sb.Append(" AND DATE(`Fecha_Ingreso`) = @FechaIngreso");
+                        cmd.Parameters.AddWithValue("@FechaIngreso", dtIngres.Date);
+                    }
+                    else
+                    {
+                        sb.Append(" AND CAST(`Fecha_Ingreso` AS CHAR) LIKE @FechaIngresoLike");
+                        cmd.Parameters.AddWithValue("@FechaIngresoLike", "%" + txt + "%");
+                    }
+                }
+
+                // Fecha_Nacimiento filter: same behavior as Fecha_Ingreso
+                if (!string.IsNullOrWhiteSpace(fechaNacimientoFilter))
+                {
+                    var txt = fechaNacimientoFilter.Trim();
+                    if (DateTime.TryParse(txt, out var dtNac))
+                    {
+                        sb.Append(" AND DATE(`Fecha_Nacimiento`) = @FechaNacimiento");
+                        cmd.Parameters.AddWithValue("@FechaNacimiento", dtNac.Date);
+                    }
+                    else
+                    {
+                        sb.Append(" AND CAST(`Fecha_Nacimiento` AS CHAR) LIKE @FechaNacimientoLike");
+                        cmd.Parameters.AddWithValue("@FechaNacimientoLike", "%" + txt + "%");
+                    }
+                }
+
+                // Filter by Numero_Hijos if provided (exact match)
+                if (numeroHijos.HasValue)
+                {
+                    sb.Append(" AND `Numero_Hijos` = @NumeroHijos");
+                    cmd.Parameters.AddWithValue("@NumeroHijos", numeroHijos.Value);
+                }
+
+                sb.Append(" ORDER BY Nombre;");
+
+                cmd.CommandText = sb.ToString();
+
+                using (var da = new MySqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
+        // Distinct value helpers (Departamento, Cargo, Estado_Civil)
+        public List<string> ObtenerDepartamentos() => ObtenerDistinctValues("Departamento");
+        public List<string> ObtenerCargos() => ObtenerDistinctValues("Cargo");
+        public List<string> ObtenerEstadosCiviles() => ObtenerDistinctValues("Estado_Civil");
+
+        private List<string> ObtenerDistinctValues(string columnName)
+        {
+            var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "Departamento", "Cargo", "Estado_Civil"
+            };
+
+            if (!allowed.Contains(columnName))
+                throw new ArgumentException("Invalid column", nameof(columnName));
+
+            var list = new List<string>();
+
+            string query = $"SELECT DISTINCT `{columnName}` FROM `empleados` WHERE `{columnName}` IS NOT NULL AND `{columnName}` <> '' ORDER BY `{columnName}`;";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var val = reader.IsDBNull(0) ? null : reader.GetString(0);
+                            if (!string.IsNullOrWhiteSpace(val))
+                                list.Add(val);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database select failed: " + ex.Message, ex);
+                }
+            }
+
+            return list;
+        }
+
         // PSEUDOCODE (detailed):
         // 1. Method signature: Editar_Empleado(string originalNumeroDocumento, Empleado nuevo, params string[] camposCambiados)
         // 2. Validate originalNumeroDocumento not null/empty and camposCambiados has at least one entry.
@@ -234,15 +447,12 @@ namespace Proyecto_Nomisoft
             if (campos.Count == 0)
                 throw new ArgumentException("At least one non-empty field must be provided in camposCambiados.", nameof(camposCambiados));
 
-            // If caller requested to change the primary key, validate and prevent duplicates
-            bool wantsKeyChange = false;
-            foreach (var c in campos)
+            bool wantsKeyChange = campos.Any(x => string.Equals(x, "Numero_Documento", StringComparison.OrdinalIgnoreCase));
+
+            // special case: if also includes Fecha_Nacimiento, ignore it for updates (derived field)
+            if (campos.Contains("Fecha_Nacimiento", StringComparer.OrdinalIgnoreCase))
             {
-                if (string.Equals(c, "Numero_Documento", StringComparison.OrdinalIgnoreCase))
-                {
-                    wantsKeyChange = true;
-                    break;
-                }
+                campos.Remove("Fecha_Nacimiento");
             }
 
             if (wantsKeyChange)
@@ -295,7 +505,7 @@ namespace Proyecto_Nomisoft
                             command.Parameters.AddWithValue("@Primer_Apellido", (object)nuevo.Primer_Apellido ?? DBNull.Value);
                             break;
                         case "Segundo_Apellido":
-                            assignments.Add("`Segundo_Apellido` = @Segundo_Apellido");
+                            assignments.Add("`Segundo_Apellido` = @Segundo_Segundo_Apellido");
                             command.Parameters.AddWithValue("@Segundo_Apellido", (object)nuevo.Segundo_Apellido ?? DBNull.Value);
                             break;
                         case "Tipo_Documento":

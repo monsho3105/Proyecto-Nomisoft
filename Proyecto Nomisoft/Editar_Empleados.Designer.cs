@@ -67,6 +67,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button_Buscar = new System.Windows.Forms.Button();
             this.button_Regresar = new System.Windows.Forms.Button();
+            this.mySqlCommand1 = new MySql.Data.MySqlClient.MySqlCommand();
             this.SuspendLayout();
             // 
             // button_Guardar
@@ -414,6 +415,13 @@
             this.button_Regresar.UseVisualStyleBackColor = true;
             this.button_Regresar.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // mySqlCommand1
+            // 
+            this.mySqlCommand1.CacheAge = 0;
+            this.mySqlCommand1.Connection = null;
+            this.mySqlCommand1.EnableCaching = false;
+            this.mySqlCommand1.Transaction = null;
+            // 
             // Editar_Empleados
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -507,5 +515,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button_Buscar;
         private System.Windows.Forms.Button button_Regresar;
+        private MySql.Data.MySqlClient.MySqlCommand mySqlCommand1;
     }
 }

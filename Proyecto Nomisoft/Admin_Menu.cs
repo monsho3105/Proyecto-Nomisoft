@@ -21,7 +21,9 @@ namespace Proyecto_Nomisoft
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Ver_Emple Next = new Ver_Emple();   
+            Next.Show();
+            this.Close();
         }
 
         private void button3_Click(object sender, EventArgs e)
