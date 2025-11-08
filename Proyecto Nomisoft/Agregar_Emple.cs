@@ -9,6 +9,7 @@ namespace Proyecto_Nomisoft
         public Agregar_Emple()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -164,6 +165,13 @@ namespace Proyecto_Nomisoft
             {
                 MessageBox.Show("Error al agregar empleado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Admin_Menu Back = new Admin_Menu();
+            Back.Show();
+            this.Hide();
         }
     }
 }

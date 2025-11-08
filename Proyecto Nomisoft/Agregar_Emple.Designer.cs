@@ -65,6 +65,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txt_Salario = new System.Windows.Forms.TextBox();
             this.button_Agregar = new System.Windows.Forms.Button();
+            this.buttonRegresar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label_Nombre1
@@ -389,11 +390,22 @@
             this.button_Agregar.UseVisualStyleBackColor = true;
             this.button_Agregar.Click += new System.EventHandler(this.button_Agregar_Click);
             // 
+            // buttonRegresar
+            // 
+            this.buttonRegresar.Location = new System.Drawing.Point(130, 871);
+            this.buttonRegresar.Name = "buttonRegresar";
+            this.buttonRegresar.Size = new System.Drawing.Size(329, 96);
+            this.buttonRegresar.TabIndex = 40;
+            this.buttonRegresar.Text = "Regresar";
+            this.buttonRegresar.UseVisualStyleBackColor = true;
+            this.buttonRegresar.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Agregar_Emple
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1531, 1077);
+            this.Controls.Add(this.buttonRegresar);
             this.Controls.Add(this.button_Agregar);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txt_Salario);
@@ -478,5 +490,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txt_Salario;
         private System.Windows.Forms.Button button_Agregar;
+        private System.Windows.Forms.Button buttonRegresar;
     }
 }

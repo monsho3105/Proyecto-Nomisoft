@@ -1,5 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 
 namespace Proyecto_Nomisoft
 {
@@ -61,7 +66,29 @@ namespace Proyecto_Nomisoft
                 command.Parameters.AddWithValue("@Departamento", Departamento);
                 command.Parameters.AddWithValue("@Fecha_Ingreso", Fecha_Ingreso);
                 command.Parameters.AddWithValue("@Tipo_Contrato", Tipo_Contrato);
-                command.Parameters.AddWithValue("@Salario_Base", Salario_Base);
+
+                // Parse Salario_Base string into decimal (handles comma or dot separators)
+                decimal? salarioDecimal = null;
+                if (!string.IsNullOrWhiteSpace(Salario_Base))
+                {
+                    // Try current culture first (supports comma decimals in many locales)
+                    if (!decimal.TryParse(Salario_Base, NumberStyles.Number, CultureInfo.CurrentCulture, out var parsed))
+                    {
+                        // Fallback: replace comma with dot and try invariant culture
+                        var normalized = Salario_Base.Replace(',', '.');
+                        if (!decimal.TryParse(normalized, NumberStyles.Number, CultureInfo.InvariantCulture, out parsed))
+                        {
+                            throw new ArgumentException($"Invalid Salario_Base value: '{Salario_Base}'", nameof(Salario_Base));
+                        }
+                    }
+                    salarioDecimal = parsed;
+                }
+
+                if (salarioDecimal.HasValue)
+                    command.Parameters.AddWithValue("@Salario_Base", salarioDecimal.Value);
+                else
+                    command.Parameters.AddWithValue("@Salario_Base", DBNull.Value);
+
                 command.Parameters.AddWithValue("@Estado", Estado);
 
                 try
@@ -76,27 +103,31 @@ namespace Proyecto_Nomisoft
             }
         }
 
+        // DTO to hold employee data returned from DB
+        public class Empleado
+        {
+            public string Primer_Nombre { get; set; }
+            public string Segundo_Nombre { get; set; }
+            public string Primer_Apellido { get; set; }
+            public string Segundo_Apellido { get; set; }
+            public string Tipo_Documento { get; set; }
+            public string Numero_Documento { get; set; } // varchar in DB -> string here
+            public DateTime? Fecha_Nacimiento { get; set; }
+            public string Telefono { get; set; }
+            public string Correo { get; set; }
+            public string Direccion { get; set; }
+            public string Estado_Civil { get; set; }
+            public int? Numero_Hijos { get; set; }
+            public string Cargo { get; set; }
+            public string Departamento { get; set; }
+            public DateTime? Fecha_Ingreso { get; set; }
+            public string Tipo_Contrato { get; set; }
+            public decimal? Salario_Base { get; set; } // changed to decimal? to match DB DECIMAL(10,2)
+            public string Estado { get; set; }
+        }
 
-        public bool Buscar_Empleado(
-            string numeroDocumento,
-            System.Windows.Forms.TextBox txtPrimer_Nombre,
-            System.Windows.Forms.TextBox txtSegundo_Nombre,
-            System.Windows.Forms.TextBox txtPrimer_Apellido,
-            System.Windows.Forms.TextBox txtSegundo_Apellido,
-            System.Windows.Forms.TextBox txtTipo_Documento,
-            System.Windows.Forms.TextBox txtNumero_Documento,
-            System.Windows.Forms.TextBox txtFecha_Nacimiento,
-            System.Windows.Forms.TextBox txtTelefono,
-            System.Windows.Forms.TextBox txtCorreo,
-            System.Windows.Forms.TextBox txtDireccion,
-            System.Windows.Forms.TextBox txtEstado_Civil,
-            System.Windows.Forms.TextBox txtNumero_Hijos,
-            System.Windows.Forms.TextBox txtCargo,
-            System.Windows.Forms.TextBox txtDepartamento,
-            System.Windows.Forms.TextBox txtFecha_Ingreso,
-            System.Windows.Forms.TextBox txtTipo_Contrato,
-            System.Windows.Forms.TextBox txtSalario_Base,
-            System.Windows.Forms.TextBox txtEstado)
+        // Returns Empleado or null if not found
+        public Empleado Buscar_Empleado(string numeroDocumento)
         {
             string query = @"
         SELECT
@@ -107,29 +138,6 @@ namespace Proyecto_Nomisoft
         FROM `empleados`
         WHERE `Numero_Documento` = @Numero_Documento
         LIMIT 1;";
-
-            // Helper local to clear all text boxes if no record is found
-            void ClearAll()
-            {
-                txtPrimer_Nombre.Text = "";
-                txtSegundo_Nombre.Text = "";
-                txtPrimer_Apellido.Text = "";
-                txtSegundo_Apellido.Text = "";
-                txtTipo_Documento.Text = "";
-                txtNumero_Documento.Text = "";
-                txtFecha_Nacimiento.Text = "";
-                txtTelefono.Text = "";
-                txtCorreo.Text = "";
-                txtDireccion.Text = "";
-                txtEstado_Civil.Text = "";
-                txtNumero_Hijos.Text = "";
-                txtCargo.Text = "";
-                txtDepartamento.Text = "";
-                txtFecha_Ingreso.Text = "";
-                txtTipo_Contrato.Text = "";
-                txtSalario_Base.Text = "";
-                txtEstado.Text = "";
-            }
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -142,54 +150,440 @@ namespace Proyecto_Nomisoft
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (!reader.Read())
-                        {
-                            ClearAll();
-                            return false;
-                        }
+                            return null;
 
-                        // Column ordinals in the same order as the SELECT list
                         int i = 0;
+                        var emp = new Empleado();
 
-                        txtPrimer_Nombre.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtSegundo_Nombre.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtPrimer_Apellido.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtSegundo_Apellido.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtTipo_Documento.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtNumero_Documento.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
+                        emp.Primer_Nombre = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Segundo_Nombre = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Primer_Apellido = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Segundo_Apellido = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Tipo_Documento = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Numero_Documento = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
 
-                        // Fecha_Nacimiento (DateTime)
-                        if (reader.IsDBNull(i)) { txtFecha_Nacimiento.Text = ""; } 
-                        else { txtFecha_Nacimiento.Text = reader.GetDateTime(i).ToString("yyyy-MM-dd"); }
+                        if (reader.IsDBNull(i)) emp.Fecha_Nacimiento = null;
+                        else emp.Fecha_Nacimiento = reader.GetDateTime(i);
                         i++;
 
-                        txtTelefono.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtCorreo.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtDireccion.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtEstado_Civil.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
+                        emp.Telefono = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Correo = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Direccion = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Estado_Civil = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
 
-                        // Numero_Hijos (int)
-                        if (reader.IsDBNull(i)) { txtNumero_Hijos.Text = ""; }
-                        else { txtNumero_Hijos.Text = reader.GetInt32(i).ToString(); }
+                        if (reader.IsDBNull(i)) emp.Numero_Hijos = null;
+                        else emp.Numero_Hijos = reader.GetInt32(i);
                         i++;
 
-                        txtCargo.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtDepartamento.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
+                        emp.Cargo = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Departamento = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
 
-                        // Fecha_Ingreso (DateTime)
-                        if (reader.IsDBNull(i)) { txtFecha_Ingreso.Text = ""; }
-                        else { txtFecha_Ingreso.Text = reader.GetDateTime(i).ToString("yyyy-MM-dd"); }
+                        if (reader.IsDBNull(i)) emp.Fecha_Ingreso = null;
+                        else emp.Fecha_Ingreso = reader.GetDateTime(i);
                         i++;
 
-                        txtTipo_Contrato.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtSalario_Base.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
-                        txtEstado.Text = reader.IsDBNull(i) ? "" : reader.GetString(i); i++;
+                        emp.Tipo_Contrato = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        emp.Salario_Base = reader.IsDBNull(i) ? (decimal?)null : reader.GetDecimal(i); i++; // FIXED: use GetDecimal instead of GetString
+                        emp.Estado = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
 
-                        return true;
+                        return emp;
                     }
                 }
                 catch (Exception ex)
                 {
                     throw new Exception("Database select failed: " + ex.Message, ex);
+                }
+            }
+        }
+
+        // Returns a DataTable with Nombre, Documento, Cargo, Salario and Estado.
+        // All parameters are optional; empty/null values are ignored.
+        // fechaIngresoFilter and fechaNacimientoFilter accept partial strings (will match against date text) or full parseable dates.
+        public DataTable ObtenerResumenEmpleados(
+            string nombre = null,
+            string documento = null,
+            string departamento = null,
+            string cargo = null,
+            string estadoCivil = null,
+            string salarioRange = null,
+            string fechaIngresoFilter = null,
+            string fechaNacimientoFilter = null,
+            int? numeroHijos = null)
+        {
+            var dt = new DataTable();
+            var sb = new StringBuilder();
+            sb.Append(@"
+        SELECT
+            -- convenient combined display name
+            CONCAT(
+                COALESCE(`Primer_Nombre`, ''), ' ',
+                COALESCE(`Segundo_Nombre`, ''), ' ',
+                COALESCE(`Primer_Apellido`, ''), ' ',
+                COALESCE(`Segundo_Apellido`, '')
+            ) AS Nombre,
+            `Numero_Documento` AS Documento,
+            `Cargo`,
+            `Salario_Base` AS Salario,
+            `Estado`,
+            -- include all underlying columns so the grid can show them on demand
+            `Primer_Nombre`,
+            `Segundo_Nombre`,
+            `Primer_Apellido`,
+            `Segundo_Apellido`,
+            `Tipo_Documento`,
+            `Fecha_Nacimiento`,
+            `Telefono`,
+            `Correo`,
+            `Direccion`,
+            `Estado_Civil`,
+            `Numero_Hijos`,
+            `Departamento`,
+            `Fecha_Ingreso`,
+            `Tipo_Contrato`
+        FROM `empleados`
+        WHERE 1 = 1
+    ");
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand())
+            {
+                cmd.Connection = conn;
+
+                if (!string.IsNullOrWhiteSpace(nombre))
+                {
+                    sb.Append(" AND CONCAT(COALESCE(`Primer_Nombre`,''),' ',COALESCE(`Segundo_Nombre`,''),' ',COALESCE(`Primer_Apellido`,''),' ',COALESCE(`Segundo_Apellido`,'')) LIKE @Nombre");
+                    cmd.Parameters.AddWithValue("@Nombre", "%" + nombre.Trim() + "%");
+                }
+
+                if (!string.IsNullOrWhiteSpace(documento))
+                {
+                    sb.Append(" AND `Numero_Documento` LIKE @Documento");
+                    cmd.Parameters.AddWithValue("@Documento", "%" + documento.Trim() + "%");
+                }
+
+                if (!string.IsNullOrWhiteSpace(departamento))
+                {
+                    sb.Append(" AND `Departamento` = @Departamento");
+                    cmd.Parameters.AddWithValue("@Departamento", departamento.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(cargo))
+                {
+                    sb.Append(" AND `Cargo` = @Cargo");
+                    cmd.Parameters.AddWithValue("@Cargo", cargo.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(estadoCivil))
+                {
+                    sb.Append(" AND `Estado_Civil` = @EstadoCivil");
+                    cmd.Parameters.AddWithValue("@EstadoCivil", estadoCivil.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(salarioRange))
+                {
+                    decimal? min = null, max = null;
+                    var key = salarioRange.Trim();
+
+                    switch (key)
+                    {
+                        case "1.400.000 - 1.999.999":
+                            min = 1400000m; max = 1999999.99m; break;
+                        case "2.000.000 - 2.999.999":
+                            min = 2000000m; max = 2999999.99m; break;
+                        case "3.000.000 - 4.999.999":
+                            min = 3000000m; max = 4999999.99m; break;
+                        case "+ 5.000.000":
+                        case "+5.000.000":
+                            min = 5000000m; break;
+                    }
+
+                    if (min.HasValue)
+                    {
+                        sb.Append(" AND `Salario_Base` >= @MinSalario");
+                        cmd.Parameters.AddWithValue("@MinSalario", min.Value);
+                    }
+
+                    if (max.HasValue)
+                    {
+                        sb.Append(" AND `Salario_Base` <= @MaxSalario");
+                        cmd.Parameters.AddWithValue("@MaxSalario", max.Value);
+                    }
+                }
+
+                // Fecha_Ingreso filter: if parseable, exact date; otherwise partial-match against MySQL textual representation (YYYY-MM-DD)
+                if (!string.IsNullOrWhiteSpace(fechaIngresoFilter))
+                {
+                    var txt = fechaIngresoFilter.Trim();
+                    if (DateTime.TryParse(txt, out var dtIngres))
+                    {
+                        sb.Append(" AND DATE(`Fecha_Ingreso`) = @FechaIngreso");
+                        cmd.Parameters.AddWithValue("@FechaIngreso", dtIngres.Date);
+                    }
+                    else
+                    {
+                        sb.Append(" AND CAST(`Fecha_Ingreso` AS CHAR) LIKE @FechaIngresoLike");
+                        cmd.Parameters.AddWithValue("@FechaIngresoLike", "%" + txt + "%");
+                    }
+                }
+
+                // Fecha_Nacimiento filter: same behavior as Fecha_Ingreso
+                if (!string.IsNullOrWhiteSpace(fechaNacimientoFilter))
+                {
+                    var txt = fechaNacimientoFilter.Trim();
+                    if (DateTime.TryParse(txt, out var dtNac))
+                    {
+                        sb.Append(" AND DATE(`Fecha_Nacimiento`) = @FechaNacimiento");
+                        cmd.Parameters.AddWithValue("@FechaNacimiento", dtNac.Date);
+                    }
+                    else
+                    {
+                        sb.Append(" AND CAST(`Fecha_Nacimiento` AS CHAR) LIKE @FechaNacimientoLike");
+                        cmd.Parameters.AddWithValue("@FechaNacimientoLike", "%" + txt + "%");
+                    }
+                }
+
+                // Filter by Numero_Hijos if provided (exact match)
+                if (numeroHijos.HasValue)
+                {
+                    sb.Append(" AND `Numero_Hijos` = @NumeroHijos");
+                    cmd.Parameters.AddWithValue("@NumeroHijos", numeroHijos.Value);
+                }
+
+                sb.Append(" ORDER BY Nombre;");
+
+                cmd.CommandText = sb.ToString();
+
+                using (var da = new MySqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
+        // Distinct value helpers (Departamento, Cargo, Estado_Civil)
+        public List<string> ObtenerDepartamentos() => ObtenerDistinctValues("Departamento");
+        public List<string> ObtenerCargos() => ObtenerDistinctValues("Cargo");
+        public List<string> ObtenerEstadosCiviles() => ObtenerDistinctValues("Estado_Civil");
+
+        private List<string> ObtenerDistinctValues(string columnName)
+        {
+            var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "Departamento", "Cargo", "Estado_Civil"
+            };
+
+            if (!allowed.Contains(columnName))
+                throw new ArgumentException("Invalid column", nameof(columnName));
+
+            var list = new List<string>();
+
+            string query = $"SELECT DISTINCT `{columnName}` FROM `empleados` WHERE `{columnName}` IS NOT NULL AND `{columnName}` <> '' ORDER BY `{columnName}`;";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var val = reader.IsDBNull(0) ? null : reader.GetString(0);
+                            if (!string.IsNullOrWhiteSpace(val))
+                                list.Add(val);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database select failed: " + ex.Message, ex);
+                }
+            }
+
+            return list;
+        }
+
+        // PSEUDOCODE (detailed):
+        // 1. Method signature: Editar_Empleado(string originalNumeroDocumento, Empleado nuevo, params string[] camposCambiados)
+        // 2. Validate originalNumeroDocumento not null/empty and camposCambiados has at least one entry.
+        // 3. Define allowed columns mapping to properties (same names as DB columns).
+        // 4. For each campo in camposCambiados:
+        //    a. Normalize name.
+        //    b. If not allowed -> throw ArgumentException.
+        //    c. Add "`Column` = @Param" to assignment list.
+        //    d. Add parameter to MySqlCommand with the value taken from `nuevo` (use DBNull.Value for nullables).
+        // 5. Build UPDATE SQL: "UPDATE `empleados` SET {assignments} WHERE `Numero_Documento` = @OriginalNumero_Documento LIMIT 1;"
+        // 6. Add parameter @OriginalNumero_Documento with the original key value.
+        // 7. Open connection, ExecuteNonQuery inside try/catch. On exception, rethrow with contextual message.
+        // 8. Caller is responsible to call this with the list of changed textboxes (field names matching DB column names).
+        public void Editar_Empleado(string originalNumeroDocumento, Empleado nuevo, params string[] camposCambiados)
+        {
+            if (string.IsNullOrWhiteSpace(originalNumeroDocumento))
+                throw new ArgumentException("originalNumeroDocumento is required.", nameof(originalNumeroDocumento));
+
+            if (camposCambiados == null || camposCambiados.Length == 0)
+                throw new ArgumentException("At least one field must be provided in camposCambiados.", nameof(camposCambiados));
+
+            // allowed fields (must match DB column names)
+            var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "Primer_Nombre","Segundo_Nombre","Primer_Apellido","Segundo_Apellido",
+                "Tipo_Documento","Numero_Documento","Fecha_Nacimiento","Telefono","Correo",
+                "Direccion","Estado_Civil","Numero_Hijos","Cargo","Departamento","Fecha_Ingreso",
+                "Tipo_Contrato","Salario_Base","Estado"
+            };
+
+            // Build a modifiable list of trimmed field names
+            var campos = new List<string>();
+            foreach (var raw in camposCambiados)
+            {
+                if (string.IsNullOrWhiteSpace(raw)) continue;
+                campos.Add(raw.Trim());
+            }
+
+            if (campos.Count == 0)
+                throw new ArgumentException("At least one non-empty field must be provided in camposCambiados.", nameof(camposCambiados));
+
+            bool wantsKeyChange = campos.Any(x => string.Equals(x, "Numero_Documento", StringComparison.OrdinalIgnoreCase));
+
+            // special case: if also includes Fecha_Nacimiento, ignore it for updates (derived field)
+            if (campos.Contains("Fecha_Nacimiento", StringComparer.OrdinalIgnoreCase))
+            {
+                campos.Remove("Fecha_Nacimiento");
+            }
+
+            if (wantsKeyChange)
+            {
+                var newKey = (nuevo.Numero_Documento ?? string.Empty).Trim();
+                var origKey = originalNumeroDocumento.Trim();
+
+                if (string.Equals(newKey, origKey, StringComparison.OrdinalIgnoreCase))
+                {
+                    // No real change -> remove the key update
+                    campos.RemoveAll(x => string.Equals(x, "Numero_Documento", StringComparison.OrdinalIgnoreCase));
+                    wantsKeyChange = false;
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(newKey))
+                        throw new ArgumentException("New Numero_Documento cannot be empty.", nameof(nuevo.Numero_Documento));
+
+                    // Duplicate check: do not allow setting to an existing key
+                    var existing = Buscar_Empleado(newKey);
+                    if (existing != null)
+                        throw new InvalidOperationException($"El número de documento '{newKey}' ya está en uso por otro empleado.");
+                }
+            }
+
+            var assignments = new List<string>();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (MySqlCommand command = new MySqlCommand())
+            {
+                command.Connection = connection;
+
+                foreach (var campo in campos)
+                {
+                    if (!allowed.Contains(campo))
+                        throw new ArgumentException($"Field '{campo}' is not allowed to be updated.", nameof(camposCambiados));
+
+                    // Add assignment and parameter based on field name
+                    switch (campo)
+                    {
+                        case "Primer_Nombre":
+                            assignments.Add("`Primer_Nombre` = @Primer_Nombre");
+                            command.Parameters.AddWithValue("@Primer_Nombre", (object)nuevo.Primer_Nombre ?? DBNull.Value);
+                            break;
+                        case "Segundo_Nombre":
+                            assignments.Add("`Segundo_Nombre` = @Segundo_Nombre");
+                            command.Parameters.AddWithValue("@Segundo_Nombre", (object)nuevo.Segundo_Nombre ?? DBNull.Value);
+                            break;
+                        case "Primer_Apellido":
+                            assignments.Add("`Primer_Apellido` = @Primer_Apellido");
+                            command.Parameters.AddWithValue("@Primer_Apellido", (object)nuevo.Primer_Apellido ?? DBNull.Value);
+                            break;
+                        case "Segundo_Apellido":
+                            assignments.Add("`Segundo_Apellido` = @Segundo_Segundo_Apellido");
+                            command.Parameters.AddWithValue("@Segundo_Apellido", (object)nuevo.Segundo_Apellido ?? DBNull.Value);
+                            break;
+                        case "Tipo_Documento":
+                            assignments.Add("`Tipo_Documento` = @Tipo_Documento");
+                            command.Parameters.AddWithValue("@Tipo_Documento", (object)nuevo.Tipo_Documento ?? DBNull.Value);
+                            break;
+                        case "Numero_Documento":
+                            assignments.Add("`Numero_Documento` = @Numero_Documento");
+                            command.Parameters.AddWithValue("@Numero_Documento", (object)nuevo.Numero_Documento ?? DBNull.Value);
+                            break;
+                        case "Fecha_Nacimiento":
+                            assignments.Add("`Fecha_Nacimiento` = @Fecha_Nacimiento");
+                            command.Parameters.AddWithValue("@Fecha_Nacimiento", (object)(nuevo.Fecha_Nacimiento.HasValue ? (object)nuevo.Fecha_Nacimiento.Value : DBNull.Value));
+                            break;
+                        case "Telefono":
+                            assignments.Add("`Telefono` = @Telefono");
+                            command.Parameters.AddWithValue("@Telefono", (object)nuevo.Telefono ?? DBNull.Value);
+                            break;
+                        case "Correo":
+                            assignments.Add("`Correo` = @Correo");
+                            command.Parameters.AddWithValue("@Correo", (object)nuevo.Correo ?? DBNull.Value);
+                            break;
+                        case "Direccion":
+                            assignments.Add("`Direccion` = @Direccion");
+                            command.Parameters.AddWithValue("@Direccion", (object)nuevo.Direccion ?? DBNull.Value);
+                            break;
+                        case "Estado_Civil":
+                            assignments.Add("`Estado_Civil` = @Estado_Civil");
+                            command.Parameters.AddWithValue("@Estado_Civil", (object)nuevo.Estado_Civil ?? DBNull.Value);
+                            break;
+                        case "Numero_Hijos":
+                            assignments.Add("`Numero_Hijos` = @Numero_Hijos");
+                            command.Parameters.AddWithValue("@Numero_Hijos", (object)(nuevo.Numero_Hijos.HasValue ? (object)nuevo.Numero_Hijos.Value : DBNull.Value));
+                            break;
+                        case "Cargo":
+                            assignments.Add("`Cargo` = @Cargo");
+                            command.Parameters.AddWithValue("@Cargo", (object)nuevo.Cargo ?? DBNull.Value);
+                            break;
+                        case "Departamento":
+                            assignments.Add("`Departamento` = @Departamento");
+                            command.Parameters.AddWithValue("@Departamento", (object)nuevo.Departamento ?? DBNull.Value);
+                            break;
+                        case "Fecha_Ingreso":
+                            assignments.Add("`Fecha_Ingreso` = @Fecha_Ingreso");
+                            command.Parameters.AddWithValue("@Fecha_Ingreso", (object)(nuevo.Fecha_Ingreso.HasValue ? (object)nuevo.Fecha_Ingreso.Value : DBNull.Value));
+                            break;
+                        case "Tipo_Contrato":
+                            assignments.Add("`Tipo_Contrato` = @Tipo_Contrato");
+                            command.Parameters.AddWithValue("@Tipo_Contrato", (object)nuevo.Tipo_Contrato ?? DBNull.Value);
+                            break;
+                        case "Salario_Base":
+                            assignments.Add("`Salario_Base` = @Salario_Base");
+                            command.Parameters.AddWithValue("@Salario_Base", (object)(nuevo.Salario_Base.HasValue ? (object)nuevo.Salario_Base.Value : DBNull.Value));
+                            break;
+                        case "Estado":
+                            assignments.Add("`Estado` = @Estado");
+                            command.Parameters.AddWithValue("@Estado", (object)nuevo.Estado ?? DBNull.Value);
+                            break;
+                    }
+                }
+
+                if (assignments.Count == 0)
+                    throw new ArgumentException("No valid fields found in camposCambiados.", nameof(camposCambiados));
+
+                // Add original key parameter
+                command.Parameters.AddWithValue("@OriginalNumero_Documento", originalNumeroDocumento);
+
+                string setClause = string.Join(", ", assignments);
+                command.CommandText = $"UPDATE `empleados` SET {setClause} WHERE `Numero_Documento` = @OriginalNumero_Documento LIMIT 1;";
+
+                try
+                {
+                    connection.Open();
+                    int affected = command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database update failed: " + ex.Message, ex);
                 }
             }
         }

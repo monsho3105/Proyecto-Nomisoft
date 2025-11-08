@@ -15,6 +15,7 @@ namespace Proyecto_Nomisoft
         public Seleccion()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -25,6 +26,11 @@ namespace Proyecto_Nomisoft
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Seleccion_Load(object sender, EventArgs e)
         {
 
         }
