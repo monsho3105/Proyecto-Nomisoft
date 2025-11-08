@@ -24,7 +24,9 @@ namespace Proyecto_Nomisoft
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            Editar_Empleados Next = new Editar_Empleados();
+            Next.Show();
+            this.Hide();
         }
 
         private void button4_Click(object sender, EventArgs e)
