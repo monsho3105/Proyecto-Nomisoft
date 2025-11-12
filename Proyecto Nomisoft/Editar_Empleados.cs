@@ -305,7 +305,7 @@ namespace Proyecto_Nomisoft
                             var existingSS = conexion.Buscar_Seguridad_Social(numero);
                             if (existingSS != null)
                             {
-                                MessageBox.Show("Ya existe información de seguridad social para este empleado. Se omitió la inserción.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show("Ya existe información de seguridad social para este empleado. Seomitió la inserción.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                             else
                             {
@@ -359,7 +359,7 @@ namespace Proyecto_Nomisoft
                         campos.Add("Primer_Apellido");
 
                     if (!string.Equals(nuevo.Segundo_Apellido ?? "", originalEmpleado.Segundo_Apellido ?? "", StringComparison.Ordinal))
-                        campos.Add("Segundo_Apellido");
+                        campos.Add(" Segundo_Apellido");
 
                     if (!string.Equals(nuevo.Tipo_Documento ?? "", originalEmpleado.Tipo_Documento ?? "", StringComparison.Ordinal))
                         campos.Add("Tipo_Documento");
@@ -404,10 +404,85 @@ namespace Proyecto_Nomisoft
                     if (!string.Equals(nuevo.Estado ?? "", originalEmpleado.Estado ?? "", StringComparison.Ordinal))
                         campos.Add("Estado");
 
+                    // Prepare seguridad_social values (combo boxes)
+                    var numero = (nuevo.Numero_Documento ?? string.Empty).Trim();
+                    var eps = comboBox1.SelectedItem?.ToString() ?? comboBox1.Text?.Trim() ?? string.Empty;
+                    var fondoPension = comboBox3.SelectedItem?.ToString() ?? comboBox3.Text?.Trim() ?? string.Empty;
+                    var fondoCesantias = comboBox2.SelectedItem?.ToString() ?? comboBox2.Text?.Trim() ?? string.Empty;
+
                     if (campos.Count == 0)
                     {
-                        MessageBox.Show("No se detectaron cambios para guardar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
+                        // No empleado changes: but maybe seguridad_social (combo boxes) changed -> handle separately
+                        try
+                        {
+                            var existingSS = conexion.Buscar_Seguridad_Social(numero);
+
+                            if (existingSS == null)
+                            {
+                                // nothing in DB yet; if user provided any seguridad_social values, insert
+                                if (!string.IsNullOrWhiteSpace(eps) || !string.IsNullOrWhiteSpace(fondoPension) || !string.IsNullOrWhiteSpace(fondoCesantias))
+                                {
+                                    var defaultArl = "sura";
+                                    var defaultCaja = "colsubsidio";
+                                    conexion.Agregar_Seguridad_Social(numero, eps, fondoPension, defaultArl, defaultCaja, fondoCesantias);
+                                    MessageBox.Show("Registro de seguridad social agregado.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    return;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("No se detectaron cambios para guardar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                // Compare combos with existing values to decide if update needed
+                                bool ssNeedsUpdate = false;
+                                var nuevoSS = new Conexion.SeguridadSocial
+                                {
+                                    Eps = string.IsNullOrWhiteSpace(eps) ? null : eps,
+                                    Fondo_Pension = string.IsNullOrWhiteSpace(fondoPension) ? null : fondoPension,
+                                    Fondo_Cesantias = string.IsNullOrWhiteSpace(fondoCesantias) ? null : fondoCesantias
+                                };
+
+                                if (nuevoSS.Eps != null && !string.Equals(nuevoSS.Eps, existingSS.Eps, StringComparison.Ordinal))
+                                    ssNeedsUpdate = true;
+                                if (nuevoSS.Fondo_Pension != null && !string.Equals(nuevoSS.Fondo_Pension, existingSS.Fondo_Pension, StringComparison.Ordinal))
+                                    ssNeedsUpdate = true;
+                                if (nuevoSS.Fondo_Cesantias != null && !string.Equals(nuevoSS.Fondo_Cesantias, existingSS.Fondo_Cesantias, StringComparison.Ordinal))
+                                    ssNeedsUpdate = true;
+
+                                if (ssNeedsUpdate)
+                                {
+                                    // use the string overload: pass numeroDocumento + all 6 parameters
+                                    conexion.Editar_Seguridad_Social(
+                                        existingSS.Numero_Documento,
+                                        nuevoSS.Eps,
+                                        nuevoSS.Fondo_Pension,
+                                        existingSS.Arl,
+                                        existingSS.Caja_Compensacion,
+                                        nuevoSS.Fondo_Cesantias
+                                    );
+                                    MessageBox.Show("Registro de seguridad social actualizado.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    return;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("No se detectaron cambios para guardar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    return;
+                                }
+                            }
+                        }
+                        catch (InvalidOperationException invEx)
+                        {
+                            MessageBox.Show("No se pudo actualizar seguridad social: " + invEx.Message, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        catch (Exception exSS)
+                        {
+                            MessageBox.Show("Error al modificar seguridad social: " + exSS.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                     }
 
                     // Call Editar_Empleado (it will validate primary-key changes and duplicates)
@@ -422,11 +497,6 @@ namespace Proyecto_Nomisoft
                         MessageBox.Show("Empleado actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // --- Now update seguridad_social using comboBox values ---
-                        var numero = (nuevo.Numero_Documento ?? string.Empty).Trim();
-                        var eps = comboBox1.SelectedItem?.ToString() ?? comboBox1.Text?.Trim() ?? string.Empty;
-                        var fondoPension = comboBox3.SelectedItem?.ToString() ?? comboBox3.Text?.Trim() ?? string.Empty;
-                        var fondoCesantias = comboBox2.SelectedItem?.ToString() ?? comboBox2.Text?.Trim() ?? string.Empty;
-
                         try
                         {
                             var existingSS = conexion.Buscar_Seguridad_Social(numero);
@@ -454,13 +524,13 @@ namespace Proyecto_Nomisoft
 
                                 if (nuevoSS.Eps != null || nuevoSS.Fondo_Pension != null || nuevoSS.Fondo_Cesantias != null)
                                 {
-                                    // use the Editar overload that accepts id + SeguridadSocial DTO
+                                    // use the Editar overload that accepts all required parameters
                                     conexion.Editar_Seguridad_Social(
                                         numero,
                                         nuevoSS.Eps,
                                         nuevoSS.Fondo_Pension,
-                                        existingSS.Arl, // preserve current ARL
-                                        existingSS.Caja_Compensacion, // preserve current Caja
+                                        existingSS.Arl, // preserve current ARL value
+                                        existingSS.Caja_Compensacion, // preserve current Caja value
                                         nuevoSS.Fondo_Cesantias
                                     );
                                     MessageBox.Show("Registro de seguridad social actualizado.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
