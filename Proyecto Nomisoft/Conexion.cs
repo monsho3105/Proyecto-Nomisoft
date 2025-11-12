@@ -11,7 +11,7 @@ namespace Proyecto_Nomisoft
     internal class Conexion
     {
         private string connectionString
-           = "Server=localhost;Database=nomisoft;User ID=root;Password=Misioner@31";
+           = "Server=localhost;Database=nomisoft;User ID=root;Password=manuela123";
 
         public bool Conectandoando()
         {
