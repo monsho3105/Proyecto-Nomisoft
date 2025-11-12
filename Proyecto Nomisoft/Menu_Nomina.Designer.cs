@@ -45,6 +45,7 @@
             this.button_Crear_Seg_Soc.TabIndex = 0;
             this.button_Crear_Seg_Soc.Text = "crear seguridad social";
             this.button_Crear_Seg_Soc.UseVisualStyleBackColor = true;
+            this.button_Crear_Seg_Soc.Click += new System.EventHandler(this.button_Crear_Seg_Soc_Click);
             // 
             // button_Editar_Nomina
             // 

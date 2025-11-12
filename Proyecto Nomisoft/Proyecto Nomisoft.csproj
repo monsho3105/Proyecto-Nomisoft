@@ -111,6 +111,12 @@
       <DependentUpon>Agregar_Emple.cs</DependentUpon>
     </Compile>
     <Compile Include="Conexion.cs" />
+    <Compile Include="Crear_Seg_Soc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Crear_Seg_Soc.Designer.cs">
+      <DependentUpon>Crear_Seg_Soc.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editar_Empleados.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +135,7 @@
     <Compile Include="Menu_Nomina.Designer.cs">
       <DependentUpon>Menu_Nomina.cs</DependentUpon>
     </Compile>
+    <Compile Include="SeguridadSocial.cs" />
     <Compile Include="Seleccion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Agregar_Emple.resx">
       <DependentUpon>Agregar_Emple.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Crear_Seg_Soc.resx">
+      <DependentUpon>Crear_Seg_Soc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editar_Empleados.resx">
       <DependentUpon>Editar_Empleados.cs</DependentUpon>
@@ -194,6 +204,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icono minimizar.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lupa.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
