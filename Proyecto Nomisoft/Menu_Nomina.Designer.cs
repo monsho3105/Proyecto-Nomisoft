@@ -28,24 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button_Crear_Seg_Soc = new System.Windows.Forms.Button();
             this.button_Editar_Nomina = new System.Windows.Forms.Button();
             this.button_Liquidar = new System.Windows.Forms.Button();
             this.button_Crear_Nomina = new System.Windows.Forms.Button();
-            this.button_Editar_Seg_Soc = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button_regresar = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // button_Crear_Seg_Soc
-            // 
-            this.button_Crear_Seg_Soc.Location = new System.Drawing.Point(111, 79);
-            this.button_Crear_Seg_Soc.Name = "button_Crear_Seg_Soc";
-            this.button_Crear_Seg_Soc.Size = new System.Drawing.Size(217, 65);
-            this.button_Crear_Seg_Soc.TabIndex = 0;
-            this.button_Crear_Seg_Soc.Text = "crear seguridad social";
-            this.button_Crear_Seg_Soc.UseVisualStyleBackColor = true;
-            this.button_Crear_Seg_Soc.Click += new System.EventHandler(this.button_Crear_Seg_Soc_Click);
             // 
             // button_Editar_Nomina
             // 
@@ -75,15 +63,6 @@
             this.button_Crear_Nomina.UseVisualStyleBackColor = true;
             this.button_Crear_Nomina.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button_Editar_Seg_Soc
-            // 
-            this.button_Editar_Seg_Soc.Location = new System.Drawing.Point(631, 79);
-            this.button_Editar_Seg_Soc.Name = "button_Editar_Seg_Soc";
-            this.button_Editar_Seg_Soc.Size = new System.Drawing.Size(204, 76);
-            this.button_Editar_Seg_Soc.TabIndex = 4;
-            this.button_Editar_Seg_Soc.Text = "Editar Seguridad social";
-            this.button_Editar_Seg_Soc.UseVisualStyleBackColor = true;
-            // 
             // button6
             // 
             this.button6.Location = new System.Drawing.Point(631, 402);
@@ -111,11 +90,9 @@
             this.ClientSize = new System.Drawing.Size(1121, 866);
             this.Controls.Add(this.button_regresar);
             this.Controls.Add(this.button6);
-            this.Controls.Add(this.button_Editar_Seg_Soc);
             this.Controls.Add(this.button_Crear_Nomina);
             this.Controls.Add(this.button_Liquidar);
             this.Controls.Add(this.button_Editar_Nomina);
-            this.Controls.Add(this.button_Crear_Seg_Soc);
             this.Name = "Menu_Nomina";
             this.Text = "Menu_Nomina";
             this.ResumeLayout(false);
@@ -123,12 +100,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button_Crear_Seg_Soc;
         private System.Windows.Forms.Button button_Editar_Nomina;
         private System.Windows.Forms.Button button_Liquidar;
         private System.Windows.Forms.Button button_Crear_Nomina;
-        private System.Windows.Forms.Button button_Editar_Seg_Soc;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button_regresar;
     }

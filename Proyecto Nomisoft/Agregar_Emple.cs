@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Proyecto_Nomisoft
@@ -160,6 +161,47 @@ namespace Proyecto_Nomisoft
                     text_Tipo_Contrato.Text, txt_Salario.Text, txt_Estado.Text);
 
                 MessageBox.Show("Empleado agregado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // --- Begin: add seguridad_social record using comboBox_Eps, comboBox_Pension, comboBox_Cesantias ---
+                // Find combo boxes safely by name (in case designer named them as requested)
+                ComboBox FindCombo(string name) => this.Controls.Find(name, true).FirstOrDefault() as ComboBox;
+
+                var cbEps = FindCombo("comboBox_Eps");
+                var cbPension = FindCombo("comboBox_Pension");
+                var cbCesantias = FindCombo("comboBox_Cesantias");
+
+                var eps = cbEps?.SelectedItem?.ToString() ?? cbEps?.Text?.Trim() ?? string.Empty;
+                var fondoPension = cbPension?.SelectedItem?.ToString() ?? cbPension?.Text?.Trim() ?? string.Empty;
+                var fondoCesantias = cbCesantias?.SelectedItem?.ToString() ?? cbCesantias?.Text?.Trim() ?? string.Empty;
+
+                var numeroDoc = (txt_Numero_Doc.Text ?? string.Empty).Trim();
+
+                // Only attempt insert if at least one seguridad_social value provided
+                if (!string.IsNullOrWhiteSpace(eps) || !string.IsNullOrWhiteSpace(fondoPension) || !string.IsNullOrWhiteSpace(fondoCesantias))
+                {
+                    try
+                    {
+                        var existing = conexion.Buscar_Seguridad_Social(numeroDoc);
+                        if (existing != null)
+                        {
+                            MessageBox.Show("Ya existe información de seguridad social para este número de documento. Seomitió la inserción.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            // default ARL and Caja if you want to set them here
+                            var defaultArl = "sura";
+                            var defaultCaja = "colsubsidio";
+
+                            conexion.Agregar_Seguridad_Social(numeroDoc, eps, fondoPension, defaultArl, defaultCaja, fondoCesantias);
+                            MessageBox.Show("Registro de seguridad social agregado.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    catch (Exception exSec)
+                    {
+                        MessageBox.Show("Error al agregar seguridad social: " + exSec.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                // --- End: seguridad_social insert ---
             }
             catch (Exception ex)
             {
@@ -172,6 +214,11 @@ namespace Proyecto_Nomisoft
             Admin_Menu Back = new Admin_Menu();
             Back.Show();
             this.Hide();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

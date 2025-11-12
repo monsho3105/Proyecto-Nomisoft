@@ -34,11 +34,8 @@ namespace Proyecto_Nomisoft
             this.Hide();
         }
 
-        private void button_Crear_Seg_Soc_Click(object sender, EventArgs e)
-        {
-            Crear_Seg_Soc next = new Crear_Seg_Soc();
-            next.Show();
-            this.Hide();
-        }
+       
+
+
     }
 }

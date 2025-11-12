@@ -66,6 +66,12 @@
             this.txt_Salario = new System.Windows.Forms.TextBox();
             this.button_Agregar = new System.Windows.Forms.Button();
             this.buttonRegresar = new System.Windows.Forms.Button();
+            this.comboBox_Eps = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBox_Pension = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBox_Cesantias = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label_Nombre1
@@ -382,7 +388,7 @@
             // 
             // button_Agregar
             // 
-            this.button_Agregar.Location = new System.Drawing.Point(1080, 936);
+            this.button_Agregar.Location = new System.Drawing.Point(1064, 972);
             this.button_Agregar.Name = "button_Agregar";
             this.button_Agregar.Size = new System.Drawing.Size(329, 96);
             this.button_Agregar.TabIndex = 39;
@@ -392,7 +398,7 @@
             // 
             // buttonRegresar
             // 
-            this.buttonRegresar.Location = new System.Drawing.Point(130, 871);
+            this.buttonRegresar.Location = new System.Drawing.Point(129, 981);
             this.buttonRegresar.Name = "buttonRegresar";
             this.buttonRegresar.Size = new System.Drawing.Size(329, 96);
             this.buttonRegresar.TabIndex = 40;
@@ -400,11 +406,98 @@
             this.buttonRegresar.UseVisualStyleBackColor = true;
             this.buttonRegresar.Click += new System.EventHandler(this.button1_Click);
             // 
+            // comboBox_Eps
+            // 
+            this.comboBox_Eps.FormattingEnabled = true;
+            this.comboBox_Eps.Items.AddRange(new object[] {
+            "Sanitas",
+            "SURA",
+            "Compensar",
+            "Nueva EPS",
+            "Salud Total",
+            "Famisanar",
+            "Coosalud",
+            "SOS",
+            "Asmet Salud",
+            "Sabia Salud",
+            "Capresoca",
+            "Dusakawi EPSI",
+            "Mallamas EPSI",
+            "Manexka EPSI",
+            "AIC EPSI",
+            "Medimás EPS"});
+            this.comboBox_Eps.Location = new System.Drawing.Point(161, 840);
+            this.comboBox_Eps.Name = "comboBox_Eps";
+            this.comboBox_Eps.Size = new System.Drawing.Size(237, 28);
+            this.comboBox_Eps.TabIndex = 42;
+            this.comboBox_Eps.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(54, 840);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 20);
+            this.label4.TabIndex = 41;
+            this.label4.Text = "EPS";
+            // 
+            // comboBox_Pension
+            // 
+            this.comboBox_Pension.FormattingEnabled = true;
+            this.comboBox_Pension.Items.AddRange(new object[] {
+            "Colpensiones",
+            "Porvenir",
+            "Protección",
+            "Colfondos",
+            "Skandia"});
+            this.comboBox_Pension.Location = new System.Drawing.Point(629, 840);
+            this.comboBox_Pension.Name = "comboBox_Pension";
+            this.comboBox_Pension.Size = new System.Drawing.Size(237, 28);
+            this.comboBox_Pension.TabIndex = 44;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(457, 843);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(121, 20);
+            this.label5.TabIndex = 43;
+            this.label5.Text = "Fondo_Pension";
+            // 
+            // comboBox_Cesantias
+            // 
+            this.comboBox_Cesantias.FormattingEnabled = true;
+            this.comboBox_Cesantias.Items.AddRange(new object[] {
+            "Porvenir",
+            "Protección",
+            "Colfondos",
+            "Skandia",
+            "Fondo Nacional del Ahorro"});
+            this.comboBox_Cesantias.Location = new System.Drawing.Point(1132, 843);
+            this.comboBox_Cesantias.Name = "comboBox_Cesantias";
+            this.comboBox_Cesantias.Size = new System.Drawing.Size(237, 28);
+            this.comboBox_Cesantias.TabIndex = 46;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(901, 840);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(152, 20);
+            this.label6.TabIndex = 45;
+            this.label6.Text = "Fondo de Cesantias";
+            // 
             // Agregar_Emple
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1531, 1077);
+            this.ClientSize = new System.Drawing.Size(1531, 1159);
+            this.Controls.Add(this.comboBox_Cesantias);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.comboBox_Pension);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.comboBox_Eps);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.buttonRegresar);
             this.Controls.Add(this.button_Agregar);
             this.Controls.Add(this.label3);
@@ -491,5 +584,11 @@
         private System.Windows.Forms.TextBox txt_Salario;
         private System.Windows.Forms.Button button_Agregar;
         private System.Windows.Forms.Button buttonRegresar;
+        private System.Windows.Forms.ComboBox comboBox_Eps;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox comboBox_Pension;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox comboBox_Cesantias;
+        private System.Windows.Forms.Label label6;
     }
 }

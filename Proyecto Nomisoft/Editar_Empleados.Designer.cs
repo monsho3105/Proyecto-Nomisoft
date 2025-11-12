@@ -68,11 +68,17 @@
             this.button_Buscar = new System.Windows.Forms.Button();
             this.button_Regresar = new System.Windows.Forms.Button();
             this.mySqlCommand1 = new MySql.Data.MySqlClient.MySqlCommand();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button_Guardar
             // 
-            this.button_Guardar.Location = new System.Drawing.Point(1277, 872);
+            this.button_Guardar.Location = new System.Drawing.Point(1134, 1003);
             this.button_Guardar.Name = "button_Guardar";
             this.button_Guardar.Size = new System.Drawing.Size(329, 96);
             this.button_Guardar.TabIndex = 76;
@@ -407,7 +413,7 @@
             // 
             // button_Regresar
             // 
-            this.button_Regresar.Location = new System.Drawing.Point(158, 931);
+            this.button_Regresar.Location = new System.Drawing.Point(144, 987);
             this.button_Regresar.Name = "button_Regresar";
             this.button_Regresar.Size = new System.Drawing.Size(329, 96);
             this.button_Regresar.TabIndex = 78;
@@ -422,11 +428,97 @@
             this.mySqlCommand1.EnableCaching = false;
             this.mySqlCommand1.Transaction = null;
             // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Porvenir",
+            "Protección",
+            "Colfondos",
+            "Skandia",
+            "Fondo Nacional del Ahorro"});
+            this.comboBox2.Location = new System.Drawing.Point(1147, 919);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(237, 28);
+            this.comboBox2.TabIndex = 84;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(916, 916);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(152, 20);
+            this.label6.TabIndex = 83;
+            this.label6.Text = "Fondo de Cesantias";
+            // 
+            // comboBox3
+            // 
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Items.AddRange(new object[] {
+            "Colpensiones",
+            "Porvenir",
+            "Protección",
+            "Colfondos",
+            "Skandia"});
+            this.comboBox3.Location = new System.Drawing.Point(644, 916);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(237, 28);
+            this.comboBox3.TabIndex = 82;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(472, 919);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(121, 20);
+            this.label5.TabIndex = 81;
+            this.label5.Text = "Fondo_Pension";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Sanitas",
+            "SURA",
+            "Compensar",
+            "Nueva EPS",
+            "Salud Total",
+            "Famisanar",
+            "Coosalud",
+            "SOS",
+            "Asmet Salud",
+            "Sabia Salud",
+            "Capresoca",
+            "Dusakawi EPSI",
+            "Mallamas EPSI",
+            "Manexka EPSI",
+            "AIC EPSI",
+            "Medimás EPS"});
+            this.comboBox1.Location = new System.Drawing.Point(176, 916);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(237, 28);
+            this.comboBox1.TabIndex = 80;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(69, 916);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 20);
+            this.label4.TabIndex = 79;
+            this.label4.Text = "EPS";
+            // 
             // Editar_Empleados
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1666, 1232);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.comboBox3);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.button_Regresar);
             this.Controls.Add(this.button_Buscar);
             this.Controls.Add(this.button_Guardar);
@@ -516,5 +608,11 @@
         private System.Windows.Forms.Button button_Buscar;
         private System.Windows.Forms.Button button_Regresar;
         private MySql.Data.MySqlClient.MySqlCommand mySqlCommand1;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label4;
     }
 }

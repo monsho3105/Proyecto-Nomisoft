@@ -590,24 +590,149 @@ namespace Proyecto_Nomisoft
 
         public class SeguridadSocial
         {
+            public int Id { get; set; }
             public string Numero_Documento { get; set; }
-            // Add other relevant properties as needed
+            public string Eps { get; set; }
+            public string Fondo_Pension { get; set; }
+            public string Arl { get; set; }
+            public string Caja_Compensacion { get; set; }
+            public string Fondo_Cesantias { get; set; }
         }
 
         public SeguridadSocial Buscar_Seguridad_Social(string numeroDocumento)
         {
-            // TODO: Implement the actual lookup logic, e.g., query the database
-            // For now, return null to indicate not found
-            return null;
+            if (string.IsNullOrWhiteSpace(numeroDocumento)) return null;
+
+            string sql = @"
+                SELECT Id, Numero_Documento, Eps, Fondo_Pension, Arl, Caja_Compensacion, Fondo_Cesantias
+                FROM `seguridad_social`
+                WHERE `Numero_Documento` = @numeroDocumento
+                LIMIT 1;";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@numeroDocumento", numeroDocumento.Trim());
+
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.Read()) return null;
+
+                        var ss = new SeguridadSocial();
+                        int i = 0;
+                        ss.Id = reader.IsDBNull(i) ? 0 : reader.GetInt32(i); i++;
+                        ss.Numero_Documento = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        ss.Eps = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        ss.Fondo_Pension = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        ss.Arl = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        ss.Caja_Compensacion = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        ss.Fondo_Cesantias = reader.IsDBNull(i) ? null : reader.GetString(i); i++;
+                        return ss;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database select failed: " + ex.Message, ex);
+                }
+            }
         }
 
         // Add this method to your Conexion class
         public void Agregar_Seguridad_Social(string numeroDocumento, string eps, string fondoPension, string arl, string cajaCompensacion, string fondoCesantias)
         {
-            // Implement the logic to insert a SeguridadSocial record into your data source.
-            // Example (pseudo-code, replace with actual DB logic):
-            // string query = "INSERT INTO SeguridadSocial (Numero_Documento, EPS, Fondo_Pension, ARL, Caja_Compensacion, Fondo_Cesantias) VALUES (@numeroDocumento, @eps, @fondoPension, @arl, @cajaCompensacion, @fondoCesantias)";
-            // using (var cmd = new SqlCommand(query, connection)) { ... }
+            if (string.IsNullOrWhiteSpace(numeroDocumento)) throw new ArgumentException("numeroDocumento is required", nameof(numeroDocumento));
+
+            // Check duplicate by Numero_Documento
+            string checkSql = "SELECT COUNT(1) FROM `seguridad_social` WHERE `Numero_Documento` = @numeroDocumento;";
+            using (var conn = new MySqlConnection(connectionString))
+            using (var checkCmd = new MySqlCommand(checkSql, conn))
+            {
+                checkCmd.Parameters.AddWithValue("@numeroDocumento", numeroDocumento.Trim());
+                try
+                {
+                    conn.Open();
+                    var countObj = checkCmd.ExecuteScalar();
+                    var count = Convert.ToInt32(countObj ?? 0);
+                    if (count > 0)
+                        throw new InvalidOperationException($"El número de documento '{numeroDocumento}' ya existe en seguridad_social.");
+                }
+                catch (InvalidOperationException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database check failed: " + ex.Message, ex);
+                }
+            }
+
+            // Insert new record
+            string insertSql = @"
+                INSERT INTO `seguridad_social` (Numero_Documento, Eps, Fondo_Pension, Arl, Caja_Compensacion, Fondo_Cesantias)
+                VALUES (@numeroDocumento, @eps, @fondoPension, @arl, @cajaCompensacion, @fondoCesantias);
+            ";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(insertSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@numeroDocumento", numeroDocumento.Trim());
+                cmd.Parameters.AddWithValue("@eps", (object)eps ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@fondoPension", (object)fondoPension ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@arl", (object)arl ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cajaCompensacion", (object)cajaCompensacion ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@fondoCesantias", (object)fondoCesantias ?? DBNull.Value);
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database insert failed: " + ex.Message, ex);
+                }
+            }
+        }
+
+        // Add this method to your existing Conexion class.
+        // Note: adjust table/column names to match your database schema if they differ.
+        public void Editar_Seguridad_Social(string numeroDocumento, string eps, string fondoPension, string arl, string cajaCompensacion, string fondoCesantias)
+        {
+            if (string.IsNullOrWhiteSpace(numeroDocumento)) throw new ArgumentException("numeroDocumento is required", nameof(numeroDocumento));
+
+            var sql = @"
+                UPDATE `seguridad_social`
+                SET `eps` = @eps,
+                    `fondo_pension` = @fondoPension,
+                    `arl` = @arl,
+                    `caja_compensacion` = @cajaCompensacion,
+                    `fondo_cesantias` = @fondoCesantias
+                WHERE `numero_documento` = @numeroDocumento;
+            ";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@eps", (object)eps ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@fondoPension", (object)fondoPension ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@arl", (object)arl ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cajaCompensacion", (object)cajaCompensacion ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@fondoCesantias", (object)fondoCesantias ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@numeroDocumento", numeroDocumento.Trim());
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database update (seguridad_social) failed: " + ex.Message, ex);
+                }
+            }
         }
     }
 }
