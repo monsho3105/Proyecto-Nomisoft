@@ -587,5 +587,27 @@ namespace Proyecto_Nomisoft
                 }
             }
         }
+
+        public class SeguridadSocial
+        {
+            public string Numero_Documento { get; set; }
+            // Add other relevant properties as needed
+        }
+
+        public SeguridadSocial Buscar_Seguridad_Social(string numeroDocumento)
+        {
+            // TODO: Implement the actual lookup logic, e.g., query the database
+            // For now, return null to indicate not found
+            return null;
+        }
+
+        // Add this method to your Conexion class
+        public void Agregar_Seguridad_Social(string numeroDocumento, string eps, string fondoPension, string arl, string cajaCompensacion, string fondoCesantias)
+        {
+            // Implement the logic to insert a SeguridadSocial record into your data source.
+            // Example (pseudo-code, replace with actual DB logic):
+            // string query = "INSERT INTO SeguridadSocial (Numero_Documento, EPS, Fondo_Pension, ARL, Caja_Compensacion, Fondo_Cesantias) VALUES (@numeroDocumento, @eps, @fondoPension, @arl, @cajaCompensacion, @fondoCesantias)";
+            // using (var cmd = new SqlCommand(query, connection)) { ... }
+        }
     }
 }
