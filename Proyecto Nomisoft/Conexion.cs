@@ -734,5 +734,248 @@ namespace Proyecto_Nomisoft
                 }
             }
         }
+
+        public class Nomina
+        {
+            public string Numero_Documento { get; set; }
+            public string Periodo { get; set; }
+            public DateTime? Fecha_Creacion { get; set; }
+
+            public int? Dias_Diurnos { get; set; }
+            public int? Dias_Nocturnos { get; set; }
+            public decimal? Valor_Dias_Nocturnos { get; set; }
+
+            public int? Dias_Festivos { get; set; }
+            public decimal? Valor_Dias_Festivos { get; set; }
+
+            public decimal? Horas_Extras_Diurnas { get; set; }
+            public decimal? Valor_Horas_Extras_Diurnas { get; set; }
+
+            public decimal? Horas_Extras_Nocturnas { get; set; }
+            public decimal? Valor_Horas_Extras_Nocturnas { get; set; }
+
+            public decimal? Horas_Extras_Festivas_Diurnas { get; set; }
+            public decimal? Valor_Horas_Extras_Festivas_Diurnas { get; set; }
+
+            public decimal? Horas_Extras_Festivas_Nocturnas { get; set; }
+            public decimal? Valor_Horas_Extras_Festivas_Nocturnas { get; set; }
+
+            public decimal? Bonificaciones { get; set; }
+            public decimal? Comisiones { get; set; }
+            public decimal? Auxilio_Transporte { get; set; }
+            public decimal? Deducciones { get; set; }
+            public decimal? Aporte_Salud { get; set; }
+            public decimal? Aporte_Pension { get; set; }
+            public decimal? Total_Devengado { get; set; }
+            public decimal? Total_Deducciones { get; set; }
+            public decimal? Neto_Pagar { get; set; }
+            public string Estado { get; set; }
+        }
+
+        // Add methods to insert and query nomina records
+        public void Agregar_Nomina(Nomina n)
+        {
+            if (n == null) throw new ArgumentNullException(nameof(n));
+            if (string.IsNullOrWhiteSpace(n.Numero_Documento)) throw new ArgumentException("Numero_Documento required", nameof(n.Numero_Documento));
+            if (string.IsNullOrWhiteSpace(n.Periodo)) throw new ArgumentException("Periodo required", nameof(n.Periodo));
+
+            // prevent duplicate (Numero_Documento + Periodo)
+            string checkSql = "SELECT COUNT(1) FROM `nomina` WHERE `Numero_Documento` = @numero AND `Periodo` = @periodo;";
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(checkSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@numero", n.Numero_Documento.Trim());
+                cmd.Parameters.AddWithValue("@periodo", n.Periodo.Trim());
+                try
+                {
+                    conn.Open();
+                    var cnt = Convert.ToInt32(cmd.ExecuteScalar() ?? 0);
+                    if (cnt > 0) throw new InvalidOperationException($"Nomina for '{n.Numero_Documento}' and periodo '{n.Periodo}' already exists.");
+                }
+                catch (InvalidOperationException) { throw; }
+                catch (Exception ex) { throw new Exception("Database check failed: " + ex.Message, ex); }
+            }
+
+            string insertSql = @"
+        INSERT INTO `nomina` (
+            `Numero_Documento`,`Periodo`,`Fecha_Creacion`,
+            `Dias_Diurnos`,`Dias_Nocturnos`,`Valor_Dias_Nocturnos`,
+            `Dias_Festivos`,`Valor_Dias_Festivos`,
+            `Horas_Extras_Diurnas`,`Valor_Horas_Extras_Diurnas`,
+            `Horas_Extras_Nocturnas`,`Valor_Horas_Extras_Nocturnas`,
+            `Horas_Extras_Festivas_Diurnas`,`Valor_Horas_Extras_Festivas_Diurnas`,
+            `Horas_Extras_Festivas_Nocturnas`,`Valor_Horas_Extras_Festivas_Nocturnas`,
+            `Bonificaciones`,`Comisiones`,`Auxilio_Transporte`,
+            `Deducciones`,`Aporte_Salud`,`Aporte_Pension`,
+            `Total_Devengado`,`Total_Deducciones`,`Neto_Pagar`,`Estado`
+        ) VALUES (
+            @Numero_Documento,@Periodo,@Fecha_Creacion,
+            @Dias_Diurnos,@Dias_Nocturnos,@Valor_Dias_Nocturnos,
+            @Dias_Festivos,@Valor_Dias_Festivos,
+            @Horas_Extras_Diurnas,@Valor_Horas_Extras_Diurnas,
+            @Horas_Extras_Nocturnas,@Valor_Horas_Extras_Nocturnas,
+            @Horas_Extras_Festivas_Diurnas,@Valor_Horas_Extras_Festivas_Diurnas,
+            @Horas_Extras_Festivas_Nocturnas,@Valor_Horas_Extras_Festivas_Nocturnas,
+            @Bonificaciones,@Comisiones,@Auxilio_Transporte,
+            @Deducciones,@Aporte_Salud,@Aporte_Pension,
+            @Total_Devengado,@Total_Deducciones,@Neto_Pagar,@Estado
+        );";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(insertSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Numero_Documento", n.Numero_Documento.Trim());
+                cmd.Parameters.AddWithValue("@Periodo", n.Periodo.Trim());
+                cmd.Parameters.AddWithValue("@Fecha_Creacion", (object)n.Fecha_Creacion ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Dias_Diurnos", (object)n.Dias_Diurnos ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Dias_Nocturnos", (object)n.Dias_Nocturnos ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Dias_Nocturnos", (object)n.Valor_Dias_Nocturnos ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Dias_Festivos", (object)n.Dias_Festivos ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Dias_Festivos", (object)n.Valor_Dias_Festivos ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Diurnas", (object)n.Horas_Extras_Diurnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Diurnas", (object)n.Valor_Horas_Extras_Diurnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Nocturnas", (object)n.Horas_Extras_Nocturnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Nocturnas", (object)n.Valor_Horas_Extras_Nocturnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Festivas_Diurnas", (object)n.Horas_Extras_Festivas_Diurnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Festivas_Diurnas", (object)n.Valor_Horas_Extras_Festivas_Diurnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Festivas_Nocturnas", (object)n.Horas_Extras_Festivas_Nocturnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Festivas_Nocturnas", (object)n.Valor_Horas_Extras_Festivas_Nocturnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Bonificaciones", (object)n.Bonificaciones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Comisiones", (object)n.Comisiones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Auxilio_Transporte", (object)n.Auxilio_Transporte ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Deducciones", (object)n.Deducciones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Aporte_Salud", (object)n.Aporte_Salud ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Aporte_Pension", (object)n.Aporte_Pension ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Total_Devengado", (object)n.Total_Devengado ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Total_Deducciones", (object)n.Total_Deducciones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Neto_Pagar", (object)n.Neto_Pagar ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Estado", (object)n.Estado ?? DBNull.Value);
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database insert (nomina) failed: " + ex.Message, ex);
+                }
+            }
+        }
+
+        public Nomina Buscar_Nomina(string numeroDocumento, string periodo)
+        {
+            if (string.IsNullOrWhiteSpace(numeroDocumento) || string.IsNullOrWhiteSpace(periodo)) return null;
+
+            string sql = @"SELECT * FROM `nomina` WHERE `Numero_Documento` = @numero AND `Periodo` = @periodo LIMIT 1;";
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@numero", numeroDocumento.Trim());
+                cmd.Parameters.AddWithValue("@periodo", periodo.Trim());
+
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.Read()) return null;
+
+                        var n = new Nomina();
+                        // use GetOrdinal to avoid relying on column order
+                        Func<string, int> g = name => reader.GetOrdinal(name);
+
+                        n.Numero_Documento = reader.IsDBNull(g("Numero_Documento")) ? null : reader.GetString(g("Numero_Documento"));
+                        n.Periodo = reader.IsDBNull(g("Periodo")) ? null : reader.GetString(g("Periodo"));
+                        n.Fecha_Creacion = reader.IsDBNull(g("Fecha_Creacion")) ? (DateTime?)null : reader.GetDateTime(g("Fecha_Creacion"));
+
+                        n.Dias_Diurnos = reader.IsDBNull(g("Dias_Diurnos")) ? (int?)null : reader.GetInt32(g("Dias_Diurnos"));
+                        n.Dias_Nocturnos = reader.IsDBNull(g("Dias_Nocturnos")) ? (int?)null : reader.GetInt32(g("Dias_Nocturnos"));
+                        n.Valor_Dias_Nocturnos = reader.IsDBNull(g("Valor_Dias_Nocturnos")) ? (decimal?)null : reader.GetDecimal(g("Valor_Dias_Nocturnos"));
+
+                        n.Dias_Festivos = reader.IsDBNull(g("Dias_Festivos")) ? (int?)null : reader.GetInt32(g("Dias_Festivos"));
+                        n.Valor_Dias_Festivos = reader.IsDBNull(g("Valor_Dias_Festivos")) ? (decimal?)null : reader.GetDecimal(g("Valor_Dias_Festivos"));
+
+                        n.Horas_Extras_Diurnas = reader.IsDBNull(g("Horas_Extras_Diurnas")) ? (decimal?)null : reader.GetDecimal(g("Horas_Extras_Diurnas"));
+                        n.Valor_Horas_Extras_Diurnas = reader.IsDBNull(g("Valor_Horas_Extras_Diurnas")) ? (decimal?)null : reader.GetDecimal(g("Valor_Horas_Extras_Diurnas"));
+
+                        n.Horas_Extras_Nocturnas = reader.IsDBNull(g("Horas_Extras_Nocturnas")) ? (decimal?)null : reader.GetDecimal(g("Horas_Extras_Nocturnas"));
+                        n.Valor_Horas_Extras_Nocturnas = reader.IsDBNull(g("Valor_Horas_Extras_Nocturnas")) ? (decimal?)null : reader.GetDecimal(g("Valor_Horas_Extras_Nocturnas"));
+
+                        n.Horas_Extras_Festivas_Diurnas = reader.IsDBNull(g("Horas_Extras_Festivas_Diurnas")) ? (decimal?)null : reader.GetDecimal(g("Horas_Extras_Festivas_Diurnas"));
+                        n.Valor_Horas_Extras_Festivas_Diurnas = reader.IsDBNull(g("Valor_Horas_Extras_Festivas_Diurnas")) ? (decimal?)null : reader.GetDecimal(g("Valor_Horas_Extras_Festivas_Diurnas"));
+
+                        n.Horas_Extras_Festivas_Nocturnas = reader.IsDBNull(g("Horas_Extras_Festivas_Nocturnas")) ? (decimal?)null : reader.GetDecimal(g("Horas_Extras_Festivas_Nocturnas"));
+                        n.Valor_Horas_Extras_Festivas_Nocturnas = reader.IsDBNull(g("Valor_Horas_Extras_Festivas_Nocturnas")) ? (decimal?)null : reader.GetDecimal(g("Valor_Horas_Extras_Festivas_Nocturnas"));
+
+                        n.Bonificaciones = reader.IsDBNull(g("Bonificaciones")) ? (decimal?)null : reader.GetDecimal(g("Bonificaciones"));
+                        n.Comisiones = reader.IsDBNull(g("Comisiones")) ? (decimal?)null : reader.GetDecimal(g("Comisiones"));
+                        n.Auxilio_Transporte = reader.IsDBNull(g("Auxilio_Transporte")) ? (decimal?)null : reader.GetDecimal(g("Auxilio_Transporte"));
+
+                        n.Deducciones = reader.IsDBNull(g("Deducciones")) ? (decimal?)null : reader.GetDecimal(g("Deducciones"));
+                        n.Aporte_Salud = reader.IsDBNull(g("Aporte_Salud")) ? (decimal?)null : reader.GetDecimal(g("Aporte_Salud"));
+                        n.Aporte_Pension = reader.IsDBNull(g("Aporte_Pension")) ? (decimal?)null : reader.GetDecimal(g("Aporte_Pension"));
+
+                        n.Total_Devengado = reader.IsDBNull(g("Total_Devengado")) ? (decimal?)null : reader.GetDecimal(g("Total_Devengado"));
+                        n.Total_Deducciones = reader.IsDBNull(g("Total_Deducciones")) ? (decimal?)null : reader.GetDecimal(g("Total_Deducciones"));
+                        n.Neto_Pagar = reader.IsDBNull(g("Neto_Pagar")) ? (decimal?)null : reader.GetDecimal(g("Neto_Pagar"));
+
+                        n.Estado = reader.IsDBNull(g("Estado")) ? null : reader.GetString(g("Estado"));
+
+                        return n;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database select (nomina) failed: " + ex.Message, ex);
+                }
+            }
+        }
+
+        // Optional: get all nominas for an employee (simple helper)
+        public List<Nomina> Obtener_Nominas_Por_Empleado(string numeroDocumento)
+        {
+            var list = new List<Nomina>();
+            if (string.IsNullOrWhiteSpace(numeroDocumento)) return list;
+
+            string sql = "SELECT * FROM `nomina` WHERE `Numero_Documento` = @numero ORDER BY `Fecha_Creacion` DESC;";
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@numero", numeroDocumento.Trim());
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var n = new Nomina
+                            {
+                                Numero_Documento = reader.IsDBNull(reader.GetOrdinal("Numero_Documento")) ? null : reader.GetString("Numero_Documento"),
+                                Periodo = reader.IsDBNull(reader.GetOrdinal("Periodo")) ? null : reader.GetString("Periodo"),
+                                Fecha_Creacion = reader.IsDBNull(reader.GetOrdinal("Fecha_Creacion")) ? (DateTime?)null : reader.GetDateTime("Fecha_Creacion"),
+                                // other fields can be mapped similarly if needed
+                            };
+                            list.Add(n);
+                        }
+                    }
+                    return list;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database select (nomina list) failed: " + ex.Message, ex);
+                }
+            }
+        }
     }
 }

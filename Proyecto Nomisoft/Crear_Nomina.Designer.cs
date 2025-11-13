@@ -33,7 +33,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_Empleado = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox_Nomina = new System.Windows.Forms.TextBox();
+            this.textBox_Periodo = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox_Dias_S = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -104,12 +104,12 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Periodo";
             // 
-            // textBox_Nomina
+            // textBox_Periodo
             // 
-            this.textBox_Nomina.Location = new System.Drawing.Point(183, 123);
-            this.textBox_Nomina.Name = "textBox_Nomina";
-            this.textBox_Nomina.Size = new System.Drawing.Size(261, 26);
-            this.textBox_Nomina.TabIndex = 5;
+            this.textBox_Periodo.Location = new System.Drawing.Point(183, 123);
+            this.textBox_Periodo.Name = "textBox_Periodo";
+            this.textBox_Periodo.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Periodo.TabIndex = 5;
             // 
             // label4
             // 
@@ -367,7 +367,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox_Dias_S);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox_Nomina);
+            this.Controls.Add(this.textBox_Periodo);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox_Empleado);
             this.Controls.Add(this.label1);
@@ -387,7 +387,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox_Empleado;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox_Nomina;
+        private System.Windows.Forms.TextBox textBox_Periodo;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox_Dias_S;
         private System.Windows.Forms.Label label5;

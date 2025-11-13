@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Proyecto_Nomisoft
@@ -60,6 +56,39 @@ namespace Proyecto_Nomisoft
                 MessageBox.Show("Error al buscar empleado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        // Validate periodo: only allow "yyyy-mm-1" or "yyyy-mm-2"
+        private static bool IsValidPeriodo(string periodo)
+        {
+            if (string.IsNullOrWhiteSpace(periodo)) return false;
+            // yyyy-(01..12)-1 or yyyy-(01..12)-2
+            var rx = new Regex(@"^\d{4}-(0[1-9]|1[0-2])-(1|2)$", RegexOptions.Compiled);
+            return rx.IsMatch(periodo.Trim());
+        }
+
+        // Call this from your "Agregar/Guardar" button before attempting to insert
+        private bool ValidatePeriodoOrShow()
+        {
+            var periodo = (textBox_Periodo.Text ?? string.Empty).Trim();
+            if (!IsValidPeriodo(periodo))
+            {
+                MessageBox.Show("Periodo inválido. Use formato yyyy-mm-1 o yyyy-mm-2 (ej. 2025-08-1).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox_Periodo.Focus();
+                return false;
+            }
+            return true;
+        }
+
+        // Optional: wire this to the textBox_Periodo Validating event to block focus loss when invalid
+        private void textBox_Periodo_Validating(object sender, CancelEventArgs e)
+        {
+            var periodo = (textBox_Periodo.Text ?? string.Empty).Trim();
+            if (!IsValidPeriodo(periodo))
+            {
+                MessageBox.Show("Periodo inválido. Use formato yyyy-mm-1 o yyyy-mm-2 (ej. 2025-08-1).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true; // prevents leaving the control
+            }
         }
     }
 }
