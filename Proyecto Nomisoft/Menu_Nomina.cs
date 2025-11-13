@@ -19,7 +19,9 @@ namespace Proyecto_Nomisoft
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            Crear_Nomina Next = new Crear_Nomina();
+            Next.Show();
+            this.Hide();
         }
 
         private void button6_Click(object sender, EventArgs e)
