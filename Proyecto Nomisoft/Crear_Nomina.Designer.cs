@@ -110,6 +110,7 @@
             this.textBox_Periodo.Name = "textBox_Periodo";
             this.textBox_Periodo.Size = new System.Drawing.Size(261, 26);
             this.textBox_Periodo.TabIndex = 5;
+            this.textBox_Periodo.TextChanged += new System.EventHandler(this.textBox_Periodo_TextChanged);
             // 
             // label4
             // 
