@@ -310,6 +310,7 @@
             this.Button_Crear.TabIndex = 33;
             this.Button_Crear.Text = "crear";
             this.Button_Crear.UseVisualStyleBackColor = true;
+            this.Button_Crear.Click += new System.EventHandler(this.Button_Crear_Click_1);
             // 
             // Total_Dev
             // 

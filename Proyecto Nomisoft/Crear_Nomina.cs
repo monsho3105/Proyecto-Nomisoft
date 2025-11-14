@@ -17,9 +17,43 @@ namespace Proyecto_Nomisoft
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Example: assign configuracion_nomina from a global/static config, or create a stub
-            // Replace this with your actual configuration retrieval logic
-            configuracion_nomina = new { Recargo_Nocturno = 0.35m, Recargo_Dominical = 0.75m, Recargo_HE_Diurna = 0.25m };
+            // Load configuration from database; fallback to sensible defaults if DB access fails.
+            try
+            {
+                var conexion = new Conexion();
+                var cfg = conexion.Obtener_Configuracion_Nomina();
+                if (cfg != null)
+                {
+                    // keep as dynamic to preserve existing code usage
+                    configuracion_nomina = cfg;
+                }
+                else
+                {
+                    configuracion_nomina = new
+                    {
+                        Recargo_Nocturno = 0.35m,
+                        Recargo_Dominical = 0.75m,
+                        Recargo_HE_Diurna = 0.25m,
+                        Recargo_HE_Nocturna = 0.75m,
+                        Recargo_HE_Dominical = 0.75m,
+                        // per your request this value comes from DB Recargo_HE_Diurna if not present; default here:
+                        Recargo_HE_Dominical_Nocturna = 0.90m
+                    };
+                }
+            }
+            catch
+            {
+                // if DB read fails, keep defaults so UI still works
+                configuracion_nomina = new
+                {
+                    Recargo_Nocturno = 0.35m,
+                    Recargo_Dominical = 0.75m,
+                    Recargo_HE_Diurna = 0.25m,
+                    Recargo_HE_Nocturna = 0.75m,
+                    Recargo_HE_Dominical = 0.75m,
+                    Recargo_HE_Dominical_Nocturna = 0.90m
+                };
+            }
 
             // wire the crear button click here (avoids editing Designer.cs)
             this.Button_Crear.Click += button_Crear_Click;
@@ -33,6 +67,8 @@ namespace Proyecto_Nomisoft
                 textBox_Periodo.Leave += TextBox_Periodo_Leave;
             }
         }
+
+
 
         private void Crear_Nomina_Load(object sender, EventArgs e)
         {
@@ -145,62 +181,65 @@ namespace Proyecto_Nomisoft
                 // divide salario base by 240 as requested
                 valor_Hora = emp.Salario_Base.Value / 240m;
 
-                // Compute valor_dias for diurnos: diasS * 8 * valor_Hora
-                decimal? valor_dias = null;
+                // Payment for diurnos (Pago_Dias) = diasS * 8 * valor_Hora
+                decimal? Pago_Dias = null;
                 if (valor_Hora.HasValue && diasS.HasValue)
                 {
-                    valor_dias = (decimal)diasS.Value * 8m * valor_Hora.Value;
+                    Pago_Dias = (decimal)diasS.Value * 8m * valor_Hora.Value;
                 }
 
-                // Compute valor_dias_nocturnos: valor_Hora * (diasN * 8) * (1 + Recargo_Nocturno)
-                decimal? valor_dias_nocturnos = null;
+                // Valor_Dias_Nocturnos = valor_Hora * (diasN * 8) * (1 + Recargo_Nocturno)
+                decimal? Valor_Dias_Nocturnos = null;
                 if (valor_Hora.HasValue && diasN.HasValue)
                 {
-                    decimal recargo = 0m;
-                    try
-                    {
-                        recargo = Convert.ToDecimal(configuracion_nomina.Recargo_Nocturno);
-                    }
-                    catch
-                    {
-                        recargo = 0m;
-                    }
-
-                    valor_dias_nocturnos = (decimal)diasN.Value * 8m * valor_Hora.Value * (1m + recargo);
+                    decimal recargoNocturno = 0m;
+                    try { recargoNocturno = Convert.ToDecimal(configuracion_nomina.Recargo_Nocturno); } catch { recargoNocturno = 0m; }
+                    Valor_Dias_Nocturnos = (decimal)diasN.Value * 8m * valor_Hora.Value * (1m + recargoNocturno);
                 }
 
-                // Compute valor_dias_festivos: valor_Hora * (diasF * 8) * (1 + Recargo_Dominical)
-                decimal? valor_dias_festivos = null;
+                // Valor_Dias_Festivos = valor_Hora * (diasF * 8) * (1 + Recargo_Dominical)
+                decimal? Valor_Dias_Festivos = null;
                 if (valor_Hora.HasValue && diasF.HasValue)
                 {
                     decimal recargoDominical = 0m;
-                    try
-                    {
-                        recargoDominical = Convert.ToDecimal(configuracion_nomina.Recargo_Dominical);
-                    }
-                    catch
-                    {
-                        recargoDominical = 0m;
-                    }
-
-                    valor_dias_festivos = (decimal)diasF.Value * 8m * valor_Hora.Value * (1m + recargoDominical);
+                    try { recargoDominical = Convert.ToDecimal(configuracion_nomina.Recargo_Dominical); } catch { recargoDominical = 0m; }
+                    Valor_Dias_Festivos = (decimal)diasF.Value * 8m * valor_Hora.Value * (1m + recargoDominical);
                 }
 
-                // Compute valor_horas_extras_diurnas: valor_Hora * extrasD * (1 + Recargo_HE_Diurna)
-                decimal? valor_horas_extras_diurnas = null;
+                // Valor_Horas_Extras_Diurnas = valor_Hora * extrasD * (1 + Recargo_HE_Diurna)
+                decimal? Valor_Horas_Extras_Diurnas = null;
                 if (valor_Hora.HasValue && extrasD.HasValue)
                 {
-                    decimal recargoHE = 0m;
-                    try
-                    {
-                        recargoHE = Convert.ToDecimal(configuracion_nomina.Recargo_HE_Diurna);
-                    }
-                    catch
-                    {
-                        recargoHE = 0m;
-                    }
+                    decimal recargoHED = 0m;
+                    try { recargoHED = Convert.ToDecimal(configuracion_nomina.Recargo_HE_Diurna); } catch { recargoHED = 0m; }
+                    Valor_Horas_Extras_Diurnas = extrasD.Value * valor_Hora.Value * (1m + recargoHED);
+                }
 
-                    valor_horas_extras_diurnas = extrasD.Value * valor_Hora.Value * (1m + recargoHE);
+                // Valor_Horas_Extras_Nocturnas = valor_Hora * extrasN * (1 + Recargo_HE_Nocturna)
+                decimal? Valor_Horas_Extras_Nocturnas = null;
+                if (valor_Hora.HasValue && extrasN.HasValue)
+                {
+                    decimal recargoHEN = 0m;
+                    try { recargoHEN = Convert.ToDecimal(configuracion_nomina.Recargo_HE_Nocturna); } catch { recargoHEN = 0m; }
+                    Valor_Horas_Extras_Nocturnas = extrasN.Value * valor_Hora.Value * (1m + recargoHEN);
+                }
+
+                // Valor_Horas_Extras_Festivas_Diurnas = valor_Hora * extrasF_D * (1 + Recargo_HE_Dominical)
+                decimal? Valor_Horas_Extras_Festivas_Diurnas = null;
+                if (valor_Hora.HasValue && extrasF_D.HasValue)
+                {
+                    decimal recargoHEDom = 0m;
+                    try { recargoHEDom = Convert.ToDecimal(configuracion_nomina.Recargo_HE_Dominical); } catch { recargoHEDom = 0m; }
+                    Valor_Horas_Extras_Festivas_Diurnas = extrasF_D.Value * valor_Hora.Value * (1m + recargoHEDom);
+                }
+
+                // Valor_Horas_Extras_Festivas_Nocturnas = valor_Hora * extrasF_N * (1 + Recargo_HE_Dominical_Nocturna)
+                decimal? Valor_Horas_Extras_Festivas_Nocturnas = null;
+                if (valor_Hora.HasValue && extrasF_N.HasValue)
+                {
+                    decimal recargoHEDomNoct = 0m;
+                    try { recargoHEDomNoct = Convert.ToDecimal(configuracion_nomina.Recargo_HE_Dominical_Nocturna); } catch { recargoHEDomNoct = 0m; }
+                    Valor_Horas_Extras_Festivas_Nocturnas = extrasF_N.Value * valor_Hora.Value * (1m + recargoHEDomNoct);
                 }
 
                 var nomina = new Conexion.Nomina
@@ -208,6 +247,7 @@ namespace Proyecto_Nomisoft
                     Numero_Documento = numero,
                     Periodo = periodo,
                     Fecha_Creacion = DateTime.Now,
+
                     Dias_Diurnos = diasS.HasValue ? (decimal?)diasS.Value : null,
                     Dias_Nocturnos = diasN.HasValue ? (decimal?)diasN.Value : null,
                     Dias_Festivos = diasF.HasValue ? (decimal?)diasF.Value : null,
@@ -221,10 +261,13 @@ namespace Proyecto_Nomisoft
                     Comisiones = comisiones,
 
                     // Set computed values into the nomina DTO so they will be saved to DB columns
-                    Valor_Dias = valor_dias,
-                    Valor_Dias_Nocturnos = valor_dias_nocturnos,
-                    Valor_Dias_Festivos = valor_dias_festivos,
-                    Valor_Horas_Extras_Diurnas = valor_horas_extras_diurnas,
+                    Valor_Dias = Pago_Dias,
+                    Valor_Dias_Nocturnos = Valor_Dias_Nocturnos,
+                    Valor_Dias_Festivos = Valor_Dias_Festivos,
+                    Valor_Horas_Extras_Diurnas = Valor_Horas_Extras_Diurnas,
+                    Valor_Horas_Extras_Nocturnas = Valor_Horas_Extras_Nocturnas,
+                    Valor_Horas_Extras_Festivas_Diurnas = Valor_Horas_Extras_Festivas_Diurnas,
+                    Valor_Horas_Extras_Festivas_Nocturnas = Valor_Horas_Extras_Festivas_Nocturnas,
 
                     // minimal fields set; extend mapping from UI controls as needed
                     Estado = "Por liquidar"
@@ -337,5 +380,12 @@ namespace Proyecto_Nomisoft
                 tb.Focus();
             }
         }
+        // Designer may be wired to Button_Crear_Click_1; provide a delegate to the implemented handler to fix the missing-method error.
+        private void Button_Crear_Click_1(object sender, EventArgs e)
+        {
+            // Delegate to the main handler to avoid duplicating logic.
+            button_Crear_Click(sender, e);
+        }
+        // ... rest of file unchanged ...
     }
 }

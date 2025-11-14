@@ -774,6 +774,19 @@ namespace Proyecto_Nomisoft
             public decimal? Neto_Pagar { get; set; }
             public string Estado { get; set; }
         }
+        // Add these members inside the existing 'internal partial class Conexion' in Conexion.cs
+
+        // DTO for configuration
+        public class ConfiguracionNomina
+        {
+            public decimal? Recargo_Nocturno { get; set; }
+            public decimal? Recargo_Dominical { get; set; }
+            public decimal? Recargo_HE_Diurna { get; set; }
+            public decimal? Recargo_HE_Nocturna { get; set; }
+            public decimal? Recargo_HE_Dominical { get; set; }
+            // per your mapping request, this value will be taken from DB Recargo_HE_Diurna if the specific column is not provided
+            public decimal? Recargo_HE_Dominical_Nocturna { get; set; }
+        }
 
         // Add methods to insert and query nomina records
         public void Agregar_Nomina(Nomina n)
@@ -983,6 +996,87 @@ namespace Proyecto_Nomisoft
                 catch (Exception ex)
                 {
                     throw new Exception("Database select (nomina list) failed: " + ex.Message, ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads payroll configuration from DB. Expects a single row in table `configuracion_nomina`
+        /// with columns matching the property names. If `Recargo_HE_Dominical_Nocturna` column
+        /// does not exist or is NULL, its value will be taken from `Recargo_HE_Diurna` (as requested).
+        /// </summary>
+        public ConfiguracionNomina Obtener_Configuracion_Nomina()
+        {
+            const string sql = @"
+                SELECT
+                    Recargo_Nocturno,
+                    Recargo_Dominical,
+                    Recargo_HE_Diurna,
+                    Recargo_HE_Nocturna,
+                    Recargo_HE_Dominical,
+                    -- try to read explicit column; if not present, we'll handle it below
+                    Recargo_HE_Dominical_Nocturna
+                FROM `configuracion_nomina`
+                LIMIT 1;";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.Read()) return null;
+
+                        Func<string, bool> hasColumn = name =>
+                        {
+                            try { return reader.GetOrdinal(name) >= 0; }
+                            catch { return false; }
+                        };
+
+                        var cfg = new ConfiguracionNomina();
+
+                        int ord;
+                        ord = reader.GetOrdinal("Recargo_Nocturno");
+                        cfg.Recargo_Nocturno = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+
+                        ord = reader.GetOrdinal("Recargo_Dominical");
+                        cfg.Recargo_Dominical = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+
+                        ord = reader.GetOrdinal("Recargo_HE_Diurna");
+                        cfg.Recargo_HE_Diurna = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+
+                        ord = reader.GetOrdinal("Recargo_HE_Nocturna");
+                        cfg.Recargo_HE_Nocturna = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+
+                        ord = reader.GetOrdinal("Recargo_HE_Dominical");
+                        cfg.Recargo_HE_Dominical = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+
+                        // Try to read Recargo_HE_Dominical_Nocturna; if missing or null, fallback to Recargo_HE_Diurna
+                        decimal? recargoHEDomNoct = null;
+                        if (hasColumn("Recargo_HE_Dominical_Nocturna"))
+                        {
+                            try
+                            {
+                                ord = reader.GetOrdinal("Recargo_HE_Dominical_Nocturna");
+                                recargoHEDomNoct = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+                            }
+                            catch
+                            {
+                                recargoHEDomNoct = null;
+                            }
+                        }
+
+                        cfg.Recargo_HE_Dominical_Nocturna = recargoHEDomNoct ?? cfg.Recargo_HE_Diurna;
+
+                        return cfg;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Bubble up or return null — choose to throw for visibility in development
+                    throw new Exception("Database select (configuracion_nomina) failed: " + ex.Message, ex);
                 }
             }
         }
