@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Proyecto_Nomisoft
 {
-    internal class Conexion
+    internal partial class Conexion
     {
         private string connectionString
            = "Server=localhost;Database=nomisoft;User ID=root;Password=Misioner@31";
@@ -741,11 +741,14 @@ namespace Proyecto_Nomisoft
             public string Periodo { get; set; }
             public DateTime? Fecha_Creacion { get; set; }
 
-            public int? Dias_Diurnos { get; set; }
-            public int? Dias_Nocturnos { get; set; }
+            // Days are now stored as DECIMAL in the DB -> use decimal? here
+            public decimal? Dias_Diurnos { get; set; }
+            public decimal? Valor_Dias { get; set; }
+
+            public decimal? Dias_Nocturnos { get; set; }
             public decimal? Valor_Dias_Nocturnos { get; set; }
 
-            public int? Dias_Festivos { get; set; }
+            public decimal? Dias_Festivos { get; set; }
             public decimal? Valor_Dias_Festivos { get; set; }
 
             public decimal? Horas_Extras_Diurnas { get; set; }
@@ -799,7 +802,8 @@ namespace Proyecto_Nomisoft
             string insertSql = @"
         INSERT INTO `nomina` (
             `Numero_Documento`,`Periodo`,`Fecha_Creacion`,
-            `Dias_Diurnos`,`Dias_Nocturnos`,`Valor_Dias_Nocturnos`,
+            `Dias_Diurnos`,`Valor_Dias`,
+            `Dias_Nocturnos`,`Valor_Dias_Nocturnos`,
             `Dias_Festivos`,`Valor_Dias_Festivos`,
             `Horas_Extras_Diurnas`,`Valor_Horas_Extras_Diurnas`,
             `Horas_Extras_Nocturnas`,`Valor_Horas_Extras_Nocturnas`,
@@ -810,7 +814,8 @@ namespace Proyecto_Nomisoft
             `Total_Devengado`,`Total_Deducciones`,`Neto_Pagar`,`Estado`
         ) VALUES (
             @Numero_Documento,@Periodo,@Fecha_Creacion,
-            @Dias_Diurnos,@Dias_Nocturnos,@Valor_Dias_Nocturnos,
+            @Dias_Diurnos,@Valor_Dias,
+            @Dias_Nocturnos,@Valor_Dias_Nocturnos,
             @Dias_Festivos,@Valor_Dias_Festivos,
             @Horas_Extras_Diurnas,@Valor_Horas_Extras_Diurnas,
             @Horas_Extras_Nocturnas,@Valor_Horas_Extras_Nocturnas,
@@ -829,6 +834,8 @@ namespace Proyecto_Nomisoft
                 cmd.Parameters.AddWithValue("@Fecha_Creacion", (object)n.Fecha_Creacion ?? DBNull.Value);
 
                 cmd.Parameters.AddWithValue("@Dias_Diurnos", (object)n.Dias_Diurnos ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Dias", (object)n.Valor_Dias ?? DBNull.Value);
+
                 cmd.Parameters.AddWithValue("@Dias_Nocturnos", (object)n.Dias_Nocturnos ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Valor_Dias_Nocturnos", (object)n.Valor_Dias_Nocturnos ?? DBNull.Value);
 
@@ -891,18 +898,20 @@ namespace Proyecto_Nomisoft
                         if (!reader.Read()) return null;
 
                         var n = new Nomina();
-                        // use GetOrdinal to avoid relying on column order
                         Func<string, int> g = name => reader.GetOrdinal(name);
 
                         n.Numero_Documento = reader.IsDBNull(g("Numero_Documento")) ? null : reader.GetString(g("Numero_Documento"));
                         n.Periodo = reader.IsDBNull(g("Periodo")) ? null : reader.GetString(g("Periodo"));
                         n.Fecha_Creacion = reader.IsDBNull(g("Fecha_Creacion")) ? (DateTime?)null : reader.GetDateTime(g("Fecha_Creacion"));
 
-                        n.Dias_Diurnos = reader.IsDBNull(g("Dias_Diurnos")) ? (int?)null : reader.GetInt32(g("Dias_Diurnos"));
-                        n.Dias_Nocturnos = reader.IsDBNull(g("Dias_Nocturnos")) ? (int?)null : reader.GetInt32(g("Dias_Nocturnos"));
+                        // read decimal fields using GetDecimal (match DB DECIMAL)
+                        n.Dias_Diurnos = reader.IsDBNull(g("Dias_Diurnos")) ? (decimal?)null : reader.GetDecimal(g("Dias_Diurnos"));
+                        n.Valor_Dias = reader.IsDBNull(g("Valor_Dias")) ? (decimal?)null : reader.GetDecimal(g("Valor_Dias"));
+
+                        n.Dias_Nocturnos = reader.IsDBNull(g("Dias_Nocturnos")) ? (decimal?)null : reader.GetDecimal(g("Dias_Nocturnos"));
                         n.Valor_Dias_Nocturnos = reader.IsDBNull(g("Valor_Dias_Nocturnos")) ? (decimal?)null : reader.GetDecimal(g("Valor_Dias_Nocturnos"));
 
-                        n.Dias_Festivos = reader.IsDBNull(g("Dias_Festivos")) ? (int?)null : reader.GetInt32(g("Dias_Festivos"));
+                        n.Dias_Festivos = reader.IsDBNull(g("Dias_Festivos")) ? (decimal?)null : reader.GetDecimal(g("Dias_Festivos"));
                         n.Valor_Dias_Festivos = reader.IsDBNull(g("Valor_Dias_Festivos")) ? (decimal?)null : reader.GetDecimal(g("Valor_Dias_Festivos"));
 
                         n.Horas_Extras_Diurnas = reader.IsDBNull(g("Horas_Extras_Diurnas")) ? (decimal?)null : reader.GetDecimal(g("Horas_Extras_Diurnas"));

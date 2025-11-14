@@ -53,6 +53,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBox_Fecha_Nacimiento = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.checkBox_Fondo_C = new System.Windows.Forms.CheckBox();
+            this.checkBox_Fondo_P = new System.Windows.Forms.CheckBox();
+            this.checkBox_EPS = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,7 +113,7 @@
             // checkBoxCorreo_Electronico
             // 
             this.checkBoxCorreo_Electronico.AutoSize = true;
-            this.checkBoxCorreo_Electronico.Location = new System.Drawing.Point(1171, 802);
+            this.checkBoxCorreo_Electronico.Location = new System.Drawing.Point(1009, 802);
             this.checkBoxCorreo_Electronico.Name = "checkBoxCorreo_Electronico";
             this.checkBoxCorreo_Electronico.Size = new System.Drawing.Size(166, 24);
             this.checkBoxCorreo_Electronico.TabIndex = 6;
@@ -309,11 +312,44 @@
             this.label8.Text = "Fecha de nacimiento";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // checkBox_Fondo_C
+            // 
+            this.checkBox_Fondo_C.AutoSize = true;
+            this.checkBox_Fondo_C.Location = new System.Drawing.Point(1239, 898);
+            this.checkBox_Fondo_C.Name = "checkBox_Fondo_C";
+            this.checkBox_Fondo_C.Size = new System.Drawing.Size(153, 24);
+            this.checkBox_Fondo_C.TabIndex = 27;
+            this.checkBox_Fondo_C.Text = "Fondo cesantias";
+            this.checkBox_Fondo_C.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_Fondo_P
+            // 
+            this.checkBox_Fondo_P.AutoSize = true;
+            this.checkBox_Fondo_P.Location = new System.Drawing.Point(1239, 802);
+            this.checkBox_Fondo_P.Name = "checkBox_Fondo_P";
+            this.checkBox_Fondo_P.Size = new System.Drawing.Size(142, 24);
+            this.checkBox_Fondo_P.TabIndex = 28;
+            this.checkBox_Fondo_P.Text = "Fondo Pension";
+            this.checkBox_Fondo_P.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_EPS
+            // 
+            this.checkBox_EPS.AutoSize = true;
+            this.checkBox_EPS.Location = new System.Drawing.Point(1086, 898);
+            this.checkBox_EPS.Name = "checkBox_EPS";
+            this.checkBox_EPS.Size = new System.Drawing.Size(67, 24);
+            this.checkBox_EPS.TabIndex = 29;
+            this.checkBox_EPS.Text = "EPS";
+            this.checkBox_EPS.UseVisualStyleBackColor = true;
+            // 
             // Ver_Emple
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1580, 966);
+            this.Controls.Add(this.checkBox_EPS);
+            this.Controls.Add(this.checkBox_Fondo_P);
+            this.Controls.Add(this.checkBox_Fondo_C);
             this.Controls.Add(this.textBox_Fecha_Nacimiento);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textBox_Numero_Hijos);
@@ -375,5 +411,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox_Fecha_Nacimiento;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox checkBox_Fondo_C;
+        private System.Windows.Forms.CheckBox checkBox_Fondo_P;
+        private System.Windows.Forms.CheckBox checkBox_EPS;
     }
 }

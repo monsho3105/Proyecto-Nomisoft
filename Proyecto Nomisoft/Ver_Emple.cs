@@ -96,7 +96,64 @@ namespace Proyecto_Nomisoft
                         }
                     }
 
-                    LoadGrid(conexion, nombre, documento, departamento, cargo, estado, salario, fechaIngresoFilter, fechaNacimientoFilter, numeroHijos);
+                    // If any of the seguridad_social checkboxes are checked, request the joined data
+                    bool includeSeguridad = (checkBox_EPS?.Checked == true) || (checkBox_Fondo_P?.Checked == true) || (checkBox_Fondo_C?.Checked == true);
+
+                    DataTable dt;
+                    dt = conexion.ObtenerResumenEmpleados(
+                        nombre, documento, departamento, cargo, estado, salario,
+                        fechaIngresoFilter, fechaNacimientoFilter, numeroHijos);
+
+                    // If user requested seguridad columns, enrich the DataTable by looking up seguridad_social per documento
+                    if (includeSeguridad)
+                    {
+                        // add columns if missing
+                        if (!dt.Columns.Contains("EPS")) dt.Columns.Add("EPS", typeof(string));
+                        if (!dt.Columns.Contains("Fondo_Pension")) dt.Columns.Add("Fondo_Pension", typeof(string));
+                        if (!dt.Columns.Contains("Fondo_Cesantias")) dt.Columns.Add("Fondo_Cesantias", typeof(string));
+
+                        // populate security columns per employee using existing Conexion.Buscar_Seguridad_Social
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            var docObj = row.Table.Columns.Contains("Documento") ? row["Documento"] : null;
+                            if (docObj == null || docObj == DBNull.Value) continue;
+
+                            string numeroDocumento = docObj.ToString();
+                            var ss = conexion.Buscar_Seguridad_Social(numeroDocumento);
+                            row["EPS"] = ss?.Eps ?? string.Empty;
+                            row["Fondo_Pension"] = ss?.Fondo_Pension ?? string.Empty;
+                            row["Fondo_Cesantias"] = ss?.Fondo_Cesantias ?? string.Empty;
+                        }
+                    }
+
+                    dataGridView1.DataSource = dt;
+                    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dataGridView1.ReadOnly = true;
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    dataGridView1.AllowUserToAddRows = false;
+                    dataGridView1.AllowUserToDeleteRows = false;
+
+                    if (dataGridView1.Columns["Salario"] != null)
+                    {
+                        dataGridView1.Columns["Salario"].DefaultCellStyle.Format = "N2";
+                        dataGridView1.Columns["Salario"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    }
+
+                    // Rename seguridad_social columns to friendly headers if present
+                    if (dataGridView1.Columns.Contains("EPS"))
+                        dataGridView1.Columns["EPS"].HeaderText = "EPS";
+                    if (dataGridView1.Columns.Contains("Fondo_Pension"))
+                        dataGridView1.Columns["Fondo_Pension"].HeaderText = "Fondo Pensión";
+                    if (dataGridView1.Columns.Contains("Fondo_Cesantias"))
+                        dataGridView1.Columns["Fondo_Cesantias"].HeaderText = "Fondo Cesantías";
+
+                    if (dataGridView1.Columns["Nombre"] != null) dataGridView1.Columns["Nombre"].HeaderText = "Nombre";
+                    if (dataGridView1.Columns["Documento"] != null) dataGridView1.Columns["Documento"].HeaderText = "Documento";
+                    if (dataGridView1.Columns["Cargo"] != null) dataGridView1.Columns["Cargo"].HeaderText = "Cargo";
+                    if (dataGridView1.Columns["Estado"] != null) dataGridView1.Columns["Estado"].HeaderText = "Estado";
+
+                    // Ensure default visibility: show core columns, hide the rest (until checkboxes enable them)
+                    EnsureDefaultColumnVisibility();
                 };
 
                 // Wire real-time updates: update whenever selection changes or the text changes
@@ -107,6 +164,11 @@ namespace Proyecto_Nomisoft
                 textBox_Fecha_Ingreso.TextChanged += (s, ev) => refreshGrid();
                 textBox_Fecha_Nacimiento.TextChanged += (s, ev) => refreshGrid();
                 textBox_Numero_Hijos.TextChanged += (s, ev) => refreshGrid();
+
+                // wire seguridad_social checkboxes to refresh grid when toggled
+                if (checkBox_EPS != null) checkBox_EPS.CheckedChanged += (s, ev) => refreshGrid();
+                if (checkBox_Fondo_P != null) checkBox_Fondo_P.CheckedChanged += (s, ev) => refreshGrid();
+                if (checkBox_Fondo_C != null) checkBox_Fondo_C.CheckedChanged += (s, ev) => refreshGrid();
 
                 // Initial load (no filters)
                 refreshGrid();

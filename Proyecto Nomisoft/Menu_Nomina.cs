@@ -36,8 +36,12 @@ namespace Proyecto_Nomisoft
             this.Hide();
         }
 
-       
+        private void button_Editar_Nomina_Click(object sender, EventArgs e)
+        {
+            Editar_Nomina next = new Editar_Nomina();
 
-
+            next.Show();
+            this.Hide();
+        }
     }
 }

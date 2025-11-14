@@ -43,6 +43,7 @@
             this.button_Editar_Nomina.TabIndex = 1;
             this.button_Editar_Nomina.Text = "editar nomina";
             this.button_Editar_Nomina.UseVisualStyleBackColor = true;
+            this.button_Editar_Nomina.Click += new System.EventHandler(this.button_Editar_Nomina_Click);
             // 
             // button_Liquidar
             // 

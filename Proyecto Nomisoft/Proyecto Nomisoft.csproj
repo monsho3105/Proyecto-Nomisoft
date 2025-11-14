@@ -111,6 +111,7 @@
       <DependentUpon>Agregar_Emple.cs</DependentUpon>
     </Compile>
     <Compile Include="Conexion.cs" />
+    <Compile Include="Conexion.Parametros.cs" />
     <Compile Include="Crear_Nomina.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +123,12 @@
     </Compile>
     <Compile Include="Editar_Empleados.Designer.cs">
       <DependentUpon>Editar_Empleados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editar_Nomina.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editar_Nomina.Designer.cs">
+      <DependentUpon>Editar_Nomina.cs</DependentUpon>
     </Compile>
     <Compile Include="login.cs">
       <SubType>Form</SubType>
@@ -162,6 +169,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editar_Empleados.resx">
       <DependentUpon>Editar_Empleados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editar_Nomina.resx">
+      <DependentUpon>Editar_Nomina.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="login.resx">
       <DependentUpon>login.cs</DependentUpon>
