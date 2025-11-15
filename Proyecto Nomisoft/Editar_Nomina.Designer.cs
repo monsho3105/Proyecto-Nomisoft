@@ -142,6 +142,7 @@
             this.label13.Size = new System.Drawing.Size(130, 20);
             this.label13.TabIndex = 61;
             this.label13.Text = "Total Devengado";
+            this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // label12
             // 

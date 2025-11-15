@@ -61,6 +61,11 @@
             this.Total_Dev = new System.Windows.Forms.Label();
             this.Total_Ded = new System.Windows.Forms.Label();
             this.Neto_Pagar = new System.Windows.Forms.Label();
+            this.textBox_Tot_Ded = new System.Windows.Forms.TextBox();
+            this.textBox_Tot_Dev = new System.Windows.Forms.TextBox();
+            this.textBox_Neto_P = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox_Deducciones = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // textBox_Documento
@@ -336,11 +341,53 @@
             this.Neto_Pagar.Size = new System.Drawing.Size(0, 20);
             this.Neto_Pagar.TabIndex = 36;
             // 
+            // textBox_Tot_Ded
+            // 
+            this.textBox_Tot_Ded.Location = new System.Drawing.Point(248, 771);
+            this.textBox_Tot_Ded.Name = "textBox_Tot_Ded";
+            this.textBox_Tot_Ded.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Tot_Ded.TabIndex = 37;
+            // 
+            // textBox_Tot_Dev
+            // 
+            this.textBox_Tot_Dev.Location = new System.Drawing.Point(248, 706);
+            this.textBox_Tot_Dev.Name = "textBox_Tot_Dev";
+            this.textBox_Tot_Dev.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Tot_Dev.TabIndex = 38;
+            // 
+            // textBox_Neto_P
+            // 
+            this.textBox_Neto_P.Location = new System.Drawing.Point(248, 853);
+            this.textBox_Neto_P.Name = "textBox_Neto_P";
+            this.textBox_Neto_P.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Neto_P.TabIndex = 39;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(39, 606);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(102, 20);
+            this.label16.TabIndex = 41;
+            this.label16.Text = "Deducciones";
+            // 
+            // textBox_Deducciones
+            // 
+            this.textBox_Deducciones.Location = new System.Drawing.Point(183, 606);
+            this.textBox_Deducciones.Name = "textBox_Deducciones";
+            this.textBox_Deducciones.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Deducciones.TabIndex = 40;
+            // 
             // Crear_Nomina
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1416, 1166);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBox_Deducciones);
+            this.Controls.Add(this.textBox_Neto_P);
+            this.Controls.Add(this.textBox_Tot_Dev);
+            this.Controls.Add(this.textBox_Tot_Ded);
             this.Controls.Add(this.Neto_Pagar);
             this.Controls.Add(this.Total_Ded);
             this.Controls.Add(this.Total_Dev);
@@ -417,5 +464,10 @@
         private System.Windows.Forms.Label Total_Dev;
         private System.Windows.Forms.Label Total_Ded;
         private System.Windows.Forms.Label Neto_Pagar;
+        private System.Windows.Forms.TextBox textBox_Tot_Ded;
+        private System.Windows.Forms.TextBox textBox_Tot_Dev;
+        private System.Windows.Forms.TextBox textBox_Neto_P;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBox_Deducciones;
     }
 }
