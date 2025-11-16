@@ -55,7 +55,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.button = new System.Windows.Forms.Button();
+            this.regresar = new System.Windows.Forms.Button();
             this.button_Lupa = new System.Windows.Forms.Button();
             this.Button_Crear = new System.Windows.Forms.Button();
             this.Total_Dev = new System.Windows.Forms.Label();
@@ -288,14 +288,15 @@
             this.label15.TabIndex = 30;
             this.label15.Text = "Neto a pagar";
             // 
-            // button
+            // regresar
             // 
-            this.button.Location = new System.Drawing.Point(91, 1015);
-            this.button.Name = "button";
-            this.button.Size = new System.Drawing.Size(130, 56);
-            this.button.TabIndex = 31;
-            this.button.Text = "button1";
-            this.button.UseVisualStyleBackColor = true;
+            this.regresar.Location = new System.Drawing.Point(91, 1015);
+            this.regresar.Name = "regresar";
+            this.regresar.Size = new System.Drawing.Size(130, 56);
+            this.regresar.TabIndex = 31;
+            this.regresar.Text = "regresar";
+            this.regresar.UseVisualStyleBackColor = true;
+            this.regresar.Click += new System.EventHandler(this.regresar_Click);
             // 
             // button_Lupa
             // 
@@ -345,27 +346,27 @@
             // 
             this.textBox_Tot_Ded.Location = new System.Drawing.Point(248, 771);
             this.textBox_Tot_Ded.Name = "textBox_Tot_Ded";
+            this.textBox_Tot_Ded.ReadOnly = true;
             this.textBox_Tot_Ded.Size = new System.Drawing.Size(261, 26);
             this.textBox_Tot_Ded.TabIndex = 37;
-            this.textBox_Tot_Ded.ReadOnly = true;
             this.textBox_Tot_Ded.TabStop = false;
             // 
             // textBox_Tot_Dev
             // 
             this.textBox_Tot_Dev.Location = new System.Drawing.Point(248, 706);
             this.textBox_Tot_Dev.Name = "textBox_Tot_Dev";
+            this.textBox_Tot_Dev.ReadOnly = true;
             this.textBox_Tot_Dev.Size = new System.Drawing.Size(261, 26);
             this.textBox_Tot_Dev.TabIndex = 38;
-            this.textBox_Tot_Dev.ReadOnly = true;
             this.textBox_Tot_Dev.TabStop = false;
             // 
             // textBox_Neto_P
             // 
             this.textBox_Neto_P.Location = new System.Drawing.Point(248, 853);
             this.textBox_Neto_P.Name = "textBox_Neto_P";
+            this.textBox_Neto_P.ReadOnly = true;
             this.textBox_Neto_P.Size = new System.Drawing.Size(261, 26);
             this.textBox_Neto_P.TabIndex = 39;
-            this.textBox_Neto_P.ReadOnly = true;
             this.textBox_Neto_P.TabStop = false;
             // 
             // label16
@@ -399,7 +400,7 @@
             this.Controls.Add(this.Total_Dev);
             this.Controls.Add(this.Button_Crear);
             this.Controls.Add(this.button_Lupa);
-            this.Controls.Add(this.button);
+            this.Controls.Add(this.regresar);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label13);
@@ -464,7 +465,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Button button;
+        private System.Windows.Forms.Button regresar;
         private System.Windows.Forms.Button button_Lupa;
         private System.Windows.Forms.Button Button_Crear;
         private System.Windows.Forms.Label Total_Dev;

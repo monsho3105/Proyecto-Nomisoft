@@ -355,6 +355,26 @@ namespace Proyecto_Nomisoft
                     if (textBox_Tot_Dev != null)
                         textBox_Tot_Dev.Text = IBC.ToString("N2", CultureInfo.CurrentCulture);
 
+                    // Calculate 4% of IBC for salud and pension, save to nomina and round to 2 decimals.
+                    decimal aporteSalud = decimal.Round(IBC * 0.04m, 2, MidpointRounding.AwayFromZero);
+                    decimal aportePension = decimal.Round(IBC * 0.04m, 2, MidpointRounding.AwayFromZero);
+
+                    nomina.Aporte_Salud = aporteSalud;
+                    nomina.Aporte_Pension = aportePension;
+
+                    // Total deductions = aporteSalud + aportePension + deducciones (user input)
+                    decimal totalDeducciones = (deducciones ?? 0m) + aporteSalud + aportePension;
+                    nomina.Total_Deducciones = totalDeducciones;
+
+                    if (textBox_Tot_Ded != null)
+                        textBox_Tot_Ded.Text = totalDeducciones.ToString("N2", CultureInfo.CurrentCulture);
+
+                    // Neto a pagar = Total Devengado (IBC) - Total Deducciones
+                    decimal netoPagar = decimal.Round(IBC - totalDeducciones, 2, MidpointRounding.AwayFromZero);
+                    nomina.Neto_Pagar = netoPagar;
+                    if (textBox_Neto_P != null)
+                        textBox_Neto_P.Text = netoPagar.ToString("N2", CultureInfo.CurrentCulture);
+
                     conexion.Agregar_Nomina(nomina);
 
                     MessageBox.Show("Nómina agregada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -472,6 +492,13 @@ namespace Proyecto_Nomisoft
                 MessageBox.Show("Periodo inválido. Use formato yyyy-mm (ej. 2025-08).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tb.Focus();
             }
+        }
+
+        private void regresar_Click(object sender, EventArgs e)
+        {
+            Menu_Nomina back = new Menu_Nomina();
+            back.Show();
+            this.Hide();
         }
     }
 }
