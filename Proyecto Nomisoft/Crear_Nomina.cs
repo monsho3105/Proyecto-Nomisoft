@@ -169,7 +169,6 @@ namespace Proyecto_Nomisoft
 
                     decimal? bonificaciones = ParseDecimalNullable(textBox_Bonificaciones?.Text);
                     decimal? comisiones = ParseDecimalNullable(textBox_Comisiones?.Text);
-                    // Added: read deducciones from the UI and parse to decimal?
                     decimal? deducciones = ParseDecimalNullable(textBox_Deducciones?.Text);
 
                     var conexion = new Conexion();
@@ -274,10 +273,8 @@ namespace Proyecto_Nomisoft
 
                         Bonificaciones = bonificaciones,
                         Comisiones = comisiones,
-                        // Added: persist Deducciones from textBox_Deducciones into the DTO
                         Deducciones = deducciones,
 
-                        // Set computed values into the nomina DTO so they will be saved to DB columns
                         Valor_Dias = Pago_Dias,
                         Valor_Dias_Nocturnos = Valor_Dias_Nocturnos,
                         Valor_Dias_Festivos = Valor_Dias_Festivos,
@@ -286,9 +283,77 @@ namespace Proyecto_Nomisoft
                         Valor_Horas_Extras_Festivas_Diurnas = Valor_Horas_Extras_Festivas_Diurnas,
                         Valor_Horas_Extras_Festivas_Nocturnas = Valor_Horas_Extras_Festivas_Nocturnas,
 
-                        // minimal fields set; extend mapping from UI controls as needed
                         Estado = "Por liquidar"
                     };
+
+                    // Read SMMLV from the proper place: first try parametros, then fallback to configuracion_nomina
+                    try
+                    {
+                        decimal smmlv = 0m;
+                        decimal? auxilioParam = null;
+
+                        // Prefer parameters table (parametros_nomina) which holds SMMLV and Auxilio_Transporte
+                        try
+                        {
+                            var parametros = conexion.Obtener_Parametros();
+                            if (parametros != null)
+                            {
+                                if (parametros.SMMLV.HasValue) smmlv = parametros.SMMLV.Value;
+                                if (parametros.Auxilio_Transporte.HasValue) auxilioParam = parametros.Auxilio_Transporte.Value;
+                            }
+                        }
+                        catch
+                        {
+                            // ignore and fallback below
+                        }
+
+                        // fallback to dynamic configuracion_nomina if parameters did not provide SMMLV
+                        if (smmlv == 0m)
+                        {
+                            try { smmlv = Convert.ToDecimal(configuracion_nomina.SMMLV); } catch { smmlv = 0m; }
+                        }
+
+                        // Debugging help: show values when running debug build
+#if DEBUG
+                        System.Diagnostics.Debug.WriteLine(
+    "SMMLV=" + smmlv.ToString("N2", CultureInfo.CurrentCulture) + ", " +
+    "Salario=" + (emp.Salario_Base.HasValue ? emp.Salario_Base.Value.ToString("N2", CultureInfo.CurrentCulture) : "NULL") + ", " +
+    "AuxilioParametro=" + (auxilioParam.HasValue ? auxilioParam.Value.ToString("N2", CultureInfo.CurrentCulture) : "NULL")
+);
+#endif
+
+                        if (smmlv > 0m && emp.Salario_Base.HasValue)
+                        {
+                            var salario = emp.Salario_Base.Value;
+                            // use salary < SMMLV * 2 as requested
+                            if (salario < smmlv * 2m)
+                            {
+                                // prefer the Auxilio_Transporte from parametros table when present
+                                nomina.Auxilio_Transporte = auxilioParam ?? 200000m;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // ignore problems reading SMMLV; leave Auxilio_Transporte as provided
+                    }
+
+                    // Compute IBC = sum of the specified Valor_* fields plus Comisiones and Bonificaciones.
+                    // Treat nullable fields as zero for the sum.
+                    decimal IBC = (Pago_Dias ?? 0m)
+                                + (Valor_Dias_Nocturnos ?? 0m)
+                                + (Valor_Dias_Festivos ?? 0m)
+                                + (Valor_Horas_Extras_Diurnas ?? 0m)
+                                + (Valor_Horas_Extras_Nocturnas ?? 0m)
+                                + (Valor_Horas_Extras_Festivas_Diurnas ?? 0m)
+                                + (Valor_Horas_Extras_Festivas_Nocturnas ?? 0m)
+                                + (comisiones ?? 0m)
+                                + (bonificaciones ?? 0m);
+
+                    // Save IBC to nomina.Total_Devengado and show it in the read-only textBox_Tot_Dev.
+                    nomina.Total_Devengado = IBC;
+                    if (textBox_Tot_Dev != null)
+                        textBox_Tot_Dev.Text = IBC.ToString("N2", CultureInfo.CurrentCulture);
 
                     conexion.Agregar_Nomina(nomina);
 

@@ -786,6 +786,10 @@ namespace Proyecto_Nomisoft
             public decimal? Recargo_HE_Dominical { get; set; }
             // per your mapping request, this value will be taken from DB Recargo_HE_Diurna if the specific column is not provided
             public decimal? Recargo_HE_Dominical_Nocturna { get; set; }
+
+            // Added: SMMLV and default Auxilio_Transporte stored in configuracion_nomina table
+            public decimal? SMMLV { get; set; }
+            public decimal? Auxilio_Transporte { get; set; }
         }
 
         // Add methods to insert and query nomina records
@@ -1015,7 +1019,9 @@ namespace Proyecto_Nomisoft
                     Recargo_HE_Nocturna,
                     Recargo_HE_Dominical,
                     -- try to read explicit column; if not present, we'll handle it below
-                    Recargo_HE_Dominical_Nocturna
+                    Recargo_HE_Dominical_Nocturna,
+                    SMMLV,
+                    Auxilio_Transporte
                 FROM `configuracion_nomina`
                 LIMIT 1;";
 
@@ -1069,6 +1075,33 @@ namespace Proyecto_Nomisoft
                         }
 
                         cfg.Recargo_HE_Dominical_Nocturna = recargoHEDomNoct ?? cfg.Recargo_HE_Diurna;
+
+                        // Read SMMLV and Auxilio_Transporte if present
+                        if (hasColumn("SMMLV"))
+                        {
+                            try
+                            {
+                                ord = reader.GetOrdinal("SMMLV");
+                                cfg.SMMLV = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+                            }
+                            catch
+                            {
+                                cfg.SMMLV = null;
+                            }
+                        }
+
+                        if (hasColumn("Auxilio_Transporte"))
+                        {
+                            try
+                            {
+                                ord = reader.GetOrdinal("Auxilio_Transporte");
+                                cfg.Auxilio_Transporte = reader.IsDBNull(ord) ? (decimal?)null : reader.GetDecimal(ord);
+                            }
+                            catch
+                            {
+                                cfg.Auxilio_Transporte = null;
+                            }
+                        }
 
                         return cfg;
                     }

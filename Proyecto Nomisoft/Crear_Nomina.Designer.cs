@@ -347,6 +347,8 @@
             this.textBox_Tot_Ded.Name = "textBox_Tot_Ded";
             this.textBox_Tot_Ded.Size = new System.Drawing.Size(261, 26);
             this.textBox_Tot_Ded.TabIndex = 37;
+            this.textBox_Tot_Ded.ReadOnly = true;
+            this.textBox_Tot_Ded.TabStop = false;
             // 
             // textBox_Tot_Dev
             // 
@@ -354,6 +356,8 @@
             this.textBox_Tot_Dev.Name = "textBox_Tot_Dev";
             this.textBox_Tot_Dev.Size = new System.Drawing.Size(261, 26);
             this.textBox_Tot_Dev.TabIndex = 38;
+            this.textBox_Tot_Dev.ReadOnly = true;
+            this.textBox_Tot_Dev.TabStop = false;
             // 
             // textBox_Neto_P
             // 
@@ -361,6 +365,8 @@
             this.textBox_Neto_P.Name = "textBox_Neto_P";
             this.textBox_Neto_P.Size = new System.Drawing.Size(261, 26);
             this.textBox_Neto_P.TabIndex = 39;
+            this.textBox_Neto_P.ReadOnly = true;
+            this.textBox_Neto_P.TabStop = false;
             // 
             // label16
             // 
