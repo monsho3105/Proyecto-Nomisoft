@@ -27,7 +27,9 @@ namespace Proyecto_Nomisoft
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Deprendible Next = new Deprendible();
+            Next.Show();
+            this.Hide();
         }
 
         private void Seleccion_Load(object sender, EventArgs e)

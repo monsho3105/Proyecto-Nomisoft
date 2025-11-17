@@ -121,6 +121,12 @@
     <Compile Include="Crear_Nomina.Designer.cs">
       <DependentUpon>Crear_Nomina.cs</DependentUpon>
     </Compile>
+    <Compile Include="Deprendible.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Deprendible.Designer.cs">
+      <DependentUpon>Deprendible.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editar_Empleados.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +193,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Crear_Nomina.resx">
       <DependentUpon>Crear_Nomina.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Deprendible.resx">
+      <DependentUpon>Deprendible.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editar_Empleados.resx">
       <DependentUpon>Editar_Empleados.cs</DependentUpon>
