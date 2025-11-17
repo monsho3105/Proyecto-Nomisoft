@@ -130,6 +130,12 @@
     <Compile Include="Editar_Nomina.Designer.cs">
       <DependentUpon>Editar_Nomina.cs</DependentUpon>
     </Compile>
+    <Compile Include="Eliminar_Empleado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Eliminar_Empleado.Designer.cs">
+      <DependentUpon>Eliminar_Empleado.cs</DependentUpon>
+    </Compile>
     <Compile Include="login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editar_Nomina.resx">
       <DependentUpon>Editar_Nomina.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Eliminar_Empleado.resx">
+      <DependentUpon>Eliminar_Empleado.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="login.resx">
       <DependentUpon>login.cs</DependentUpon>

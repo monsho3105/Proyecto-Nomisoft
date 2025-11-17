@@ -35,7 +35,9 @@ namespace Proyecto_Nomisoft
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            Eliminar_Empleado Next = new Eliminar_Empleado();
+            Next.Show();
+            this.Hide();
         }
 
         private void button5_Click(object sender, EventArgs e)
