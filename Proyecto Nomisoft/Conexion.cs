@@ -1246,5 +1246,30 @@ namespace Proyecto_Nomisoft
 
             return dt;
         }
+
+        // Add this method inside the existing 'internal partial class Conexion'
+        public DataTable ObtenerResumenNominasTablaPorEstado(string estado)
+        {
+            var dt = new DataTable();
+            string sql = @"
+        SELECT
+            `Numero_Documento`,
+            `Periodo`,
+            `Neto_Pagar`,
+            `Estado`
+        FROM `nomina`
+        WHERE `Estado` = @Estado
+        ORDER BY `Fecha_Creacion` DESC;";
+
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(connectionString))
+            using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(sql, conn))
+            using (var da = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd))
+            {
+                cmd.Parameters.AddWithValue("@Estado", (object)estado ?? string.Empty);
+                da.Fill(dt);
+            }
+
+            return dt;
+        }
     }
 }

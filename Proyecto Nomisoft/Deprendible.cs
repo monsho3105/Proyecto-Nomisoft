@@ -203,8 +203,8 @@ namespace Proyecto_Nomisoft
 
             string nombreEmpleado = emp == null ? "" :
                 string.Join(" ", new[] {
-                    emp.Primer_Nombre, emp.Segundo_Nombre,
-                    emp.Primer_Apellido, emp.Segundo_Apellido
+                        emp.Primer_Nombre, emp.Segundo_Nombre,
+                        emp.Primer_Apellido, emp.Segundo_Apellido
                 }.Where(p => !string.IsNullOrWhiteSpace(p)));
 
             PdfPTable tablaEmpleado = new PdfPTable(2);
@@ -234,14 +234,14 @@ namespace Proyecto_Nomisoft
 
             string[] orderedNames = new[]
             {
-                "Fecha_Creacion","Dias_Diurnos","Valor_Dias","Dias_Nocturnos","Valor_Dias_Nocturnos",
-                "Dias_Festivos","Valor_Dias_Festivos","Horas_Extras_Diurnas","Valor_Horas_Extras_Diurnas",
-                "Horas_Extras_Nocturnas","Valor_Horas_Extras_Nocturnas","Horas_Extras_Festivas_Diurnas",
-                "Valor_Horas_Extras_Festivas_Diurnas","Horas_Extras_Festivas_Nocturnas",
-                "Valor_Horas_Extras_Festivas_Nocturnas","Bonificaciones","Comisiones",
-                "Auxilio_Transporte","Deducciones","Aporte_Salud","Aporte_Pension",
-                "Total_Devengado","Total_Deducciones","Neto_Pagar","Estado"
-            };
+                    "Fecha_Creacion","Dias_Diurnos","Valor_Dias","Dias_Nocturnos","Valor_Dias_Nocturnos",
+                    "Dias_Festivos","Valor_Dias_Festivos","Horas_Extras_Diurnas","Valor_Horas_Extras_Diurnas",
+                    "Horas_Extras_Nocturnas","Valor_Horas_Extras_Nocturnas","Horas_Extras_Festivas_Diurnas",
+                    "Valor_Horas_Extras_Festivas_Diurnas","Horas_Extras_Festivas_Nocturnas",
+                    "Valor_Horas_Extras_Festivas_Nocturnas","Bonificaciones","Comisiones",
+                    "Auxilio_Transporte","Deducciones","Aporte_Salud","Aporte_Pension",
+                    "Total_Devengado","Total_Deducciones","Neto_Pagar","Estado"
+                };
 
             PdfPTable tablaDetalle = new PdfPTable(2);
             tablaDetalle.WidthPercentage = 100;
@@ -259,17 +259,9 @@ namespace Proyecto_Nomisoft
                 string displayName = name.Replace('_', ' ');
                 string displayValue;
 
-                if (val == null)
+                // fields that represent quantities (no currency symbol)
+                string[] quantityFields =
                 {
-                    displayValue = "";
-                }
-                else if (val is decimal || val is decimal?)
-                {
-                    decimal d = Convert.ToDecimal(val);
-
-                    // No "$" for these fields
-                    string[] quantityFields =
-                    {
                         "Dias_Diurnos",
                         "Dias_Nocturnos",
                         "Dias_Festivos",
@@ -279,6 +271,29 @@ namespace Proyecto_Nomisoft
                         "Horas_Extras_Festivas_Nocturnas"
                     };
 
+                // determine if property is a numeric type (decimal/nullable decimal, int, etc.)
+                var propType = prop.PropertyType;
+                var coreType = Nullable.GetUnderlyingType(propType) ?? propType;
+                bool isNumericType = coreType == typeof(decimal) || coreType == typeof(double) ||
+                                     coreType == typeof(float) || coreType == typeof(int) ||
+                                     coreType == typeof(long) || coreType == typeof(short);
+
+                if (val == null)
+                {
+                    if (isNumericType)
+                    {
+                        // print 0.00 (or N2) for numeric nulls
+                        decimal zero = 0m;
+                        displayValue = quantityFields.Contains(name) ? zero.ToString("N2") : zero.ToString("C");
+                    }
+                    else
+                    {
+                        displayValue = "";
+                    }
+                }
+                else if (val is decimal || val is decimal?)
+                {
+                    decimal d = Convert.ToDecimal(val);
                     if (quantityFields.Contains(name))
                         displayValue = d.ToString("N2");  // no $
                     else
@@ -290,7 +305,17 @@ namespace Proyecto_Nomisoft
                 }
                 else
                 {
-                    displayValue = val.ToString();
+                    // fallback: if non-null value is an empty string and property is numeric type, show 0.00
+                    var s = val as string;
+                    if (isNumericType && string.IsNullOrWhiteSpace(s))
+                    {
+                        decimal zero = 0m;
+                        displayValue = quantityFields.Contains(name) ? zero.ToString("N2") : zero.ToString("C");
+                    }
+                    else
+                    {
+                        displayValue = val.ToString();
+                    }
                 }
 
                 // Create a single cell that contains: left text, dotted leader, right text
@@ -312,8 +337,6 @@ namespace Proyecto_Nomisoft
 
             doc.Add(tablaDetalle);
             doc.Add(new Paragraph("\n"));
-
-            
 
             doc.Close();
         }

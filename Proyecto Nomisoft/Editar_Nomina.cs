@@ -492,5 +492,12 @@ namespace Proyecto_Nomisoft
             if (decimal.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, out d)) return d;
             return null;
         }
+
+        private void button_Regread_Click(object sender, EventArgs e)
+        {
+            Menu_Nomina back = new Menu_Nomina();
+            back.Show();
+            this.Hide();
+        }
     }
 }

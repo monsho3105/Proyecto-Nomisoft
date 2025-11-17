@@ -36,30 +36,51 @@ namespace Proyecto_Nomisoft
             try
             {
                 var conexion = new Conexion();
-                // Use the correct parameter name: 'estado' is not valid, use 'estadoCivil' or another supported parameter
-                DataTable dt = conexion.ObtenerResumenEmpleados(estadoCivil: "Por liquidar");
+                DataTable dt = conexion.ObtenerResumenNominasTablaPorEstado("Por liquidar");
 
                 _nominasTable = dt; // cache for filtering
 
                 dataGridView1.AutoGenerateColumns = true;
                 dataGridView1.DataSource = _nominasTable;
 
-                // Size columns to their content so width adapts to text length
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-
-                // Disable wrapping so column width reflects single-line text length
-                dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-                dataGridView1.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
-
-                // Ensure horizontal scrollbar is available for navigation when total width exceeds viewport
-                dataGridView1.ScrollBars = ScrollBars.Both;
-
-                // Allow the user to resize columns if they want different widths
+                // Make columns fill the entire grid width
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView1.RowHeadersVisible = false;
                 dataGridView1.AllowUserToResizeColumns = true;
+                dataGridView1.ScrollBars = ScrollBars.Vertical;
+                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridView1.ReadOnly = true;
+                dataGridView1.AllowUserToAddRows = false;
+                dataGridView1.AllowUserToDeleteRows = false;
 
-                // Keep row autosizing off to avoid tall rows when text is long
-                dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                // Give preferred widths to important columns (relative weights)
+                if (dataGridView1.Columns.Contains("Numero_Documento"))
+                {
+                    var c = dataGridView1.Columns["Numero_Documento"];
+                    c.FillWeight = 35;
+                    c.HeaderText = "Documento";
+                    c.Visible = true;
+                }
+                if (dataGridView1.Columns.Contains("Periodo"))
+                {
+                    var c = dataGridView1.Columns["Periodo"];
+                    c.FillWeight = 20;
+                    c.HeaderText = "Periodo";
+                    c.Visible = true;
+                }
+                if (dataGridView1.Columns.Contains("Neto_Pagar"))
+                {
+                    var c = dataGridView1.Columns["Neto_Pagar"];
+                    c.FillWeight = 45;
+                    c.HeaderText = "Neto Pagar";
+                    c.DefaultCellStyle.Format = "N2";
+                    c.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    c.Visible = true;
+                }
+
+                // Hide any extra technical columns like Estado if you don't want them shown:
+                if (dataGridView1.Columns.Contains("Estado"))
+                    dataGridView1.Columns["Estado"].Visible = false;
             }
             catch (Exception ex)
             {
@@ -86,8 +107,8 @@ namespace Proyecto_Nomisoft
             if (string.IsNullOrEmpty(txt))
             {
                 dataGridView1.DataSource = _nominasTable;
-                // restore sizing
-                dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                // keep Fill mode after rebind
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 return;
             }
 
@@ -103,7 +124,7 @@ namespace Proyecto_Nomisoft
                 filtered.ImportRow(row);
 
             dataGridView1.DataSource = filtered;
-            dataGridView1.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         // Click handler: mark selected nomina as Liquidado

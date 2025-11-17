@@ -88,12 +88,13 @@
             // 
             // button_Regread
             // 
-            this.button_Regread.Location = new System.Drawing.Point(161, 1056);
+            this.button_Regread.Location = new System.Drawing.Point(127, 1056);
             this.button_Regread.Name = "button_Regread";
             this.button_Regread.Size = new System.Drawing.Size(130, 56);
             this.button_Regread.TabIndex = 64;
             this.button_Regread.Text = "Regresar";
             this.button_Regread.UseVisualStyleBackColor = true;
+            this.button_Regread.Click += new System.EventHandler(this.button_Regread_Click);
             // 
             // label15
             // 
