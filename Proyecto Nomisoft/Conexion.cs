@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Proyecto_Nomisoft
 {
+    // Ensure accessibility matches other partial declarations (use internal)
     internal partial class Conexion
     {
         private string connectionString
@@ -1208,7 +1209,7 @@ namespace Proyecto_Nomisoft
             }
         }
 
-        // Add this method near the other nomina/configuration helpers in the existing 'internal partial class Conexion'
+        // Add this method to the existing nomina/configuration helpers in the existing 'internal partial class Conexion'
         public DataTable ObtenerConfiguracionNominaTabla()
         {
             var dt = new DataTable();

@@ -70,7 +70,7 @@
             this.button_Regresar.TabIndex = 3;
             this.button_Regresar.Text = "Regresar";
             this.button_Regresar.UseVisualStyleBackColor = true;
-            this.button_Regresar.Click += new System.EventHandler(this.button_Regresar_Click_1);
+            this.button_Regresar.Click += new System.EventHandler(this.button_Regresar_Click);
             // 
             // button_Imprimir
             // 
