@@ -28,12 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Neto_Pagar = new System.Windows.Forms.Label();
-            this.Total_Ded = new System.Windows.Forms.Label();
-            this.Total_Dev = new System.Windows.Forms.Label();
-            this.Button_Crear = new System.Windows.Forms.Button();
+            this.Button_Editar = new System.Windows.Forms.Button();
             this.button_Lupa = new System.Windows.Forms.Button();
-            this.button = new System.Windows.Forms.Button();
+            this.button_Regread = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -62,40 +59,22 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_Documento = new System.Windows.Forms.TextBox();
             this.button_Periodo = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox_Deducciones = new System.Windows.Forms.TextBox();
+            this.textBox_Tot_Devengado = new System.Windows.Forms.TextBox();
+            this.textBox_Tot_Ded = new System.Windows.Forms.TextBox();
+            this.textBox_Neto_Pagar = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // Neto_Pagar
+            // Button_Editar
             // 
-            this.Neto_Pagar.AutoSize = true;
-            this.Neto_Pagar.Location = new System.Drawing.Point(303, 900);
-            this.Neto_Pagar.Name = "Neto_Pagar";
-            this.Neto_Pagar.Size = new System.Drawing.Size(0, 20);
-            this.Neto_Pagar.TabIndex = 69;
-            // 
-            // Total_Ded
-            // 
-            this.Total_Ded.AutoSize = true;
-            this.Total_Ded.Location = new System.Drawing.Point(303, 818);
-            this.Total_Ded.Name = "Total_Ded";
-            this.Total_Ded.Size = new System.Drawing.Size(0, 20);
-            this.Total_Ded.TabIndex = 68;
-            // 
-            // Total_Dev
-            // 
-            this.Total_Dev.AutoSize = true;
-            this.Total_Dev.Location = new System.Drawing.Point(303, 747);
-            this.Total_Dev.Name = "Total_Dev";
-            this.Total_Dev.Size = new System.Drawing.Size(0, 20);
-            this.Total_Dev.TabIndex = 67;
-            // 
-            // Button_Crear
-            // 
-            this.Button_Crear.Location = new System.Drawing.Point(1017, 1028);
-            this.Button_Crear.Name = "Button_Crear";
-            this.Button_Crear.Size = new System.Drawing.Size(157, 84);
-            this.Button_Crear.TabIndex = 66;
-            this.Button_Crear.Text = "crear";
-            this.Button_Crear.UseVisualStyleBackColor = true;
+            this.Button_Editar.Location = new System.Drawing.Point(1017, 1028);
+            this.Button_Editar.Name = "Button_Editar";
+            this.Button_Editar.Size = new System.Drawing.Size(157, 84);
+            this.Button_Editar.TabIndex = 66;
+            this.Button_Editar.Text = "Editar";
+            this.Button_Editar.UseVisualStyleBackColor = true;
+            this.Button_Editar.Click += new System.EventHandler(this.Button_Crear_Click);
             // 
             // button_Lupa
             // 
@@ -107,14 +86,14 @@
             this.button_Lupa.UseVisualStyleBackColor = true;
             this.button_Lupa.Click += new System.EventHandler(this.button_Lupa_Click_1);
             // 
-            // button
+            // button_Regread
             // 
-            this.button.Location = new System.Drawing.Point(161, 1056);
-            this.button.Name = "button";
-            this.button.Size = new System.Drawing.Size(130, 56);
-            this.button.TabIndex = 64;
-            this.button.Text = "button1";
-            this.button.UseVisualStyleBackColor = true;
+            this.button_Regread.Location = new System.Drawing.Point(161, 1056);
+            this.button_Regread.Name = "button_Regread";
+            this.button_Regread.Size = new System.Drawing.Size(130, 56);
+            this.button_Regread.TabIndex = 64;
+            this.button_Regread.Text = "Regresar";
+            this.button_Regread.UseVisualStyleBackColor = true;
             // 
             // label15
             // 
@@ -346,18 +325,57 @@
             this.button_Periodo.UseVisualStyleBackColor = true;
             this.button_Periodo.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(109, 648);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(102, 20);
+            this.label16.TabIndex = 72;
+            this.label16.Text = "Deducciones";
+            // 
+            // textBox_Deducciones
+            // 
+            this.textBox_Deducciones.Location = new System.Drawing.Point(253, 648);
+            this.textBox_Deducciones.Name = "textBox_Deducciones";
+            this.textBox_Deducciones.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Deducciones.TabIndex = 71;
+            // 
+            // textBox_Tot_Devengado
+            // 
+            this.textBox_Tot_Devengado.Location = new System.Drawing.Point(309, 744);
+            this.textBox_Tot_Devengado.Name = "textBox_Tot_Devengado";
+            this.textBox_Tot_Devengado.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Tot_Devengado.TabIndex = 73;
+            // 
+            // textBox_Tot_Ded
+            // 
+            this.textBox_Tot_Ded.Location = new System.Drawing.Point(309, 818);
+            this.textBox_Tot_Ded.Name = "textBox_Tot_Ded";
+            this.textBox_Tot_Ded.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Tot_Ded.TabIndex = 74;
+            // 
+            // textBox_Neto_Pagar
+            // 
+            this.textBox_Neto_Pagar.Location = new System.Drawing.Point(309, 900);
+            this.textBox_Neto_Pagar.Name = "textBox_Neto_Pagar";
+            this.textBox_Neto_Pagar.Size = new System.Drawing.Size(261, 26);
+            this.textBox_Neto_Pagar.TabIndex = 75;
+            // 
             // Editar_Nomina
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1493, 1199);
+            this.Controls.Add(this.textBox_Neto_Pagar);
+            this.Controls.Add(this.textBox_Tot_Ded);
+            this.Controls.Add(this.textBox_Tot_Devengado);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBox_Deducciones);
             this.Controls.Add(this.button_Periodo);
-            this.Controls.Add(this.Neto_Pagar);
-            this.Controls.Add(this.Total_Ded);
-            this.Controls.Add(this.Total_Dev);
-            this.Controls.Add(this.Button_Crear);
+            this.Controls.Add(this.Button_Editar);
             this.Controls.Add(this.button_Lupa);
-            this.Controls.Add(this.button);
+            this.Controls.Add(this.button_Regread);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label13);
@@ -393,13 +411,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label Neto_Pagar;
-        private System.Windows.Forms.Label Total_Ded;
-        private System.Windows.Forms.Label Total_Dev;
-        private System.Windows.Forms.Button Button_Crear;
+        private System.Windows.Forms.Button Button_Editar;
         private System.Windows.Forms.Button button_Lupa;
-        private System.Windows.Forms.Button button;
+        private System.Windows.Forms.Button button_Regread;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
@@ -428,5 +442,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_Documento;
         private System.Windows.Forms.Button button_Periodo;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBox_Deducciones;
+        private System.Windows.Forms.TextBox textBox_Tot_Devengado;
+        private System.Windows.Forms.TextBox textBox_Tot_Ded;
+        private System.Windows.Forms.TextBox textBox_Neto_Pagar;
     }
 }

@@ -1113,5 +1113,99 @@ namespace Proyecto_Nomisoft
                 }
             }
         }
+
+        // Add this method to the existing 'internal partial class Conexion' (near Agregar_Nomina)
+        public void Editar_Nomina(Nomina n)
+        {
+            if (n == null) throw new ArgumentNullException(nameof(n));
+            if (string.IsNullOrWhiteSpace(n.Numero_Documento)) throw new ArgumentException("Numero_Documento required", nameof(n.Numero_Documento));
+            if (string.IsNullOrWhiteSpace(n.Periodo)) throw new ArgumentException("Periodo required", nameof(n.Periodo));
+
+            string updateSql = @"
+        UPDATE `nomina` SET
+            `Fecha_Creacion` = @Fecha_Creacion,
+            `Dias_Diurnos` = @Dias_Diurnos,
+            `Valor_Dias` = @Valor_Dias,
+            `Dias_Nocturnos` = @Dias_Nocturnos,
+            `Valor_Dias_Nocturnos` = @Valor_Dias_Nocturnos,
+            `Dias_Festivos` = @Dias_Festivos,
+            `Valor_Dias_Festivos` = @Valor_Dias_Festivos,
+            `Horas_Extras_Diurnas` = @Horas_Extras_Diurnas,
+            `Valor_Horas_Extras_Diurnas` = @Valor_Horas_Extras_Diurnas,
+            `Horas_Extras_Nocturnas` = @Horas_Extras_Nocturnas,
+            `Valor_Horas_Extras_Nocturnas` = @Valor_Horas_Extras_Nocturnas,
+            `Horas_Extras_Festivas_Diurnas` = @Horas_Extras_Festivas_Diurnas,
+            `Valor_Horas_Extras_Festivas_Diurnas` = @Valor_Horas_Extras_Festivas_Diurnas,
+            `Horas_Extras_Festivas_Nocturnas` = @Horas_Extras_Festivas_Nocturnas,
+            `Valor_Horas_Extras_Festivas_Nocturnas` = @Valor_Horas_Extras_Festivas_Nocturnas,
+            `Bonificaciones` = @Bonificaciones,
+            `Comisiones` = @Comisiones,
+            `Auxilio_Transporte` = @Auxilio_Transporte,
+            `Deducciones` = @Deducciones,
+            `Aporte_Salud` = @Aporte_Salud,
+            `Aporte_Pension` = @Aporte_Pension,
+            `Total_Devengado` = @Total_Devengado,
+            `Total_Deducciones` = @Total_Deducciones,
+            `Neto_Pagar` = @Neto_Pagar,
+            `Estado` = @Estado
+        WHERE `Numero_Documento` = @Numero_Documento AND `Periodo` = @Periodo
+        LIMIT 1;
+    ";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(updateSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Fecha_Creacion", (object)n.Fecha_Creacion ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Dias_Diurnos", (object)n.Dias_Diurnos ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Dias", (object)n.Valor_Dias ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Dias_Nocturnos", (object)n.Dias_Nocturnos ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Dias_Nocturnos", (object)n.Valor_Dias_Nocturnos ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Dias_Festivos", (object)n.Dias_Festivos ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Dias_Festivos", (object)n.Valor_Dias_Festivos ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Diurnas", (object)n.Horas_Extras_Diurnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Diurnas", (object)n.Valor_Horas_Extras_Diurnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Nocturnas", (object)n.Horas_Extras_Nocturnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Nocturnas", (object)n.Valor_Horas_Extras_Nocturnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Festivas_Diurnas", (object)n.Horas_Extras_Festivas_Diurnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Festivas_Diurnas", (object)n.Valor_Horas_Extras_Festivas_Diurnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Horas_Extras_Festivas_Nocturnas", (object)n.Horas_Extras_Festivas_Nocturnas ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Valor_Horas_Extras_Festivas_Nocturnas", (object)n.Valor_Horas_Extras_Festivas_Nocturnas ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Bonificaciones", (object)n.Bonificaciones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Comisiones", (object)n.Comisiones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Auxilio_Transporte", (object)n.Auxilio_Transporte ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Deducciones", (object)n.Deducciones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Aporte_Salud", (object)n.Aporte_Salud ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Aporte_Pension", (object)n.Aporte_Pension ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Total_Devengado", (object)n.Total_Devengado ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Total_Deducciones", (object)n.Total_Deducciones ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Neto_Pagar", (object)n.Neto_Pagar ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Estado", (object)n.Estado ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@Numero_Documento", n.Numero_Documento.Trim());
+                cmd.Parameters.AddWithValue("@Periodo", n.Periodo.Trim());
+
+                try
+                {
+                    conn.Open();
+                    int affected = cmd.ExecuteNonQuery();
+                    if (affected == 0)
+                        throw new InvalidOperationException("No se encontró la nómina para actualizar.");
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database update (nomina) failed: " + ex.Message, ex);
+                }
+            }
+        }
     }
 }
