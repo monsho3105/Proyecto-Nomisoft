@@ -1,44 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Proyecto_Nomisoft
 {
     public partial class login : Form
     {
+        // Admin credentials (hardcoded)
+        private const string AdminUser = "admin1234";
+        private const string AdminPass = "admin_pass_123";
+
+        // Store real password separately so the textbox only shows a masked view
+        private string _realPassword = string.Empty;
+        private const string PasswordPlaceholder = "CONTRASEÑA";
+        private const char MaskChar = '*';
+
         public login()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+
+            // Ensure events are wired (Designer already wires some; these ensure behavior)
+            this.txtPass.KeyPress -= txtPass_KeyPress;
+            this.txtPass.KeyPress += txtPass_KeyPress;
+            this.txtPass.KeyDown -= txtPass_KeyDown;
+            this.txtPass.KeyDown += txtPass_KeyDown;
+            this.txtPass.Enter -= txtPass_Enter;
+            this.txtPass.Enter += txtPass_Enter;
+            this.txtPass.Leave -= txtPass_Leave;
+            this.txtPass.Leave += txtPass_Leave;
+
+            // Initialize placeholder if designer default differs
+            if (string.IsNullOrEmpty(txtPass.Text))
+            {
+                SetPasswordPlaceholder();
+            }
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Seleccion Next = new Seleccion();
-            Next.Show();
-            this.Hide();
+            // Read values and ignore placeholder texts
+            string user = (txtUser.Text ?? string.Empty).Trim();
+            string pass = _realPassword; // use stored real password
+
+            if (string.Equals(user, "USUARIO", StringComparison.OrdinalIgnoreCase)) user = string.Empty;
+
+            // Admin shortcut
+            if (user == AdminUser && pass == AdminPass)
+            {
+                Admin_Menu admin = new Admin_Menu();
+                admin.Show();
+                this.Hide();
+                return;
+            }
+
+            // Allow any registered empleado to log in when user == pass == Numero_Documento
+            if (!string.IsNullOrEmpty(user) && user == pass)
+            {
+                try
+                {
+                    var conexion = new Conexion();
+                    var emp = conexion.Buscar_Empleado(user);
+                    if (emp != null)
+                    {
+                        // successful employee login -> open Deprendible
+                        Deprendible desp = new Deprendible();
+                        desp.Show();
+                        this.Hide();
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error verificando credenciales: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            // fallback: invalid credentials
+            MessageBox.Show("Usuario o contraseña incorrectos.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        private void txtUser_Enter(object sender, EventArgs e)
-        {
-            
-        }
+        private void txtUser_Enter(object sender, EventArgs e) { }
 
-        private void txtUser_Leave(object sender, EventArgs e)
-        {
-            
-
-        }
+        private void txtUser_Leave(object sender, EventArgs e) { }
 
         private void txtUser_MouseEnter(object sender, EventArgs e)
         {
@@ -46,7 +95,6 @@ namespace Proyecto_Nomisoft
             {
                 txtUser.Text = "";
                 txtUser.ForeColor = Color.WhiteSmoke;
-
             }
         }
 
@@ -56,104 +104,119 @@ namespace Proyecto_Nomisoft
             {
                 txtUser.Text = "USUARIO";
                 txtUser.ForeColor = Color.WhiteSmoke;
-
             }
         }
 
-        private void txtPass_MouseEnter(object sender, EventArgs e)
-        {
-           
-        }
+        private void txtPass_MouseEnter(object sender, EventArgs e) { }
 
-        private void txtPass_MouseLeave(object sender, EventArgs e)
-        {
-
-        }
+        private void txtPass_MouseLeave(object sender, EventArgs e) { }
 
         private void txtPass_Enter(object sender, EventArgs e)
         {
-            if (txtPass.Text == "CONTRASEÑA")
+            // Clear placeholder and prepare for masked input
+            if (txtPass.Text == PasswordPlaceholder || txtPass.Text == "")
             {
-                txtPass.Text = "";
+                _realPassword = string.Empty;
+                UpdatePasswordDisplay();
                 txtPass.ForeColor = Color.WhiteSmoke;
-                txtPass.UseSystemPasswordChar = true;  
             }
+        }
+
+        // Intercept printable characters and build real password, but show one '*' per char
+        private void txtPass_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Ignore control keys here; handle printable characters
+            if (!char.IsControl(e.KeyChar))
+            {
+                // append char to real password and prevent it from being shown directly
+                _realPassword += e.KeyChar;
+                UpdatePasswordDisplay();
+                e.Handled = true; // prevent default character insertion
+            }
+        }
+
+        // Handle backspace/delete and navigation keys
+        private void txtPass_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back)
+            {
+                if (_realPassword.Length > 0)
+                {
+                    _realPassword = _realPassword.Substring(0, _realPassword.Length - 1);
+                    UpdatePasswordDisplay();
+                }
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                // Treat delete same as clear in this simple masked input
+                _realPassword = string.Empty;
+                UpdatePasswordDisplay();
+                e.Handled = true;
+            }
+            // allow arrows, tab, enter to behave normally
+        }
+
+        // Keep KeyUp handler if designer references it
+        private void txtPass_KeyUp(object sender, KeyEventArgs e)
+        {
+            // no-op or add additional logic if required
+        }
+
+        private void UpdatePasswordDisplay()
+        {
+            if (string.IsNullOrEmpty(_realPassword))
+            {
+                SetPasswordPlaceholder();
+                return;
+            }
+
+            // show a mask with one '*' per real character
+            txtPass.UseSystemPasswordChar = false;
+            txtPass.Text = new string(MaskChar, _realPassword.Length);
+            txtPass.ForeColor = Color.WhiteSmoke;
+
+            // keep caret at end
+            txtPass.SelectionStart = txtPass.Text.Length;
+        }
+
+        private void SetPasswordPlaceholder()
+        {
+            txtPass.UseSystemPasswordChar = false;
+            txtPass.Text = PasswordPlaceholder;
+            txtPass.ForeColor = Color.LightGray;
+            txtPass.SelectionStart = 0;
         }
 
         private void txtPass_TextChanged(object sender, EventArgs e)
         {
-            if (txtPass.Text != "CONTRASEÑA" && txtPass.Text.Length > 0)
-            {
-                txtPass.UseSystemPasswordChar = true;
-            }
-
-            // Si se borra todo el texto, mostrar el placeholder sin puntitos
-            if (txtPass.Text.Length == 0)
-            {
-                txtPass.Text = "CONTRASEÑA";
-                txtPass.UseSystemPasswordChar = false;
-                txtPass.ForeColor = Color.WhiteSmoke;
-
-                // Mover el cursor al inicio
-                txtPass.Select(0, 0);
-            }
+            // Prevent external edits from breaking the stored password.
+            if (txtPass.Focused) return; // actual input handled on KeyPress/KeyDown
+            if (string.IsNullOrEmpty(_realPassword))
+                SetPasswordPlaceholder();
+            else
+                UpdatePasswordDisplay();
         }
 
         private void txtPass_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtPass.Text))
+            if (string.IsNullOrWhiteSpace(_realPassword))
             {
-                txtPass.Text = "CONTRASEÑA";
-                txtPass.ForeColor = Color.WhiteSmoke;
-                txtPass.UseSystemPasswordChar = false; 
-
+                SetPasswordPlaceholder();
             }
             else
             {
-                // Mantener los puntitos si hay texto real
-                txtPass.UseSystemPasswordChar = true;
+                // keep showing mask when leaving
+                UpdatePasswordDisplay();
             }
         }
 
-        private void btnCerrar_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+        private void btnCerrar_Click(object sender, EventArgs e) => Application.Exit();
 
-        private void btnMinimzar_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
+        private void btnMinimzar_Click(object sender, EventArgs e) => this.WindowState = FormWindowState.Minimized;
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) { }
 
-        }
-
-        private void txtPass_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (txtPass.UseSystemPasswordChar == false && txtPass.Text == "CONTRASEÑA")
-            {
-                txtPass.Text = "";
-                txtPass.UseSystemPasswordChar = true;
-            }
-        }
-
-        private void txtPass_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (txtPass.Text == "CONTRASEÑA" || string.IsNullOrEmpty(txtPass.Text))
-            {
-                txtPass.UseSystemPasswordChar = false;
-            }
-            else
-            {
-                txtPass.UseSystemPasswordChar = true;
-            }
-        }
-
-        private void txtPass_TextChanged_1(object sender, EventArgs e)
-        {
-
-        }
+        private void txtPass_TextChanged_1(object sender, EventArgs e) { }
     }
 }

@@ -62,7 +62,7 @@ namespace Proyecto_Nomisoft
 
         private void buttonRegresar_Click(object sender, EventArgs e)
         {
-            Seleccion Back = new Seleccion();
+            login Back = new login();
             Back.Show();
             this.Hide();    
         }

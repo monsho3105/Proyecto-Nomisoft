@@ -80,7 +80,6 @@
             this.txtPass.TextChanged += new System.EventHandler(this.txtPass_TextChanged_1);
             this.txtPass.Enter += new System.EventHandler(this.txtPass_Enter);
             this.txtPass.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPass_KeyPress);
-            this.txtPass.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPass_KeyUp);
             this.txtPass.Leave += new System.EventHandler(this.txtUser_Leave);
             // 
             // btnAcceder
