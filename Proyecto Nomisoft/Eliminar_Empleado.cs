@@ -22,6 +22,13 @@ namespace Proyecto_Nomisoft
                 this.textBox_Identificacion.TextChanged -= textBox1_TextChanged;
                 this.textBox_Identificacion.TextChanged += textBox1_TextChanged;
             }
+
+            // Wire delete button click
+            if (this.button_Eliminar != null)
+            {
+                this.button_Eliminar.Click -= button_Eliminar_Click;
+                this.button_Eliminar.Click += button_Eliminar_Click;
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -111,6 +118,62 @@ namespace Proyecto_Nomisoft
                 filtered.ImportRow(row);
 
             dataGridView1.DataSource = filtered;
+        }
+
+        // New: when user clicks Eliminar, mark selected empleado as Inactivo
+        private void button_Eliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Determine selected row (prefer selected rows, fallback to current row)
+                DataGridViewRow row = null;
+                if (dataGridView1.SelectedRows != null && dataGridView1.SelectedRows.Count > 0)
+                    row = dataGridView1.SelectedRows[0];
+                else if (dataGridView1.CurrentRow != null)
+                    row = dataGridView1.CurrentRow;
+
+                if (row == null)
+                {
+                    MessageBox.Show("Seleccione un empleado en la tabla primero.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Try to get Numero_Documento by column name, fallback to first cell
+                string numero = null;
+                if (row.Cells["Numero_Documento"] != null)
+                    numero = Convert.ToString(row.Cells["Numero_Documento"].Value);
+                else if (row.Cells.Count > 0)
+                    numero = Convert.ToString(row.Cells[0].Value);
+
+                numero = (numero ?? string.Empty).Trim();
+                if (string.IsNullOrEmpty(numero))
+                {
+                    MessageBox.Show("No se pudo determinar el número de documento del empleado seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var confirm = MessageBox.Show($"¿Desea marcar al empleado con documento '{numero}' como Inactivo?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirm != DialogResult.Yes) return;
+
+                var conexion = new Conexion();
+                var nuevo = new Conexion.Empleado
+                {
+                    Numero_Documento = numero,
+                    Estado = "Inactivo"
+                };
+
+                // Update only the Estado column
+                conexion.Editar_Empleado(numero, nuevo, "Estado");
+
+                MessageBox.Show("Empleado marcado como Inactivo.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Refresh the grid to remove the now-inactive record from active list
+                LoadActiveEmployees();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar empleado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
