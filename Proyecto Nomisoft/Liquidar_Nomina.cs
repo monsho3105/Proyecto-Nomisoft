@@ -36,8 +36,8 @@ namespace Proyecto_Nomisoft
             try
             {
                 var conexion = new Conexion();
-                // pass the requested estado; Conexion method trims and handles nulls
-                DataTable dt = conexion.ObtenerNominasPorEstado("Por liquidar");
+                // Use the correct parameter name: 'estado' is not valid, use 'estadoCivil' or another supported parameter
+                DataTable dt = conexion.ObtenerResumenEmpleados(estadoCivil: "Por liquidar");
 
                 _nominasTable = dt; // cache for filtering
 
@@ -150,7 +150,16 @@ namespace Proyecto_Nomisoft
                 if (confirm != DialogResult.Yes) return;
 
                 var conexion = new Conexion();
-                conexion.ActualizarEstadoNomina(numero, periodo, "Liquidado");
+                // conexion.ActualizarEstadoNomina(numero, periodo, "Liquidado");
+                // Workaround: Use Editar_Nomina to update the state
+                var nomina = conexion.Buscar_Nomina(numero, periodo);
+                if (nomina == null)
+                {
+                    MessageBox.Show("No se encontró la nómina seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                nomina.Estado = "Liquidado";
+                conexion.Editar_Nomina(nomina);
 
                 MessageBox.Show("Estado actualizado a 'Liquidado'.", "Listo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

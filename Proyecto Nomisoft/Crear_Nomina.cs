@@ -329,7 +329,7 @@ namespace Proyecto_Nomisoft
                             if (salario < smmlv * 2m)
                             {
                                 // prefer the Auxilio_Transporte from parametros table when present
-                                nomina.Auxilio_Transporte = auxilioParam ?? 200000m;
+                                nomina.Auxilio_Transporte = auxilioParam ?? 162000m;
                             }
                         }
                     }

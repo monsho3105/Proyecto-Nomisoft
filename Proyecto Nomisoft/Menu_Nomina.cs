@@ -26,7 +26,9 @@ namespace Proyecto_Nomisoft
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            Parametros Next = new Parametros();
+            Next.Show();
+            this.Hide();
         }
 
         private void button7_Click(object sender, EventArgs e)

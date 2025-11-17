@@ -27,10 +27,10 @@ namespace Proyecto_Nomisoft
         // Read one parameters row. Change table name if yours differs.
         public ParametrosNomina Obtener_Parametros(int id = 0)
         {
-            // replace 'parametros_nomina' with your actual table name if needed
+            // Use `configuracion_nomina` table (your DB uses this table name)
             string sql = id > 0
-                ? "SELECT * FROM `parametros_nomina` WHERE `id` = @id LIMIT 1;"
-                : "SELECT * FROM `parametros_nomina` ORDER BY `id` DESC LIMIT 1;";
+                ? "SELECT * FROM `configuracion_nomina` WHERE `id` = @id LIMIT 1;"
+                : "SELECT * FROM `configuracion_nomina` ORDER BY `id` DESC LIMIT 1;";
 
             using (var conn = new MySqlConnection(connectionString))
             using (var cmd = new MySqlCommand(sql, conn))
@@ -52,7 +52,6 @@ namespace Proyecto_Nomisoft
                         p.Recargo_HE_Nocturna = r.IsDBNull(r.GetOrdinal("Recargo_HE_Nocturna")) ? (decimal?)null : r.GetDecimal("Recargo_HE_Nocturna");
                         p.Recargo_Dominical = r.IsDBNull(r.GetOrdinal("Recargo_Dominical")) ? (decimal?)null : r.GetDecimal("Recargo_Dominical");
                         p.Recargo_HE_Dominical = r.IsDBNull(r.GetOrdinal("Recargo_HE_Dominical")) ? (decimal?)null : r.GetDecimal("Recargo_HE_Dominical");
-                        // column name may be truncated in GUI; adjust name if different
                         if (ColumnExists(r, "Recargo_HE_Dominical_Nocturna"))
                             p.Recargo_HE_Dominical_Nocturna = r.IsDBNull(r.GetOrdinal("Recargo_HE_Dominical_Nocturna")) ? (decimal?)null : r.GetDecimal("Recargo_HE_Dominical_Nocturna");
                         else if (ColumnExists(r, "Recargo_HE_Dominical_Noct"))
@@ -67,7 +66,7 @@ namespace Proyecto_Nomisoft
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Database select (parametros_nomina) failed: " + ex.Message, ex);
+                    throw new Exception("Database select (configuracion_nomina) failed: " + ex.Message, ex);
                 }
             }
         }
@@ -79,10 +78,36 @@ namespace Proyecto_Nomisoft
             // set/update timestamp
             p.Fecha_Ultima_Actualizacion = DateTime.Now;
 
+            // Validate numeric ranges to avoid MySQL "Out of range" errors.
+            // Adjust ranges if your DB columns have different precision/scale.
+            void ValidateRange(decimal? value, decimal min, decimal max, string name)
+            {
+                if (value.HasValue && (value.Value < min || value.Value > max))
+                    throw new ArgumentOutOfRangeException(name, $"Value {value.Value} for '{name}' is outside allowed range [{min}, {max}].");
+            }
+
+            // Percentages: expect 0..100 (if your DB stores fractions 0..1 change accordingly)
+            ValidateRange(p.Porcentaje_EPS, 0m, 100m, nameof(p.Porcentaje_EPS));
+            ValidateRange(p.Porcentaje_Pension, 0m, 100m, nameof(p.Porcentaje_Pension));
+            ValidateRange(p.Porcentaje_Fondo_Solidaridad, 0m, 100m, nameof(p.Porcentaje_Fondo_Solidaridad));
+
+            // Recargos: small fractions like 0.35 (allow up to 10 to be safe)
+            ValidateRange(p.Recargo_Nocturno, 0m, 10m, nameof(p.Recargo_Nocturno));
+            ValidateRange(p.Recargo_HE_Diurna, 0m, 10m, nameof(p.Recargo_HE_Diurna));
+            ValidateRange(p.Recargo_HE_Nocturna, 0m, 10m, nameof(p.Recargo_HE_Nocturna));
+            ValidateRange(p.Recargo_Dominical, 0m, 10m, nameof(p.Recargo_Dominical));
+            ValidateRange(p.Recargo_HE_Dominical, 0m, 10m, nameof(p.Recargo_HE_Dominical));
+            ValidateRange(p.Recargo_HE_Dominical_Nocturna, 0m, 10m, nameof(p.Recargo_HE_Dominical_Nocturna));
+
+            // Monetary values: non-negative
+            ValidateRange(p.SMMLV, 0m, decimal.MaxValue, nameof(p.SMMLV));
+            ValidateRange(p.Auxilio_Transporte, 0m, decimal.MaxValue, nameof(p.Auxilio_Transporte));
+            ValidateRange(p.Valor_Hora_Ordinaria, 0m, decimal.MaxValue, nameof(p.Valor_Hora_Ordinaria));
+
             if (p.Id > 0)
             {
                 string sql = @"
-                    UPDATE `parametros_nomina` SET
+                    UPDATE `configuracion_nomina` SET
                         `Porcentaje_EPS` = @Porcentaje_EPS,
                         `Porcentaje_Pension` = @Porcentaje_Pension,
                         `Porcentaje_Fondo_Solidaridad` = @Porcentaje_Fondo_Solidaridad,
@@ -122,14 +147,14 @@ namespace Proyecto_Nomisoft
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("Database update (parametros_nomina) failed: " + ex.Message, ex);
+                        throw new Exception("Database update (configuracion_nomina) failed: " + ex.Message, ex);
                     }
                 }
             }
             else
             {
                 string sql = @"
-                    INSERT INTO `parametros_nomina` (
+                    INSERT INTO `configuracion_nomina` (
                         `Porcentaje_EPS`,`Porcentaje_Pension`,`Porcentaje_Fondo_Solidaridad`,
                         `Recargo_Nocturno`,`Recargo_HE_Diurna`,`Recargo_HE_Nocturna`,
                         `Recargo_Dominical`,`Recargo_HE_Dominical`,`Recargo_HE_Dominical_Nocturna`,
@@ -164,7 +189,7 @@ namespace Proyecto_Nomisoft
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("Database insert (parametros_nomina) failed: " + ex.Message, ex);
+                        throw new Exception("Database insert (configuracion_nomina) failed: " + ex.Message, ex);
                     }
                 }
             }
