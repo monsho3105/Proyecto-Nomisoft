@@ -1207,5 +1207,56 @@ namespace Proyecto_Nomisoft
                 }
             }
         }
+
+        // Add this method near the other nomina helpers in the existing 'internal partial class Conexion'
+        public DataTable ObtenerNominasPorEstado(string estado)
+        {
+            var dt = new DataTable();
+            string sql = @"SELECT * FROM `nomina` WHERE `Estado` = @estado ORDER BY `Fecha_Creacion` DESC;";
+
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(connectionString))
+            using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(sql, conn))
+            using (var da = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd))
+            {
+                // Trim input to avoid mismatches with trailing/multiple spaces
+                var valor = (estado ?? string.Empty).Trim();
+                cmd.Parameters.AddWithValue("@estado", valor);
+                da.Fill(dt);
+            }
+
+            return dt;
+        }
+        // Add this method near the other nomina helpers in the existing 'internal partial class Conexion'
+        public void ActualizarEstadoNomina(string numeroDocumento, string periodo, string nuevoEstado)
+        {
+            if (string.IsNullOrWhiteSpace(numeroDocumento)) throw new ArgumentException("numeroDocumento is required", nameof(numeroDocumento));
+            if (string.IsNullOrWhiteSpace(periodo)) throw new ArgumentException("periodo is required", nameof(periodo));
+
+            string sql = @"
+                UPDATE `nomina`
+                SET `Estado` = @Estado
+                WHERE `Numero_Documento` = @numero AND `Periodo` = @periodo
+                LIMIT 1;";
+
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(connectionString))
+            using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Estado", (object)(nuevoEstado ?? string.Empty).Trim());
+                cmd.Parameters.AddWithValue("@numero", numeroDocumento.Trim());
+                cmd.Parameters.AddWithValue("@periodo", periodo.Trim());
+
+                try
+                {
+                    conn.Open();
+                    int affected = cmd.ExecuteNonQuery();
+                    if (affected == 0)
+                        throw new InvalidOperationException("No se encontró la nómina para actualizar.");
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Database update (nomina estado) failed: " + ex.Message, ex);
+                }
+            }
+        }
     }
 }

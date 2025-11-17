@@ -53,6 +53,7 @@
             this.button_Liquidar.TabIndex = 2;
             this.button_Liquidar.Text = "Liquidar Nomina";
             this.button_Liquidar.UseVisualStyleBackColor = true;
+            this.button_Liquidar.Click += new System.EventHandler(this.button_Liquidar_Click);
             // 
             // button_Crear_Nomina
             // 

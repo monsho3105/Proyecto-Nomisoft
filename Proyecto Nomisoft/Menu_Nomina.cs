@@ -43,5 +43,12 @@ namespace Proyecto_Nomisoft
             next.Show();
             this.Hide();
         }
+
+        private void button_Liquidar_Click(object sender, EventArgs e)
+        {
+            Liquidar_Nomina Next = new Liquidar_Nomina();
+            Next.Show();
+            this.Hide();
+        }
     }
 }
