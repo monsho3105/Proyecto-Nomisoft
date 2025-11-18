@@ -10,7 +10,14 @@ namespace Proyecto_Nomisoft
         public Agregar_Emple()
         {
             InitializeComponent();
+            this.BackgroundImage = Properties.Resources.WhatsApp_Image_2025_11_18_at_9_57_18_AM;
+            this.BackgroundImageLayout = ImageLayout.Zoom; // o Stretch si prefieres
+
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
         }
 
         private void label2_Click(object sender, EventArgs e)

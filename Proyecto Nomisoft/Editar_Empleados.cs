@@ -16,6 +16,10 @@ namespace Proyecto_Nomisoft
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
         }
 
         private void txt_Numero_Doc_TextChanged(object sender, EventArgs e)

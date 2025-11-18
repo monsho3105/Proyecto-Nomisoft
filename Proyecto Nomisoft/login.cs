@@ -7,8 +7,8 @@ namespace Proyecto_Nomisoft
     public partial class login : Form
     {
         // Admin credentials (hardcoded)
-        private const string AdminUser = "admin1234";
-        private const string AdminPass = "admin_pass_123";
+        private const string AdminUser = "1";
+        private const string AdminPass = "1";
 
         // Store real password separately so the textbox only shows a masked view
         private string _realPassword = string.Empty;
@@ -19,6 +19,10 @@ namespace Proyecto_Nomisoft
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.BackgroundImage = Image.FromFile(@"C:\Users\dg262\Music\NOMISOFT\fondos pantalla\Copilot_20251118_023345.png");
+            this.BackgroundImageLayout = ImageLayout.Stretch; // Ajusta al tamaño del formulario
+            this.Resize += (s, e) => this.Invalidate();
 
             // Ensure events are wired (Designer already wires some; these ensure behavior)
             this.txtPass.KeyPress -= txtPass_KeyPress;

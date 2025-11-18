@@ -257,5 +257,11 @@
   <ItemGroup>
     <None Include="Resources\lupa.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fondo_inicio.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WhatsApp Image 2025-11-18 at 9.57.18 AM.jpeg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

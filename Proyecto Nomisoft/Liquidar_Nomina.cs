@@ -13,6 +13,10 @@ namespace Proyecto_Nomisoft
         public Liquidar_Nomina()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
 
             // wire textbox filter
             if (this.textBox_Identificacion != null)
@@ -198,6 +202,11 @@ namespace Proyecto_Nomisoft
             Menu_Nomina back = new Menu_Nomina();
             back.Show();
             this.Hide();
+        }
+
+        private void Liquidar_Nomina_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

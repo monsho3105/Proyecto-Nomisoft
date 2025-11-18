@@ -18,6 +18,10 @@ namespace Proyecto_Nomisoft
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
 
             // Ensure designer-forwarding handler is removed so the logic runs only once.
             // Designer may have wired Button_Crear -> Button_Crear_Click_1; remove that subscription if present.

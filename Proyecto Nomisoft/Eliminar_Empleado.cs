@@ -15,6 +15,10 @@ namespace Proyecto_Nomisoft
         {
             InitializeComponent();
             LoadActiveEmployees();
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
 
             // Wire text change for live filtering (textBox1 is the Identificacion textbox in Designer)
             if (this.textBox_Identificacion != null)
@@ -181,6 +185,11 @@ namespace Proyecto_Nomisoft
             Admin_Menu Back = new Admin_Menu();
             Back.Show();
             this.Hide();
+        }
+
+        private void Eliminar_Empleado_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -6,8 +6,10 @@ using System.Windows.Forms;
 
 namespace Proyecto_Nomisoft
 {
+
     public partial class Ver_Emple : Form
     {
+
         // core columns that must be visible by default
         private readonly string[] coreColumns = { "Nombre", "Documento", "Cargo", "Salario", "Estado" };
 
@@ -29,6 +31,10 @@ namespace Proyecto_Nomisoft
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
         }
 
         private void Ver_Emple_Load(object sender, EventArgs e)

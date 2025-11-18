@@ -37,18 +37,20 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(39, 101);
+            this.dataGridView1.Location = new System.Drawing.Point(35, 81);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(1008, 110);
+            this.dataGridView1.Size = new System.Drawing.Size(896, 88);
             this.dataGridView1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(50, 276);
+            this.button1.Location = new System.Drawing.Point(44, 221);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(108, 54);
+            this.button1.Size = new System.Drawing.Size(96, 43);
             this.button1.TabIndex = 1;
             this.button1.Text = "Regresar";
             this.button1.UseVisualStyleBackColor = true;
@@ -56,23 +58,26 @@
             // 
             // button_Guardar
             // 
-            this.button_Guardar.Location = new System.Drawing.Point(778, 292);
+            this.button_Guardar.Location = new System.Drawing.Point(692, 234);
+            this.button_Guardar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button_Guardar.Name = "button_Guardar";
-            this.button_Guardar.Size = new System.Drawing.Size(153, 55);
+            this.button_Guardar.Size = new System.Drawing.Size(136, 44);
             this.button_Guardar.TabIndex = 2;
             this.button_Guardar.Text = "Guradar";
             this.button_Guardar.UseVisualStyleBackColor = true;
             // 
             // Parametros
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1097, 401);
+            this.ClientSize = new System.Drawing.Size(975, 321);
             this.Controls.Add(this.button_Guardar);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Parametros";
             this.Text = "Parametros";
+            this.Load += new System.EventHandler(this.Parametros_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

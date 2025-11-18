@@ -39,35 +39,38 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(65, 76);
+            this.label1.Location = new System.Drawing.Point(58, 61);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(103, 20);
+            this.label1.Size = new System.Drawing.Size(85, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "Identificacion";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBox_Identificacion
             // 
-            this.textBox_Identificacion.Location = new System.Drawing.Point(209, 70);
+            this.textBox_Identificacion.Location = new System.Drawing.Point(186, 56);
+            this.textBox_Identificacion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_Identificacion.Name = "textBox_Identificacion";
-            this.textBox_Identificacion.Size = new System.Drawing.Size(248, 26);
+            this.textBox_Identificacion.Size = new System.Drawing.Size(221, 22);
             this.textBox_Identificacion.TabIndex = 1;
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 186);
+            this.dataGridView1.Location = new System.Drawing.Point(11, 149);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(1231, 454);
+            this.dataGridView1.Size = new System.Drawing.Size(1094, 363);
             this.dataGridView1.TabIndex = 2;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(80, 754);
+            this.button1.Location = new System.Drawing.Point(71, 603);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(354, 59);
+            this.button1.Size = new System.Drawing.Size(315, 47);
             this.button1.TabIndex = 3;
             this.button1.Text = "Regresar";
             this.button1.UseVisualStyleBackColor = true;
@@ -75,25 +78,28 @@
             // 
             // button_Eliminar
             // 
-            this.button_Eliminar.Location = new System.Drawing.Point(729, 754);
+            this.button_Eliminar.Location = new System.Drawing.Point(648, 603);
+            this.button_Eliminar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button_Eliminar.Name = "button_Eliminar";
-            this.button_Eliminar.Size = new System.Drawing.Size(354, 59);
+            this.button_Eliminar.Size = new System.Drawing.Size(315, 47);
             this.button_Eliminar.TabIndex = 4;
             this.button_Eliminar.Text = "Eliminar";
             this.button_Eliminar.UseVisualStyleBackColor = true;
             // 
             // Eliminar_Empleado
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1255, 894);
+            this.ClientSize = new System.Drawing.Size(1116, 715);
             this.Controls.Add(this.button_Eliminar);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.textBox_Identificacion);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Eliminar_Empleado";
             this.Text = "Eliminar_Empleado";
+            this.Load += new System.EventHandler(this.Eliminar_Empleado_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

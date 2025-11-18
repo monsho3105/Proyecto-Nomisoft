@@ -12,6 +12,10 @@ namespace Proyecto_Nomisoft
         public Parametros()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
 
             // wire save button
             if (this.button_Guardar != null)
@@ -127,6 +131,11 @@ namespace Proyecto_Nomisoft
             if (decimal.TryParse(norm, NumberStyles.Number, CultureInfo.InvariantCulture, out parsed)) return parsed;
 
             return null;
+        }
+
+        private void Parametros_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

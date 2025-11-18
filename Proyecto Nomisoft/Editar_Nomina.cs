@@ -20,6 +20,10 @@ namespace Proyecto_Nomisoft
         public Editar_Nomina()
         {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
+            this.TopLevel = false; // ya lo tienes
+            this.Text = ""; // opcional, borra el texto del título
+
 
             // Wire the lookup button(s) if present in the Designer.
             if (this.button_Lupa != null)
@@ -498,6 +502,11 @@ namespace Proyecto_Nomisoft
             Menu_Nomina back = new Menu_Nomina();
             back.Show();
             this.Hide();
+        }
+
+        private void Editar_Nomina_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
