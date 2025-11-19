@@ -84,7 +84,7 @@
             // 
             this.checkBox_Tipo_Documento.AutoSize = true;
             this.checkBox_Tipo_Documento.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_Tipo_Documento.Location = new System.Drawing.Point(455, 946);
+            this.checkBox_Tipo_Documento.Location = new System.Drawing.Point(455, 950);
             this.checkBox_Tipo_Documento.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Tipo_Documento.Name = "checkBox_Tipo_Documento";
             this.checkBox_Tipo_Documento.Size = new System.Drawing.Size(18, 17);
@@ -108,7 +108,7 @@
             // 
             this.checkBox_Telefono.AutoSize = true;
             this.checkBox_Telefono.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_Telefono.Location = new System.Drawing.Point(1037, 946);
+            this.checkBox_Telefono.Location = new System.Drawing.Point(1041, 949);
             this.checkBox_Telefono.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Telefono.Name = "checkBox_Telefono";
             this.checkBox_Telefono.Size = new System.Drawing.Size(18, 17);
@@ -119,7 +119,7 @@
             // 
             this.checkBoxCorreo_Electronico.AutoSize = true;
             this.checkBoxCorreo_Electronico.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxCorreo_Electronico.Location = new System.Drawing.Point(1210, 946);
+            this.checkBoxCorreo_Electronico.Location = new System.Drawing.Point(1210, 950);
             this.checkBoxCorreo_Electronico.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxCorreo_Electronico.Name = "checkBoxCorreo_Electronico";
             this.checkBoxCorreo_Electronico.Size = new System.Drawing.Size(18, 17);
@@ -131,7 +131,7 @@
             // 
             this.checkBox_Estado_Civil.AutoSize = true;
             this.checkBox_Estado_Civil.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_Estado_Civil.Location = new System.Drawing.Point(629, 988);
+            this.checkBox_Estado_Civil.Location = new System.Drawing.Point(632, 987);
             this.checkBox_Estado_Civil.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Estado_Civil.Name = "checkBox_Estado_Civil";
             this.checkBox_Estado_Civil.Size = new System.Drawing.Size(18, 17);
@@ -153,7 +153,7 @@
             // 
             this.checkBox_Cargo.AutoSize = true;
             this.checkBox_Cargo.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_Cargo.Location = new System.Drawing.Point(1094, 988);
+            this.checkBox_Cargo.Location = new System.Drawing.Point(1090, 987);
             this.checkBox_Cargo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Cargo.Name = "checkBox_Cargo";
             this.checkBox_Cargo.Size = new System.Drawing.Size(18, 17);
@@ -164,7 +164,7 @@
             // 
             this.checkBox_Fecha_Nacimiento.AutoSize = true;
             this.checkBox_Fecha_Nacimiento.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_Fecha_Nacimiento.Location = new System.Drawing.Point(736, 946);
+            this.checkBox_Fecha_Nacimiento.Location = new System.Drawing.Point(741, 949);
             this.checkBox_Fecha_Nacimiento.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Fecha_Nacimiento.Name = "checkBox_Fecha_Nacimiento";
             this.checkBox_Fecha_Nacimiento.Size = new System.Drawing.Size(18, 17);
@@ -186,7 +186,7 @@
             "1.400.000 - 1.999.999",
             "2.000.000 - 2.999.999",
             "3.000.000 - 4.999.999"});
-            this.comboBox_Salario_Base.Location = new System.Drawing.Point(41, 289);
+            this.comboBox_Salario_Base.Location = new System.Drawing.Point(41, 287);
             this.comboBox_Salario_Base.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox_Salario_Base.Name = "comboBox_Salario_Base";
             this.comboBox_Salario_Base.Size = new System.Drawing.Size(381, 42);
@@ -230,7 +230,7 @@
             "2.000.000 - 2.999.999",
             "3.000.000 - 4.999.999",
             "+ 5.000.000"});
-            this.comboBox_Departamento.Location = new System.Drawing.Point(869, 289);
+            this.comboBox_Departamento.Location = new System.Drawing.Point(869, 286);
             this.comboBox_Departamento.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox_Departamento.Name = "comboBox_Departamento";
             this.comboBox_Departamento.Size = new System.Drawing.Size(384, 42);
@@ -248,7 +248,7 @@
             "2.000.000 - 2.999.999",
             "3.000.000 - 4.999.999",
             "+ 5.000.000"});
-            this.comboBox_Cargo.Location = new System.Drawing.Point(1287, 289);
+            this.comboBox_Cargo.Location = new System.Drawing.Point(1287, 287);
             this.comboBox_Cargo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox_Cargo.Name = "comboBox_Cargo";
             this.comboBox_Cargo.Size = new System.Drawing.Size(407, 42);
@@ -267,7 +267,7 @@
             "2.000.000 - 2.999.999",
             "3.000.000 - 4.999.999",
             "+ 5.000.000"});
-            this.combo_Estado_Civil.Location = new System.Drawing.Point(41, 420);
+            this.combo_Estado_Civil.Location = new System.Drawing.Point(41, 415);
             this.combo_Estado_Civil.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.combo_Estado_Civil.Name = "combo_Estado_Civil";
             this.combo_Estado_Civil.Size = new System.Drawing.Size(530, 42);
@@ -303,7 +303,7 @@
             // 
             this.checkBox_Fondo_C.AutoSize = true;
             this.checkBox_Fondo_C.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_Fondo_C.Location = new System.Drawing.Point(1355, 988);
+            this.checkBox_Fondo_C.Location = new System.Drawing.Point(1352, 988);
             this.checkBox_Fondo_C.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Fondo_C.Name = "checkBox_Fondo_C";
             this.checkBox_Fondo_C.Size = new System.Drawing.Size(18, 17);
@@ -314,7 +314,7 @@
             // 
             this.checkBox_Fondo_P.AutoSize = true;
             this.checkBox_Fondo_P.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_Fondo_P.Location = new System.Drawing.Point(1481, 946);
+            this.checkBox_Fondo_P.Location = new System.Drawing.Point(1481, 948);
             this.checkBox_Fondo_P.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Fondo_P.Name = "checkBox_Fondo_P";
             this.checkBox_Fondo_P.Size = new System.Drawing.Size(18, 17);
@@ -325,7 +325,7 @@
             // 
             this.checkBox_EPS.AutoSize = true;
             this.checkBox_EPS.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox_EPS.Location = new System.Drawing.Point(1235, 988);
+            this.checkBox_EPS.Location = new System.Drawing.Point(1233, 988);
             this.checkBox_EPS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_EPS.Name = "checkBox_EPS";
             this.checkBox_EPS.Size = new System.Drawing.Size(18, 17);

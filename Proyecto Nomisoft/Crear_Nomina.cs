@@ -505,5 +505,10 @@ namespace Proyecto_Nomisoft
             back.Show();
             this.Hide();
         }
+
+        private void textBox_F_N_TextChanged(object sender, EventArgs e)
+        {
+            // Aquí puedes agregar la lógica que desees ejecutar cuando cambie el texto.
+        }
     }
 }

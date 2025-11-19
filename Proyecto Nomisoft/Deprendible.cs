@@ -226,7 +226,7 @@ namespace Proyecto_Nomisoft
 
         internal void GenerarPDF(Conexion.Nomina nomina, Conexion.Empleado emp)
         {
-            string folder = @"C:\Users\yeiso\Desktop\NOMISOFT\Desprendibles";
+            string folder = @"C:\Users\manue\Music\desprendible";
             string docPart = SanitizeFileName(nomina?.Numero_Documento ?? "unknown");
             string periodoPart = SanitizeFileName(nomina?.Periodo ?? "unknown");
             string ruta = Path.Combine(folder, $"Desprendible_{docPart}_{periodoPart}.pdf");

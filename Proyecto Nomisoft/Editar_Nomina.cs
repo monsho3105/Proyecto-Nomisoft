@@ -509,5 +509,31 @@ namespace Proyecto_Nomisoft
         {
 
         }
+
+        private void textBox_Extras_F_D_TextChanged(object sender, EventArgs e)
+        {
+            // Aquí puedes agregar la lógica que desees ejecutar cuando cambie el texto.
+        }
+
+        // Agrega este método al archivo de código de Editar_Nomina (no en el Designer)
+        private void textBox_F_N_TextChanged(object sender, EventArgs e)
+        {
+            // Aquí puedes agregar la lógica que desees ejecutar cuando cambie el texto.
+        }
+
+        // Agrega este método al archivo de código de la clase Editar_Nomina
+
+        private void textBox_Tot_Ded_TextChanged(object sender, EventArgs e)
+        {
+            // Aquí puedes agregar la lógica que desees ejecutar cuando cambie el texto.
+            // Por ejemplo, recalcular el neto a pagar, validar el valor, etc.
+        }
+
+        // Agrega este método al archivo de código de Editar_Nomina (no en el Designer)
+        private void textBox_Tot_Devengado_TextChanged(object sender, EventArgs e)
+        {
+            // Aquí puedes poner la lógica que desees ejecutar cuando cambie el texto.
+            // Por ejemplo, dejarlo vacío si no necesitas hacer nada especial:
+        }
     }
 }

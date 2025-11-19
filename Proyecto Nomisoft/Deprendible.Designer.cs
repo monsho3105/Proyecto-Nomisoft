@@ -99,7 +99,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1852, 959);
+            this.ClientSize = new System.Drawing.Size(1924, 1008);
             this.Controls.Add(this.button_Imprimir);
             this.Controls.Add(this.button_Regresar);
             this.Controls.Add(this.dataGridView1);
