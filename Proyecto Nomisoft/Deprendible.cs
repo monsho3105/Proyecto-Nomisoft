@@ -393,5 +393,10 @@ namespace Proyecto_Nomisoft
         {
 
         }
+
+        private void TextBox_Documento_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

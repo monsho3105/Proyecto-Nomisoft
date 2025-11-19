@@ -185,20 +185,21 @@
             // 
             this.comboBox_Salario_Base.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.comboBox_Salario_Base.CausesValidation = false;
-            this.comboBox_Salario_Base.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox_Salario_Base.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.comboBox_Salario_Base.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.World, ((byte)(0)));
             this.comboBox_Salario_Base.ForeColor = System.Drawing.SystemColors.InactiveBorder;
             this.comboBox_Salario_Base.FormattingEnabled = true;
+            this.comboBox_Salario_Base.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.comboBox_Salario_Base.Items.AddRange(new object[] {
             "",
             "1.400.000 - 1.999.999",
             "2.000.000 - 2.999.999",
             "3.000.000 - 4.999.999",
             "+ 5.000.000"});
-            this.comboBox_Salario_Base.Location = new System.Drawing.Point(176, 39);
+            this.comboBox_Salario_Base.Location = new System.Drawing.Point(53, 273);
             this.comboBox_Salario_Base.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox_Salario_Base.Name = "comboBox_Salario_Base";
-            this.comboBox_Salario_Base.Size = new System.Drawing.Size(206, 21);
+            this.comboBox_Salario_Base.Size = new System.Drawing.Size(236, 21);
             this.comboBox_Salario_Base.TabIndex = 12;
             // 
             // label2
@@ -425,7 +426,6 @@
         private System.Windows.Forms.CheckBox checkBox_Cargo;
         private System.Windows.Forms.CheckBox checkBox_Fecha_Nacimiento;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox_Salario_Base;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox_Fecha_Ingreso;
@@ -442,5 +442,6 @@
         private System.Windows.Forms.CheckBox checkBox_Fondo_C;
         private System.Windows.Forms.CheckBox checkBox_Fondo_P;
         private System.Windows.Forms.CheckBox checkBox_EPS;
+        private System.Windows.Forms.ComboBox comboBox_Salario_Base;
     }
 }
