@@ -49,7 +49,7 @@
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Right;
             this.panelContenedor.Location = new System.Drawing.Point(675, 0);
             this.panelContenedor.Name = "panelContenedor";
-            this.panelContenedor.Size = new System.Drawing.Size(590, 775);
+            this.panelContenedor.Size = new System.Drawing.Size(590, 876);
             this.panelContenedor.TabIndex = 6;
             this.panelContenedor.Paint += new System.Windows.Forms.PaintEventHandler(this.panelver_emple_Paint);
             // 
@@ -86,7 +86,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(323, 775);
+            this.panel1.Size = new System.Drawing.Size(323, 876);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1_Paint);
             // 
@@ -139,13 +139,21 @@
             // 
             // buttonRegresar
             // 
-            this.buttonRegresar.Location = new System.Drawing.Point(25, 730);
+            this.buttonRegresar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(95)))), ((int)(((byte)(153)))));
+            this.buttonRegresar.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(95)))), ((int)(((byte)(153)))));
+            this.buttonRegresar.FlatAppearance.BorderSize = 0;
+            this.buttonRegresar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.buttonRegresar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.buttonRegresar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRegresar.Font = new System.Drawing.Font("Sans Serif Collection", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRegresar.ForeColor = System.Drawing.Color.White;
+            this.buttonRegresar.Location = new System.Drawing.Point(48, 807);
             this.buttonRegresar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonRegresar.Name = "buttonRegresar";
-            this.buttonRegresar.Size = new System.Drawing.Size(204, 34);
+            this.buttonRegresar.Size = new System.Drawing.Size(204, 58);
             this.buttonRegresar.TabIndex = 5;
-            this.buttonRegresar.Text = "Regresar";
-            this.buttonRegresar.UseVisualStyleBackColor = true;
+            this.buttonRegresar.Text = "Cerrar sesión";
+            this.buttonRegresar.UseVisualStyleBackColor = false;
             this.buttonRegresar.Click += new System.EventHandler(this.buttonRegresar_Click);
             // 
             // button5
@@ -235,7 +243,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(32)))), ((int)(((byte)(44)))));
-            this.ClientSize = new System.Drawing.Size(1265, 775);
+            this.ClientSize = new System.Drawing.Size(1265, 876);
             this.Controls.Add(this.btncerrar);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelContenedor);

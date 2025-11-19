@@ -37,30 +37,35 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(70, 208);
+            this.dataGridView1.Location = new System.Drawing.Point(57, 398);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(1120, 330);
+            this.dataGridView1.Size = new System.Drawing.Size(1629, 397);
             this.dataGridView1.TabIndex = 0;
             // 
             // button_Guardar
             // 
-            this.button_Guardar.Location = new System.Drawing.Point(883, 595);
+            this.button_Guardar.BackColor = System.Drawing.Color.Transparent;
+            this.button_Guardar.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
+            this.button_Guardar.FlatAppearance.BorderSize = 0;
+            this.button_Guardar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.button_Guardar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.button_Guardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Guardar.Location = new System.Drawing.Point(1526, 799);
             this.button_Guardar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button_Guardar.Name = "button_Guardar";
-            this.button_Guardar.Size = new System.Drawing.Size(136, 44);
+            this.button_Guardar.Size = new System.Drawing.Size(160, 68);
             this.button_Guardar.TabIndex = 2;
-            this.button_Guardar.Text = "Guradar";
-            this.button_Guardar.UseVisualStyleBackColor = true;
+            this.button_Guardar.UseVisualStyleBackColor = false;
             // 
             // Parametros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1273, 759);
+            this.ClientSize = new System.Drawing.Size(1711, 951);
             this.Controls.Add(this.button_Guardar);
             this.Controls.Add(this.dataGridView1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);

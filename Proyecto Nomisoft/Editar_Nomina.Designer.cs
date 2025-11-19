@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editar_Nomina));
             this.Button_Editar = new System.Windows.Forms.Button();
             this.button_Lupa = new System.Windows.Forms.Button();
-            this.button_Regread = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -69,7 +68,7 @@
             // 
             // Button_Editar
             // 
-            this.Button_Editar.Location = new System.Drawing.Point(903, 669);
+            this.Button_Editar.Location = new System.Drawing.Point(1268, 884);
             this.Button_Editar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Button_Editar.Name = "Button_Editar";
             this.Button_Editar.Size = new System.Drawing.Size(140, 67);
@@ -88,17 +87,6 @@
             this.button_Lupa.Text = "Lupa";
             this.button_Lupa.UseVisualStyleBackColor = true;
             this.button_Lupa.Click += new System.EventHandler(this.button_Lupa_Click_1);
-            // 
-            // button_Regread
-            // 
-            this.button_Regread.Location = new System.Drawing.Point(113, 845);
-            this.button_Regread.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button_Regread.Name = "button_Regread";
-            this.button_Regread.Size = new System.Drawing.Size(116, 45);
-            this.button_Regread.TabIndex = 64;
-            this.button_Regread.Text = "Regresar";
-            this.button_Regread.UseVisualStyleBackColor = true;
-            this.button_Regread.Click += new System.EventHandler(this.button_Regread_Click);
             // 
             // label15
             // 
@@ -326,7 +314,7 @@
             // 
             // textBox_Documento
             // 
-            this.textBox_Documento.Location = new System.Drawing.Point(225, 70);
+            this.textBox_Documento.Location = new System.Drawing.Point(249, 73);
             this.textBox_Documento.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_Documento.Name = "textBox_Documento";
             this.textBox_Documento.Size = new System.Drawing.Size(232, 22);
@@ -389,7 +377,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1327, 844);
+            this.ClientSize = new System.Drawing.Size(1465, 981);
             this.Controls.Add(this.textBox_Neto_Pagar);
             this.Controls.Add(this.textBox_Tot_Ded);
             this.Controls.Add(this.textBox_Tot_Devengado);
@@ -398,7 +386,6 @@
             this.Controls.Add(this.button_Periodo);
             this.Controls.Add(this.Button_Editar);
             this.Controls.Add(this.button_Lupa);
-            this.Controls.Add(this.button_Regread);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label13);
@@ -438,7 +425,6 @@
         #endregion
         private System.Windows.Forms.Button Button_Editar;
         private System.Windows.Forms.Button button_Lupa;
-        private System.Windows.Forms.Button button_Regread;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;

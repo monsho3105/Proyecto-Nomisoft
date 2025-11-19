@@ -346,5 +346,30 @@ namespace Proyecto_Nomisoft
         {
 
         }
+
+        private void CheckBox_Numero_Hijos_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CheckBoxCorreo_Electronico_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ComboBox_Cargo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Combo_Estado_Civil_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label8_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
