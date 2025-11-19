@@ -12,11 +12,12 @@ namespace Proyecto_Nomisoft
     public partial class Deprendible : Form
     {
         private DataTable _nominasTable;
+        private string _initialDocumento; // filter value provided from login
 
         public Deprendible()
         {
             InitializeComponent();
-
+            this.BackgroundImageLayout = ImageLayout.Zoom; // o Stretch si prefieres
             if (this.textBox_Documento != null)
             {
                 this.textBox_Documento.TextChanged -= textBox_Documento_TextChanged;
@@ -31,11 +32,22 @@ namespace Proyecto_Nomisoft
 
             if (this.button_Imprimir != null)
             {
-                this.button_Imprimir.Click -= button_Imprimir_Click;
-                this.button_Imprimir.Click += button_Imprimir_Click;
+                this.button_Imprimir.Click -= button_Imprimir_Click_1;
+                this.button_Imprimir.Click += button_Imprimir_Click_1;
             }
 
             LoadNominas();
+        }
+
+        // New overload: allow caller (login) to pass the Numero_Documento to pre-filter the grid
+        public Deprendible(string numeroDocumento) : this()
+        {
+            _initialDocumento = (numeroDocumento ?? string.Empty).Trim();
+            if (!string.IsNullOrEmpty(_initialDocumento))
+            {
+                // pre-fill the Periodo textbox is left to the user; we apply the document-only filter now
+                ApplyFilter(string.Empty);
+            }
         }
 
         private void LoadNominas()
@@ -85,6 +97,13 @@ namespace Proyecto_Nomisoft
                     c.DefaultCellStyle.Format = "N2";
                     c.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 }
+
+                // If an initial document filter was provided before LoadNominas completed,
+                // ensure filter is applied now (safety if constructor ordering changed).
+                if (!string.IsNullOrEmpty(_initialDocumento))
+                {
+                    ApplyFilter(string.Empty);
+                }
             }
             catch (Exception ex)
             {
@@ -94,10 +113,12 @@ namespace Proyecto_Nomisoft
 
         private void textBox_Documento_TextChanged(object sender, EventArgs e)
         {
+            // textBox_Documento is used to filter by Periodo (per request)
             ApplyFilter(textBox_Documento.Text);
         }
 
-        private void ApplyFilter(string filterText)
+        // ApplyFilter now combines initial Documento equality (if provided) AND Periodo LIKE (from textbox)
+        private void ApplyFilter(string periodoFilter)
         {
             if (_nominasTable == null)
             {
@@ -105,24 +126,48 @@ namespace Proyecto_Nomisoft
                 return;
             }
 
-            var txt = (filterText ?? string.Empty).Trim();
             var dv = _nominasTable.DefaultView;
+            string docFilter = string.Empty;
+            string periodo = (periodoFilter ?? string.Empty).Trim();
 
-            if (string.IsNullOrEmpty(txt))
+            if (!string.IsNullOrEmpty(_initialDocumento))
             {
-                dv.RowFilter = string.Empty;
-                dataGridView1.DataSource = dv;
-                return;
+                // exact match on Numero_Documento
+                var escapedDoc = _initialDocumento.Replace("'", "''");
+                docFilter = $"Convert(Numero_Documento, 'System.String') = '{escapedDoc}'";
             }
 
-            var escaped = txt.Replace("'", "''");
-            dv.RowFilter = $"Convert(Numero_Documento, 'System.String') LIKE '%{escaped}%'";
+            string periodoClause = string.Empty;
+            if (!string.IsNullOrEmpty(periodo))
+            {
+                var escapedPeriodo = periodo.Replace("'", "''");
+                periodoClause = $"Convert(Periodo, 'System.String') LIKE '%{escapedPeriodo}%'";
+            }
+
+            if (!string.IsNullOrEmpty(docFilter) && !string.IsNullOrEmpty(periodoClause))
+                dv.RowFilter = $"{docFilter} AND {periodoClause}";
+            else if (!string.IsNullOrEmpty(docFilter))
+                dv.RowFilter = docFilter;
+            else if (!string.IsNullOrEmpty(periodoClause))
+                dv.RowFilter = periodoClause;
+            else
+                dv.RowFilter = string.Empty;
+
             dataGridView1.DataSource = dv;
         }
 
         private void button_Regresar_Click(object sender, EventArgs e)
         {
+            login back = new login();
+            back.Show();
             this.Close();
+        }
+
+        // keep existing imprimir logic in one place; Designer currently hooks the _Click_1 handler,
+        // so forward that to the main implementation.
+        private void button_Imprimir_Click_1(object sender, EventArgs e)
+        {
+            button_Imprimir_Click(sender, e);
         }
 
         private void button_Imprimir_Click(object sender, EventArgs e)
@@ -181,7 +226,7 @@ namespace Proyecto_Nomisoft
 
         internal void GenerarPDF(Conexion.Nomina nomina, Conexion.Empleado emp)
         {
-            string folder = @"C:\Users\dg262\Music\NOMISOFT\Desprendibles nomina";
+            string folder = @"C:\Users\yeiso\Desktop\NOMISOFT\Desprendibles";
             string docPart = SanitizeFileName(nomina?.Numero_Documento ?? "unknown");
             string periodoPart = SanitizeFileName(nomina?.Periodo ?? "unknown");
             string ruta = Path.Combine(folder, $"Desprendible_{docPart}_{periodoPart}.pdf");
@@ -232,8 +277,7 @@ namespace Proyecto_Nomisoft
             doc.Add(new Paragraph("DETALLE NÓMINA (todos los campos)", subTitulo));
             doc.Add(new Paragraph("\n"));
 
-            string[] orderedNames = new[]
-            {
+            string[] orderedNames = new[] {
                     "Fecha_Creacion","Dias_Diurnos","Valor_Dias","Dias_Nocturnos","Valor_Dias_Nocturnos",
                     "Dias_Festivos","Valor_Dias_Festivos","Horas_Extras_Diurnas","Valor_Horas_Extras_Diurnas",
                     "Horas_Extras_Nocturnas","Valor_Horas_Extras_Nocturnas","Horas_Extras_Festivas_Diurnas",
@@ -259,7 +303,6 @@ namespace Proyecto_Nomisoft
                 string displayName = name.Replace('_', ' ');
                 string displayValue;
 
-                // fields that represent quantities (no currency symbol)
                 string[] quantityFields =
                 {
                         "Dias_Diurnos",
@@ -271,7 +314,6 @@ namespace Proyecto_Nomisoft
                         "Horas_Extras_Festivas_Nocturnas"
                     };
 
-                // determine if property is a numeric type (decimal/nullable decimal, int, etc.)
                 var propType = prop.PropertyType;
                 var coreType = Nullable.GetUnderlyingType(propType) ?? propType;
                 bool isNumericType = coreType == typeof(decimal) || coreType == typeof(double) ||
@@ -282,7 +324,6 @@ namespace Proyecto_Nomisoft
                 {
                     if (isNumericType)
                     {
-                        // print 0.00 (or N2) for numeric nulls
                         decimal zero = 0m;
                         displayValue = quantityFields.Contains(name) ? zero.ToString("N2") : zero.ToString("C");
                     }
@@ -295,9 +336,9 @@ namespace Proyecto_Nomisoft
                 {
                     decimal d = Convert.ToDecimal(val);
                     if (quantityFields.Contains(name))
-                        displayValue = d.ToString("N2");  // no $
+                        displayValue = d.ToString("N2");
                     else
-                        displayValue = d.ToString("C");   // with $
+                        displayValue = d.ToString("C");
                 }
                 else if (val is DateTime dt)
                 {
@@ -305,7 +346,6 @@ namespace Proyecto_Nomisoft
                 }
                 else
                 {
-                    // fallback: if non-null value is an empty string and property is numeric type, show 0.00
                     var s = val as string;
                     if (isNumericType && string.IsNullOrWhiteSpace(s))
                     {
@@ -318,7 +358,6 @@ namespace Proyecto_Nomisoft
                     }
                 }
 
-                // Create a single cell that contains: left text, dotted leader, right text
                 var dotted = new DottedLineSeparator() { Gap = 2f, Offset = -1f };
                 Phrase leaderPhrase = new Phrase();
                 leaderPhrase.Add(new Chunk(displayName + " ", subTitulo));
@@ -348,6 +387,11 @@ namespace Proyecto_Nomisoft
             return new string(input.Select(ch => invalid.Contains(ch) ? '_' : ch).ToArray())
                 .Replace(' ', '_')
                 .Trim();
+        }
+
+        private void Deprendible_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

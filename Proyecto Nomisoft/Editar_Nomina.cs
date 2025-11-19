@@ -20,6 +20,7 @@ namespace Proyecto_Nomisoft
         public Editar_Nomina()
         {
             InitializeComponent();
+            this.BackgroundImageLayout = ImageLayout.Zoom; // o Stretch si prefieres
             this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
             this.TopLevel = false; // ya lo tienes
             this.Text = ""; // opcional, borra el texto del título

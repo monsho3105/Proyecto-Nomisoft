@@ -10,7 +10,7 @@ namespace Proyecto_Nomisoft
         private const string AdminUser = "1";
         private const string AdminPass = "1";
 
-        // Store real password separately so the textbox only shows a masked view
+        // Store real password separately so the textbox only shows a fixed mask
         private string _realPassword = string.Empty;
         private const string PasswordPlaceholder = "CONTRASEÑA";
         private const char MaskChar = '*';
@@ -20,7 +20,7 @@ namespace Proyecto_Nomisoft
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            this.BackgroundImage = Image.FromFile(@"C:\Users\dg262\Music\NOMISOFT\fondos pantalla\Copilot_20251118_023345.png");
+          
             this.BackgroundImageLayout = ImageLayout.Stretch; // Ajusta al tamaño del formulario
             this.Resize += (s, e) => this.Invalidate();
 
@@ -35,10 +35,7 @@ namespace Proyecto_Nomisoft
             this.txtPass.Leave += txtPass_Leave;
 
             // Initialize placeholder if designer default differs
-            if (string.IsNullOrEmpty(txtPass.Text))
-            {
-                SetPasswordPlaceholder();
-            }
+            if (string.IsNullOrEmpty(txtPass.Text)) ;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -71,8 +68,8 @@ namespace Proyecto_Nomisoft
                     var emp = conexion.Buscar_Empleado(user);
                     if (emp != null)
                     {
-                        // successful employee login -> open Deprendible
-                        Deprendible desp = new Deprendible();
+                        // successful employee login -> open Deprendible filtered to this document
+                        Deprendible desp = new Deprendible(user);
                         desp.Show();
                         this.Hide();
                         return;
@@ -195,6 +192,8 @@ namespace Proyecto_Nomisoft
         private void txtPass_TextChanged(object sender, EventArgs e)
         {
             // Prevent external edits from breaking the stored password.
+            // If user somehow pasted text, replace display with mask and try to sync real value length.
+            // Best-effort: if the display is not the placeholder or mask, restore the appropriate display.
             if (txtPass.Focused) return; // actual input handled on KeyPress/KeyDown
             if (string.IsNullOrEmpty(_realPassword))
                 SetPasswordPlaceholder();
@@ -222,5 +221,10 @@ namespace Proyecto_Nomisoft
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) { }
 
         private void txtPass_TextChanged_1(object sender, EventArgs e) { }
+
+        private void TxtUser_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

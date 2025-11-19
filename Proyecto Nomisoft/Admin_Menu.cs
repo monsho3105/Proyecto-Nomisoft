@@ -22,7 +22,7 @@ namespace Proyecto_Nomisoft
             this.ControlBox = false;                           // quita los botones de título
             this.Text = "";                                     // borra el texto del título
 
-            this.BackgroundImage = Properties.Resources.fondo_inicio;
+          
             this.BackgroundImageLayout = ImageLayout.Zoom;
 
             panelContenedor.Dock = DockStyle.Fill;
@@ -101,7 +101,7 @@ namespace Proyecto_Nomisoft
             agregarForm.Show(); // lo muestra
 
 
-            this.BackgroundImage = Image.FromFile(@"C:\Users\dg262\Downloads\WhatsApp Image 2025-11-18 at 9.57.18 AM.jpeg");
+            
 
         }
 
@@ -344,6 +344,11 @@ LIMIT 1;";
         private void btncerrar_Click(object sender, EventArgs e)
         {
             Application.Exit(); // cierra toda la app
+        }
+
+        private void Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

@@ -191,5 +191,10 @@ namespace Proyecto_Nomisoft
         {
 
         }
+
+        private void Button_Eliminar_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

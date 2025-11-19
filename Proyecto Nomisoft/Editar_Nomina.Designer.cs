@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editar_Nomina));
             this.Button_Editar = new System.Windows.Forms.Button();
             this.button_Lupa = new System.Windows.Forms.Button();
             this.button_Regread = new System.Windows.Forms.Button();
@@ -68,7 +69,7 @@
             // 
             // Button_Editar
             // 
-            this.Button_Editar.Location = new System.Drawing.Point(904, 822);
+            this.Button_Editar.Location = new System.Drawing.Point(903, 669);
             this.Button_Editar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Button_Editar.Name = "Button_Editar";
             this.Button_Editar.Size = new System.Drawing.Size(140, 67);
@@ -387,6 +388,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(1327, 844);
             this.Controls.Add(this.textBox_Neto_Pagar);
             this.Controls.Add(this.textBox_Tot_Ded);

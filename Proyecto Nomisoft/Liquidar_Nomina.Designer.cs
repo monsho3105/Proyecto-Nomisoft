@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Liquidar_Nomina));
             this.textBox_Identificacion = new System.Windows.Forms.TextBox();
-            this.buttonRegresar = new System.Windows.Forms.Button();
             this.Identificacion = new System.Windows.Forms.Label();
             this.button_Liquidar = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -44,17 +44,6 @@
             this.textBox_Identificacion.Size = new System.Drawing.Size(204, 22);
             this.textBox_Identificacion.TabIndex = 0;
             // 
-            // buttonRegresar
-            // 
-            this.buttonRegresar.Location = new System.Drawing.Point(86, 494);
-            this.buttonRegresar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonRegresar.Name = "buttonRegresar";
-            this.buttonRegresar.Size = new System.Drawing.Size(150, 53);
-            this.buttonRegresar.TabIndex = 1;
-            this.buttonRegresar.Text = "Regresar";
-            this.buttonRegresar.UseVisualStyleBackColor = true;
-            this.buttonRegresar.Click += new System.EventHandler(this.buttonRegresar_Click);
-            // 
             // Identificacion
             // 
             this.Identificacion.AutoSize = true;
@@ -66,7 +55,7 @@
             // 
             // button_Liquidar
             // 
-            this.button_Liquidar.Location = new System.Drawing.Point(852, 494);
+            this.button_Liquidar.Location = new System.Drawing.Point(1124, 701);
             this.button_Liquidar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button_Liquidar.Name = "button_Liquidar";
             this.button_Liquidar.Size = new System.Drawing.Size(150, 53);
@@ -77,27 +66,28 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(37, 110);
+            this.dataGridView1.Location = new System.Drawing.Point(103, 108);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(1098, 318);
+            this.dataGridView1.Size = new System.Drawing.Size(1255, 514);
             this.dataGridView1.TabIndex = 4;
             // 
             // Liquidar_Nomina
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1188, 594);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.ClientSize = new System.Drawing.Size(1416, 765);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button_Liquidar);
             this.Controls.Add(this.Identificacion);
-            this.Controls.Add(this.buttonRegresar);
             this.Controls.Add(this.textBox_Identificacion);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Liquidar_Nomina";
             this.Text = "Liquidar_Nomina";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Liquidar_Nomina_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -108,7 +98,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox textBox_Identificacion;
-        private System.Windows.Forms.Button buttonRegresar;
         private System.Windows.Forms.Label Identificacion;
         private System.Windows.Forms.Button button_Liquidar;
         private System.Windows.Forms.DataGridView dataGridView1;

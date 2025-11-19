@@ -30,6 +30,7 @@ namespace Proyecto_Nomisoft
         public Ver_Emple()
         {
             InitializeComponent();
+            this.BackgroundImageLayout = ImageLayout.Zoom; // o Stretch si prefieres
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.None; // sin bordes ni título
             this.TopLevel = false; // ya lo tienes
